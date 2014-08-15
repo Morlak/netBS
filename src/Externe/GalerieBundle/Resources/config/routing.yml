@@ -1,0 +1,19 @@
+ExterneGalerie_accueil:
+    pattern:  /
+    defaults: { _controller: ExterneGalerieBundle:Galerie:launcher }
+    
+ExterneGalerie_update_droit:
+    pattern: /update-droit/{id}
+    defaults: { _controller: ExterneGalerieBundle:Galerie:updateDroit}
+    
+ExterneGalerie_get_pictures:
+    pattern: /get-pictures/{id}
+    defaults: { _controller: ExterneGalerieBundle:Galerie:getPictures}
+    
+ExterneGalerie_first_call:
+    pattern: /first-call
+    defaults: { _controller: ExterneGalerieBundle:Galerie:firstCall}
+    
+ExterneGalerie_zip:
+    pattern: /zip-album/{id}
+    defaults: { _controller: ExterneGalerieBundle:Galerie:zipAlbum}

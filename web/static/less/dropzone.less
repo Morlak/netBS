@@ -1,0 +1,130 @@
+@import "mixins.less";
+
+.dz-default
+{
+    width:100%;
+    background:rgba(0,0,0,0.05);
+    cursor:cell;
+    border-bottom:1px solid rgb(200,200,200);
+    border-left:1px solid rgb(200,200,200);
+    border-right:1px solid rgb(200,200,200);
+    
+    span
+    {
+        display:block;
+        text-align:center;
+        padding:20px 0;
+        font-size:16px;
+    }
+}
+
+.dz-preview
+{
+    width:110px;
+    height:160px;
+    padding:15px;
+    background:#fcfcfc url(/netBS/web/static/images/layout/dropzone/texture.png) 0 100% repeat-x;
+    .box-sizing(border-box);
+    border:1px solid #c6c9cb;
+    float:left;
+    margin:15px;
+    .box-shadow(0 1px 3px rgba(0,0,0,.12));
+    
+    img
+    {
+        width:80px;
+        height:80px;
+        border:1px solid rgb(200,200,200);
+        margin-bottom:8px;
+    }
+    
+    .dz-success-mark,
+    .dz-error-mark
+    {
+        display:block;
+        width:25px;
+        height:25px;
+        text-align:center;
+        line-height:25px;
+        position:absolute;
+        margin-top:-29px;
+        border-radius:100px;
+        border:1px solid rgb(200,200,200);
+        .box-shadow(0 0 5px rgb(200,200,200));
+        cursor:pointer;
+        display:none;
+    }
+    
+    .dz-error-mark
+    {
+        margin-left:-27px;
+        background:rgb(255,200,200);
+    }
+    
+    .dz-success-mark
+    {
+        margin-left:81px;
+        background:lightgreen;
+    }
+    
+    .dz-filename
+    {
+        overflow:hidden;
+        
+        span
+        {
+            display:block;
+            width:80px;
+            height:20px;
+            line-height:20px;
+            text-align:center;
+        }
+    }
+    
+    .dz-size
+    {
+        text-align:center;
+    }
+    
+    .dz-error-message
+    {
+        display:none;
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        background:white;
+        margin-top:-130px;
+        padding:5px;
+    }
+    
+    .dz-remove
+    {
+        display:block;
+        width:80px;
+        margin:auto;
+        text-align:center;
+        background:white;
+        height:25px;
+        line-height:25px;
+        border-radius:50px;
+        margin-top:5px;
+        border:1px solid #c6c9cb;
+        color:black;
+        .box-shadow(0 1px 3px rgba(0,0,0,.12));
+    }
+}
+
+.dropzone .dz-preview.dz-error .dz-error-mark,
+.dropzone-previews .dz-preview.dz-error .dz-error-mark {
+    display: block;
+}
+.dropzone .dz-preview.dz-success .dz-success-mark,
+.dropzone-previews .dz-preview.dz-success .dz-success-mark {
+    display: block;
+}
+
+.dropzone .dz-preview.dz-error:hover .dz-error-message
+{
+    display:block;
+}

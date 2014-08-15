@@ -1,0 +1,187 @@
+/**
+ * Style des éléments de formulaire
+ * les styles sont valables pour tous les éléments de formulaire,
+ * si ils sont dans un formulaire, ou a l'exterieur en ayant la classe
+ * field
+ */
+
+
+form
+{
+	width:100%;
+	font-size:12px;
+	
+	> .row
+	{
+		border-bottom:@widget-border;
+		border-top:1px solid white;
+		
+		&:first-child
+		{
+			border-top:none;
+		}
+		
+		&:last-child
+		{
+			border-bottom:none;
+		}
+		
+		label
+		{
+			font-weight:normal;
+			line-height:70px;
+			color:rgb(100,100,100);
+			margin:0 0 0 10px;
+			width:400px;
+			.box-sizing(border-box);
+		}
+		
+		input,
+		select,
+		.slider,
+		textarea
+		{
+			margin-top:20px;
+		}
+		
+		input
+		{
+			height:30px;
+		}
+		
+		textarea
+		{
+			width:calc(~"100% - 13px");
+			height:100px;
+			margin:20px 13px 20px 0;
+		}
+		
+		div
+		{
+			padding-left:10px;
+			.box-sizing(border-box);
+		}
+		
+		input[type=date] + [id^="_time"]
+		{
+			background:red;
+		}
+		
+	}
+	
+	input[type=submit]
+	{
+		display:inline-block;
+	}
+}
+
+form > div,
+.field
+{
+	input,
+	select,
+	textarea
+	{
+		font-size:11px;
+		border:1px solid #D7D7D7;
+		padding:0 10px 0 5px;
+		box-shadow:0 1px 0 white;
+			
+		.transition(box-shadow .2s);
+		.box-sizing(border-box);
+		
+		&:focus
+		{
+			box-shadow:0 0 2px rgba(100,100,255,0.5);
+			border:1px solid rgba(100,100,255,0.5);
+		}
+	}
+
+	input
+	{
+		width:calc(~"100% - 13px");
+		.box-sizing(border-box);
+	}
+	
+	textarea
+	{
+		padding:10px;
+		resize:none;
+	}
+	
+	select
+	{
+		border-radius:3px;
+		#gradient > .vertical(#FCFCFC, #FBFBFB);
+		box-shadow:0 1px 1px rgba(0,0,0,0.1);
+		border:1px solid #D5D5D5;
+		.appearance();
+		cursor:pointer;
+		background-image:url('../images/icons/forms/select.png');
+		background-repeat:no-repeat;
+		background-position:96% 50%;
+		color:rgb(100,100,100);
+		padding:5px 0;
+	}
+	
+	.slider
+	{
+		width:16px;
+		height:16px;
+		margin:0;
+		display:inline-block;
+		outline:none;
+		position:relative;
+		top:-4px;
+		left:10px;
+	}
+	
+	.slider + label
+	{
+		display:inline-block;
+		width:50px;
+		#gradient > .vertical(#D27969, #DC7E6E);
+		position:relative;
+		left:-25px;
+		border-radius:2px;
+		border:1px solid #BD6E61;
+		.box-sizing(border-box);
+		.transition(background .2s);
+		margin-top:21px;
+		cursor:pointer;
+		box-shadow:0 1px 0 white;
+	}
+	
+	.slider + label:after
+	{
+		content:' ';
+		display:block;
+		width:20px;
+		height:20px;
+		#gradient > .vertical(rgb(252,252,252), rgb(235,235,235));
+		border-radius:1px;
+		position:relative;
+		left:0px;
+		.transition(left .2s);
+	}
+	
+	.slider:checked + label
+	{
+		#gradient > .vertical(#92B95C, #9FC168);
+		border:1px solid #849D51;
+	}
+	
+	.slider:checked + label:after
+	{
+		position:relative;
+		left:28px;
+	}
+	
+	input[type=file]
+	{
+		width:auto;
+		height:auto;
+		padding:3px;
+		background:rgb(253,253,253);
+	}
+}

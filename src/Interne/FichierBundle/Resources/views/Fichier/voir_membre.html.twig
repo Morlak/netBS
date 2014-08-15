@@ -1,0 +1,349 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}{% endblock %}
+
+
+{% block body %}
+
+    <div class="row">
+    	<div class="col-lg-11 col-lg-offset-1">
+    		<h3>{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}</h3>
+    	</div>
+    </div>
+    
+    <div class="row">
+    	
+    	<div class="col-lg-7">
+    		
+    		<div class="widget">
+    			<div class="widget-title">
+    				<span>Informations sur le membre</span>
+    			</div>
+    			
+    			<div class="widget-content">
+    				
+    				<div class="row">
+    					
+    					<div class="col-md-6">
+    						
+    						<ul class="data-liste">
+		    					<li><strong>Prénom</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.prenom">{{ membre.prenom|capitalize }}</span></li>
+		    					<li><strong>Date de naissance</strong><span>{{ membre.naissance|date("d.m.Y") }}</span></li>
+		    					<li><strong>Téléphone</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.contact.telephone">{{ membre.contact.telephone }}</span></li>
+		    					<li><strong>E-Mail</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.contact.email">{{ membre.contact.email }}</span></li>
+		    				</ul>
+    						
+    					</div>
+    					
+    					<div class="col-md-6">
+    						
+    						<ul class="data-liste">
+    							<li><strong>Numéro BS</strong><span>{{ membre.numeroBs }}</span></li>
+    							<li><strong>Inscrit le</strong><span>{{ membre.inscription|date("d.m.Y") }}</span></li>
+    							<li><strong>Statut</strong><span>{{ membre.statut }}</span></li>
+    						</ul>
+    						
+    					</div>
+    					
+    				</div>
+    				
+    			</div>
+    		</div>
+    		
+    	</div>
+    	
+    	<div class="col-lg-5">
+    		<div class="widget">
+    			<div class="widget-title">
+    				<span>Informations sur la famille</span>
+    			</div>
+    			
+    			<div class="widget-content">
+    				
+    				<ul class="data-liste">
+    					<li><strong>Nom de famille</strong><span><a href="{{ path('InterneFichier_voir_famille', {'id' : membre.famille.id}) }}">{{ membre.famille.nom|capitalize }}</a></span></li>
+    					<li><strong>Parents</strong><span>{{ membre.famille.pere.prenom|capitalize }} et {{ membre.famille.mere.prenom|capitalize }}</span></li>
+    					<li><strong>Téléphone familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.telephone">{{ membre.famille.contact.telephone }}</span></li>
+    					<li><strong>E-Mail familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.email">{{ membre.famille.contact.email }}</span></li>
+    				</ul>
+    				
+    			</div>
+    		</div>
+    	</div>
+    	
+    </div>
+    
+    <div class="row">
+    	
+    	<div class="col-lg-5">
+    		
+    		<div class="widget">
+    			<div class="widget-title">
+    				<span>Adresse principale</span>
+    			</div>
+    			<div class="widget-content">
+    				
+    				{% if adressePrincipale == 'famille' %}
+    				
+    					<ul class="data-liste">
+    						<li><h4>Adresse familiale</h4></li>
+	    					<li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.rue">{{ membre.famille.adresse.rue }}</span></li>
+	    					<li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.npa">{{ membre.famille.adresse.npa }}</span></li>
+	    					<li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.localite">{{ membre.famille.adresse.localite }}</span></li>
+	    					<li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.facturable" {% if membre.famille.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
+	    					<li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.remarques">{{ membre.famille.adresse.remarques }}</span></li>
+	    				</ul>
+    				
+    				{% elseif adressePrincipale == 'membre' %}
+    				
+    					<ul class="data-liste">
+    						<li><h4>Adresse du membre</h4></li>
+	    					<li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.rue">{{ membre.adresse.rue }}</span></li>
+	    					<li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.npa">{{ membre.adresse.npa }}</span></li>
+	    					<li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.localite">{{ membre.adresse.localite }}</span></li>
+	    					<li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.facturable" {% if membre.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
+	    					<li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.remarques">{{ membre.adresse.remarques }}</span></li>
+	    				</ul>
+    				
+    				{% endif %}
+    				
+    			</div>
+    		</div>
+    		
+    	</div>
+    	
+    	<div class="col-lg-7">
+    		
+    		<div class="widget">
+    			<div class="widget-title">
+    				<span>Adresses disponibles</span>
+    			</div>
+    			
+    			<div class="widget-content">
+    				
+					<div class="panel-group accordeon" id="adresses-accordeon">
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Adresse du membre</a>
+								</h4>
+							</div>
+							
+							<div id="collapseOne" class="panel-collapse collapse">
+								<div class="panel-body">
+								
+								    <ul class="data-liste">
+				    					<li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.rue">{{ membre.adresse.rue }}</span></li>
+				    					<li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.npa">{{ membre.adresse.npa }}</span></li>
+				    					<li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.localite">{{ membre.adresse.localite }}</span></li>
+				    					<li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.facturable" {% if membre.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
+				    					<li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.remarques">{{ membre.adresse.remarques }}</span></li>
+				    				</ul>
+								
+								</div>
+							</div>
+						</div>
+						
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Adresse familiale</a>
+								</h4>
+							</div>
+							
+							<div id="collapseTwo" class="panel-collapse collapse">
+								<div class="panel-body">
+								
+								    <ul class="data-liste">
+				    					<li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.rue">{{ membre.famille.adresse.rue }}</span></li>
+				    					<li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.npa">{{ membre.famille.adresse.npa }}</span></li>
+				    					<li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.localite">{{ membre.famille.adresse.localite }}</span></li>
+				    					<li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.facturable" {% if membre.famille.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
+				    					<li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.remarques">{{ membre.famille.adresse.remarques }}</span></li>
+				    				</ul>
+								
+								</div>
+							</div>
+						</div>
+					
+					</div>
+    				
+    			</div>
+    		</div>
+    		
+    	</div>
+    	
+    </div>
+    
+    <div class="row">
+    	
+    	<div class="col-lg-12">
+    		
+    		<div class="widget">
+    			<div class="widget-title">
+    				<span>Groupes par attributions actives</span>
+    			</div>
+    			
+    			<div class="widget-content">
+    				
+    				{% for hierarchie in hierarchies %}
+				
+						<div class="flex groupe-container">
+						
+							{% for groupe in hierarchie  %}
+							
+								<a class="groupe" href="{{ path('InterneStructure_voir_groupe', {id: groupe.id}) }}">
+									{{ groupe.nom }}
+								</a>
+								
+								<span class="glyphicon glyphicon-chevron-right"></span>
+							
+							{% endfor %}
+						
+					</div>
+					
+					{% endfor %}
+    				
+    			</div>
+    		</div>
+    		
+    	</div>
+    	
+    </div>
+			
+	<div class="row">
+		
+		<div class="col-lg-8">
+			
+			<div class="widget">
+				<div class="widget-title">
+					<span>Attributions</span>
+					
+					<div class="widget-toolbar">
+						<button data-toggle="modal" data-target="#attributions-form-modal">Ajouter une attribution</button>
+						
+					</div>
+				</div>
+				
+				<div class="widget-content">
+					
+					<table class="datatable">
+					
+						<thead>
+							<tr>
+								<th>Fonction</th>
+								<th>Groupe</th>
+								<th>Date de début</th>
+								<th>Date de fin</th>
+								<th>Options</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						
+							{% for attribution in membre.attributions %}
+							
+							<tr>
+								<td>{{ attribution.fonction.nom }} ({{ attribution.fonction.abreviation | upper }})</td>
+								<td><a href="{{ path('InterneStructure_voir_groupe', {id: attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></td>
+								<td>{{ attribution.dateDebut | date("d.m.Y") }}</td>
+								<td>{{ attribution.dateFin | datum }}</td>
+								<td><a href="{{ path('InterneStructure_remove_attribution', {attributionId: attribution.id}) }}"><span class="glyphicon glyphicon-remove" title="supprimer" onclick="return confirm('Etes-vous sur ?');"></span></a></td>
+							</tr>
+							
+							{% endfor %}
+							
+						</tbody>
+						
+					</table>
+					
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="col-lg-4">
+			
+			<div class="widget">
+				<div class="widget-title">
+					<span>Distinctions</span>
+					
+					<div class="widget-toolbar">
+						<button onclick="addObtentionDistinction()">Ajouter une distinction</button>
+					</div>
+				</div>
+				
+				<div class="widget-content">
+					
+					<table class="table datatable">
+						
+						<thead>
+							<tr>
+								<th>Nom</th>
+								<th>Date d'obtention</th>
+								<th>Options</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						
+							{% for distinction in membre.distinctions %}
+							
+							<tr>
+								<td>{{ distinction.distinction.nom }}</td>
+								<td>{{ distinction.obtention | date("d.m.Y") }}</td>
+								<td></td>
+							</tr>
+							
+							
+							{% endfor %}
+							
+						</tbody>
+						
+					</table>
+					
+				</div>
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	
+			{% include 'InterneFichierBundle:Modal:attributions_modal.html.twig' %}
+			
+			<div class="modal" id="addAttribution" title="nouvelle attribution">
+			
+				<form method="post" action="#">
+					
+					{% include 'InterneStructureBundle:Form:attribution_form.html.twig' %}
+					
+					<input type="submit" value="Ajouter" />
+					
+				</form>
+				
+			</div>
+			
+			<div class="modal" id="addObtentionDistinction" title="nouvelle distinction">
+			
+				<form method="post" action="#">
+					
+					{% include 'InterneStructureBundle:Form:obtention_distinction_form.html.twig' %}
+					
+					<input type="submit" value="Ajouter" />
+					
+				</form>
+				
+			</div>
+			
+		</div>
+
+{% endblock %}
+
+{% block javascript %}
+    
+    <script src="{{ asset('static/js/modifikator.js') }}"></script>
+    <script src="{{ asset('static/js/modal-process.js') }}"></script>
+    
+{% endblock %}

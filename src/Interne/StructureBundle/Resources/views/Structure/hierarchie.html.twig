@@ -1,0 +1,57 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Hierarchie{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('static/css/jstree.css') }}">
+	<link rel="stylesheet" href="{{ asset('static/css/hierarchie.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<div class="row">
+	
+	<div class="col-lg-8">
+		<div class="widget">
+			<div class="widget-title">
+				<span>Hierarchie complète</span>
+				
+				<div class="widget-toolbar">
+					
+					<button onclick="retrieveHierarchie();">Récupérer</button>
+				</div>
+			</div>
+			
+			<div class="widget-content">
+				<div style="padding:20px;" id="hierarchie"></div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-lg-4">
+		<div class="widget">
+			<div class="widget-title">
+				<span>Ajouter un groupe</span>
+			</div>
+			
+			<div class="widget-content">
+				<form method="post" action="">
+					
+					{% include 'InterneStructureBundle:Form:groupe_form.html.twig' %}
+					
+				</form>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+
+{% endblock %}
+
+{% block javascript %}
+
+	<script type="text/javascript" src="{{ asset('static/js/jstree.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('static/js/groupes.js') }}"></script>
+
+{% endblock %}

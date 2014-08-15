@@ -1,0 +1,73 @@
+<!doctype html>
+    
+<html>
+    
+    <head>
+        <meta charset="utf-8">
+        <title>Galerie - BS</title>
+        
+        <link rel="stylesheet" href="{{ asset('static/css/lightbox.css') }}">
+        <link rel="stylesheet" href="{{ asset('static/css/jstree.css') }}">
+        <link rel="stylesheet/less" href="{{ asset('static/less/bootstrap.less') }}">
+        <link rel="stylesheet/less" href="{{ asset('static/less/galeria.less') }}">
+        <script type="text/javascript" src="{{ asset('static/js/less.js') }}"></script>
+    </head>
+    
+    <body>
+        
+        <nav>
+            
+            <header>
+                <img src="{{ asset('static/images/logo.png')}}" />
+            </header>
+            
+            <div id="options">
+                
+                <button id="homie" title="retour à l'accueil" class="glyphicon glyphicon-home"></button>
+                <button title="informations" class="glyphicon glyphicon-tasks"></button>
+                
+            </div>
+            
+            <div id="insiders-container">
+                
+                <div class="insider" id="back">
+                    <h3><span></span><span>Groupe parent</span></h3>
+                    <div class="i-container"></div>
+                </div>
+                
+                <div class="insider" id="present">
+                    <h3><span></span><span>Groupe courant</span></h3>
+                    <div class="i-container"></div>
+                </div>
+                
+                <div class="insider" id="enfants">
+                    <h3><span></span><span>Groupes enfants</span></h3>
+                    <div class="i-container"></div>
+                </div>
+                
+                <div class="insider" id="folders">
+                    <h3><span></span><span>Dossiers et albums</span></h3>
+                    <div class="i-container" id="dossiers-et-albums"></div>
+                </div>
+                
+            </div>
+            
+        </nav>
+        
+        <section class="overflowed">
+            
+            <div id="gallery">
+                
+            </div>
+        
+        </section>
+        
+        <script src="{{  asset('static/js/jquery.js') }}"></script>
+	<script src="{{  asset('static/js/justified-gallery.js') }}"></script>
+	<script src="{{  asset('static/js/lightbox.js') }}"></script>
+	<script src="{{  asset('static/js/jstree.js') }}"></script>
+	<script src="{{  asset('static/js/galeria.js') }}"></script>
+        
+    </body>
+    
+</html>

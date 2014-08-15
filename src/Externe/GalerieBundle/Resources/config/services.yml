@@ -1,0 +1,4 @@
+services:
+    galerie.getTree:
+        class: Externe\GalerieBundle\Services\GalerieTree
+        arguments: [ @doctrine.orm.entity_manager ]

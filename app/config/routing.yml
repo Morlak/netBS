@@ -1,0 +1,56 @@
+
+#routes de login
+
+login:
+    path:     /login
+    defaults: { _controller: ExternePublicBundle:Public:login }
+
+login_check:
+    path:     /login_check
+
+logout:
+    path:     /logout
+
+#routes publiques
+#non sécurisées
+externe_home:
+    resource: "@ExternePublicBundle/Resources/config/routing.yml"
+    prefix:   /
+
+externe_galerie:
+    resource: "@ExterneGalerieBundle/Resources/config/routing.yml"
+    prefix:   /galerie
+
+
+
+#routes de l'intranet
+#zone sécurisée
+interne_home:
+    resource: "@InterneHomeBundle/Resources/config/routing.yml"
+    prefix:   /interne
+
+interne_stamm:
+    resource: "@InterneStammBundle/Resources/config/routing.yml"
+    prefix:   /interne/stamm
+
+interne_fichier:
+    resource: "@InterneFichierBundle/Resources/config/routing.yml"
+    prefix:   /interne/fichier
+
+interne_structure:
+    resource: "@InterneStructureBundle/Resources/config/routing.yml"
+    prefix:   /interne/structure
+
+interne_search:
+    resource: "@InterneSearchBundle/Resources/config/routing.yml"
+    prefix:   /interne/search
+
+# routes concernant la sécurité du netBS
+# sécurisées par role
+interne_security:
+    resource: "@InterneSecurityBundle/Resources/config/routing.yml"
+    prefix:   /interne/security
+
+interne_global:
+    resource: "@InterneGlobalBundle/Resources/config/routing.yml"
+    prefix:   /interne/global

@@ -1,0 +1,27 @@
+/**
+ * hierarchie.less fixe le css de l'affichage de la
+ * hierarchie globale des groupes
+ */
+
+.hierarchie-groupe
+{
+    margin-left:30px;
+}
+
+.hierarchie-element a
+{
+    display:inline-block;
+    height:25px;
+    line-height:25px;
+    padding: 0 15px;
+    text-align:center;
+    margin:3px 0;
+    border-radius:2px;
+    transition:background .2s;
+}
+
+.hierarchie-element a:hover
+{
+    background:lightgreen;
+    text-decoration:none;
+}

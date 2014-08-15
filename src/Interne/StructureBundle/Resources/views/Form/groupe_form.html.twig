@@ -1,0 +1,23 @@
+
+	<div class="form-errors">
+		{{ form_errors(groupeForm) }}
+	</div>
+	
+	<fieldset>
+		<div class="row">
+			<div class="col-sm-3">{{ form_label(groupeForm.nom, "Nom du groupe") }}</div>
+			<div class="col-sm-9">{{ form_widget(groupeForm.nom) }}</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-3">{{ form_label(groupeForm.parent, "Groupe parent") }}</div>
+			<div class="col-sm-9">{{ form_widget(groupeForm.parent, { attr : { class : "chosen" }}) }}</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-9 col-sm-offset-3">
+				<input type="submit" class="btn btn-primary" value="Ajouter le groupe" />
+			</div>
+		</div>
+		{{ form_rest(groupeForm) }}
+	</fieldset>

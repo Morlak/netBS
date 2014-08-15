@@ -1,0 +1,3 @@
+InterneSearch_search:
+    pattern:  /
+    defaults: { _controller: InterneSearchBundle:Search:search }

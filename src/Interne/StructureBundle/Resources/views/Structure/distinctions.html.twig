@@ -1,0 +1,88 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Distinctions{% endblock %}
+
+
+{% block body %}
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="widget">
+				<div class="widget-title">
+					<span>Distinctions</span>
+					<div  class="widget-toolbar">
+						<button data-toggle="modal" data-target="#distinctionModal">Ajouter</button>
+					</div>
+				</div>
+				<div class="widget-content">
+					<table class="datatable">
+						<thead>
+							<tr>
+								<th>nom</th>
+								<th>droits</th>
+								<th>remarques</th>
+								<th>options</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						
+							{% for distinction in distinctions %}
+							
+								<tr>
+									<td>{{ distinction.nom }}</td>
+									<td></td>
+									<td>{{ distinction.remarques }}</td>
+									<td></td>
+								</tr>
+							
+							{% endfor %}
+							
+							
+						</tbody>
+						
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<div class="modal fade" id="distinctionModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
+				<h4 class="modal-title" id="myModalLabel">Ajouter une distinction</h4>
+			</div>
+			<div class="modal-body">
+			
+				<form method="post" id="distinction-form">
+					
+					{{ form_errors(distinctionForm)}}
+					<fieldset>
+						<div class="row">
+							<div class="col-sm-4">{{ form_label(distinctionForm.nom, "Nom") }}</div>
+							<div class="col-sm-8">{{ form_widget(distinctionForm.nom) }}</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-4">{{ form_label(distinctionForm.remarques, "Remarques") }}</div>
+							<div class="col-sm-8">{{ form_widget(distinctionForm.remarques) }}</div>
+						</div>
+					</fieldset>
+					
+					{{ form_rest(distinctionForm) }}
+					
+				</form>
+			
+			</div>
+			
+			<div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+			<button type="button" onclick="document.getElementById('distinction-form').submit();" class="btn btn-primary">Ajouter</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

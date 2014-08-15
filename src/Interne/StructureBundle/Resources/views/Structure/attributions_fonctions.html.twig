@@ -1,0 +1,105 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Attributions{% endblock %}
+
+
+{% block body %}
+	
+	<div class="row">
+		<div class="col-md-4">
+			<div class="widget">
+				<div class="widget-title">
+					<span>Fonctions</span>
+				</div>
+				<div class="widget-content">
+					
+					<table class="datatable">
+						<thead>
+							<tr>
+								<th>nom</th>
+								<th>abreviation</th>
+								<th>droits</th>
+								<th>options</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						
+							{% for fonction in fonctions %}
+							
+								<tr>
+									<td>{{ fonction.nom }}</td>
+									<td>{{ fonction.abreviation | upper }}</td>
+									<td></td>
+									<td></td>
+								</tr>
+							
+							{% endfor %}
+							
+							
+						</tbody>
+						
+					</table>
+					
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-md-8">
+			<div class="widget">
+				<div class="widget-title">
+					<span>Attributions existantes</span>
+					<div class="widget-toolbar">
+						<button class="widget-options-button">Recherche avancée</button>
+					</div>
+				</div>
+				<div class="widget-content">
+					
+					<div class="widget-options field">
+					
+						<h4>Rechercher des attributions</h4>
+						
+						{{ form_widget(groupeList.groupe) }}
+							
+						<select id="hierarchie">
+							<option value="main">Ce groupe uniquement</option>
+							<option value="children">Ses enfants uniquement</option>
+							<option value="all">Ce groupe et ses enfants</option>
+						</select>
+						
+						<input id="date1" class="datepicker" placeholder="Début" />
+						<input id="date2" class="datepicker" placeholder="Fin" />
+						
+						<button onclick="retrieveAttributions(null, this);">Rechercher</button>
+					
+					</div>
+					
+					<table class="datatable" id="attributionsTable">
+							
+						<thead>
+							<tr>
+								<th>nom</th>
+								<th>prenom</th>
+								<th>fonction</th>
+								<th>groupe</th>
+								<th>debut</th>
+								<th>fin</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						
+							
+						</tbody>
+						
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block javascript %}
+	<script type="text/javascript" src="{{ asset('static/js/groupes.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,28 @@
+InterneGlobal_modifikator:
+    pattern:  /modifikator/{entity}/{content}
+    defaults: { _controller: InterneGlobalBundle:Global:modifikator }
+
+#galerie
+InterneGlobal_galerie_overview:
+    pattern:  /galerie/overview
+    defaults: { _controller: InterneGlobalBundle:Galerie:overview }
+
+InterneGlobal_galerie_groupe:
+    pattern:  /galerie/groupe/{id}
+    defaults: { _controller: InterneGlobalBundle:Galerie:groupeGalerie }
+
+InterneGlobal_galerie_retrieve_tree:
+    pattern:  /galerie/retrieveTree/{id}
+    defaults: { _controller: InterneGlobalBundle:Galerie:retrieveTree }
+    
+InterneGlobal_galerie_update_colors:
+    pattern:  /galerie/update-colors/{id}/{color1}/{color2}
+    defaults: { _controller: InterneGlobalBundle:Galerie:updateColors }
+
+InterneGlobal_galerie_add_album:
+    pattern:  /galerie/add-album/{id}
+    defaults: { _controller: InterneGlobalBundle:Galerie:addAlbum }
+    
+InterneGlobal_galerie_add_photos:
+    pattern:  /galerie/add-photos/{id}
+    defaults: { _controller: InterneGlobalBundle:Galerie:addPhotos }

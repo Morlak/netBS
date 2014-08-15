@@ -1,0 +1,166 @@
+/**
+ * Styles pour les tables et tableaux dynamiques
+ * utilisés dans le netBS
+ */
+
+.dataTables_wrapper
+{
+	font-size:12px;
+	background:rgba(0,0,0,0.03);
+	
+	.dataTables_length,
+	.dataTables_filter,
+	.dataTables_paginate,
+	.dataTables_info
+	{
+		width:50%;
+		padding:15px 10px;
+		.box-sizing(border-box);
+		font-size:11px;
+		
+		label
+		{
+			font-weight:normal;
+		}
+		
+		input,
+		select
+		{
+			background:#f9f9f9;
+			border:1px solid rgb(204, 204, 204);
+			box-shadow:inset 0 2px 2px rgb(240,240,240), 0 1px 0px white;
+			padding:4px 7px;
+			margin-left:8px;
+		}
+	}
+	
+	.dataTables_filter
+	{
+		float:left;
+	}
+	
+	.dataTables_length
+	{
+		float:right;
+		text-align:right;
+	}
+	
+	.dataTable
+	{
+		clear:both;
+		box-shadow:0 1px 0 white;
+		border-bottom:@widget-border;
+		width:100%;
+		
+		thead
+		{
+			background:rgba(0,0,0,0.04);
+			height:25px;
+			border-bottom:@widget-border;
+			
+			tr th
+			{
+				border-top:1px solid rgb(200,200,200);
+				box-shadow:inset 0 1px 0 white;
+				padding:3px 0;
+				font-weight:normal;
+				font-size:11px;
+				color:rgb(130,130,130);
+				text-align:center;
+				border-right:@widget-border;
+				cursor:pointer;
+				
+				&:last-child
+				{
+					border-right:none;
+				}
+			}
+		}
+		
+		tbody
+		{
+			td
+			{
+				border-bottom:@widget-border-light;
+				padding:8px 4px;
+				border-right:@widget-border-light;
+				color:rgb(100,100,100);
+				
+				&:last-child
+				{
+					border-right:none;
+				}
+			}
+			
+			tr:last-child td
+			{
+				border-bottom:none;
+			}
+			
+			tr.odd td
+			{
+				background:#F2F2F2;
+			}
+			
+			tr.even td
+			{
+				background:#F7F7F7;
+			}
+			
+		}
+	}
+	
+	.dataTables_info
+	{
+		display:inline-block;
+	}
+	
+	.dataTables_paginate
+	{
+		display:inline-block;
+		text-align:right;
+	}
+}
+
+/**
+ * styles des boutons de pagination, égalemement utilisés
+ * ailleurs que dans les datatables
+ */
+.paginate_button
+{
+	border:1px solid #d3d3d3;
+	padding:4px 7px;
+	margin:0 3px;
+	cursor:pointer;
+	color:#919191;
+	#gradient > .vertical(#f9f9f9, #eeeeee);
+	border-radius:3px;
+	box-shadow:inset 0 1px 0 #fff, 0 1px 0px #dfdfdf;
+	text-decoration:none;
+	.user-select(none);
+	font-size:12px;
+	
+	&:hover
+	{
+		text-decoration:none;
+		color:#919191;
+		background:rgb(240,240,240);
+	}
+}
+
+.paginate_button.current,
+.paginate_button:active
+{
+	background:#6f6f6f;
+	color:#fff;
+	border-color:#646464;
+	box-shadow:inset 0 1px 2px #545454, 0 1px 0 #fff;
+	outline:none;
+}
+
+.disabled
+{
+	opacity:0;
+	cursor:default;
+}
+ 

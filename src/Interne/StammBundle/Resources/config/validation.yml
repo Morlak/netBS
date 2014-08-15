@@ -1,0 +1,6 @@
+# src/Interne/StammBundle/Resources/config/validation.yml
+Interne\StammBundle\Entity\Download:
+    properties:
+        file:
+            - File:
+                maxSize: 6000000

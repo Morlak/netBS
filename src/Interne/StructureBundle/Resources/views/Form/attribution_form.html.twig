@@ -1,0 +1,27 @@
+                            
+                            
+                            <div class="form-element">
+								{{ form_label(attributionForm.groupe, "Groupe") }}
+							    {{ form_errors(attributionForm.groupe) }}
+							    {{ form_widget(attributionForm.groupe) }}
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(attributionForm.fonction, "Fonction") }}
+							    {{ form_errors(attributionForm.fonction) }}
+							    {{ form_widget(attributionForm.fonction) }}
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(attributionForm.dateDebut, "Début") }}
+							    {{ form_errors(attributionForm.dateDebut) }}
+							    {{ form_widget(attributionForm.dateDebut) }}
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(attributionForm.dateFin, "Fin") }}
+							    {{ form_errors(attributionForm.dateFin) }}
+							    {{ form_widget(attributionForm.dateFin) }}
+							</div>
+					
+							{{ form_rest(attributionForm) }}

@@ -1,0 +1,12 @@
+parameters:
+#    interne_structure.example.class: Interne\StructureBundle\Example
+
+services:
+    structure.Services.date_filter:
+        class: Interne\StructureBundle\Services\DateFilter
+        tags:
+            - { name: twig.extension }
+    
+    structure.AttributionsService:
+        class: Interne\StructureBundle\Services\AttributionsServices
+        

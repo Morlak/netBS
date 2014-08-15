@@ -1,0 +1,209 @@
+{% extends 'InterneHomeBundle::layout.html.twig' %}
+
+{% block title %}Galerie de groupe{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('static/css/jstree.css')}}" type="text/css">
+    <link rel="stylesheet/less" href="{{ asset('static/less/dropzone.less')}}" type="text/css">
+{% endblock %}
+
+{% block body %}
+    
+    <div class="row">
+        
+        <div class="col-md-4">
+            
+            <div class="row">
+                
+                <div class="col-lg-12">
+                    
+                    <div class="widget">
+                        <div class="widget-title">
+                            <span>Information</span>
+                        </div>
+                        
+                        <div class="widget-content">
+                            <ul class="data-liste">
+                                <li><strong>Groupe</strong><span><a href="{{ path('InterneStructure_voir_groupe', { id : droit.groupe.id }) }}">{{ droit.groupe.nom }}</a></span></li>
+                                <li><strong>Actif</strong><span>{% if droit.active == 1 %} Oui {% else %} Non {% endif %}</span></li>
+                                <li><strong>Droit de publication</strong><span>{% if droit.droitAlbum == 1 %} Oui {% else %} Non {% endif %}</span></li>
+                                <li><strong>Droit de visibilité</strong><span>{% if droit.albumsVisibles == 1 %} Oui {% else %} Non {% endif %}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+            <div class="row">
+                
+                <div class="col-lg-12">
+                    
+                    <div class="widget">
+                        <div class="widget-title">
+                            <span>Couleurs du groupe</span>
+                        </div>
+                        
+                        <div class="widget-content">
+                                
+                            <fieldset class="field">
+                                
+                                <ul class="data-liste">
+                                    <li><strong>Couleur 1</strong><span><input id="groupe-color1" maxlength="6" type="text" class="color" /></span></li>
+                                    <li><strong>Couleur 2</strong><span><input id="groupe-color2" maxlength="6" type="text" class="color" /> <button class="btn btn-success btn-xs" onclick="updateColors();">Changer</button></span></li>
+                                    <li class="separator"></li>
+                                    <li><strong>Couleurs actuelles</strong><span style="width:22px;height:22px;background-color: #{{ droit.color1 }};"></span><span style="width:22px;height:22px;background-color: #{{ droit.color2 }};"></span></li>
+                                </ul>
+                                
+                            </fieldset>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+        
+        <div class="col-md-8">
+            
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Dossiers et albums</span>
+                    
+                    <div class="widget-toolbar">
+                        <button data-toggle="modal" data-target="#ajouter-dossier-modal">Ajouter un dossier</button>
+                        <button data-toggle="modal" data-target="#ajouter-album-modal">Ajouter un album</button>
+                    </div>
+                </div>
+                
+                <div class="widget-content">
+                    
+                    <div id="dossiers-n-shit"></div>
+                    
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    <!-- modales -->
+    
+    <div class="modal fade" id="ajouter-dossier-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Ajouter un dossier</h4>
+                </div>
+                
+                <div class="modal-body">
+                    <form method="post" action="" id="ajouter-dossier-form">
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-sm-3">{{ form_label(dossierForm.nom, "Nom du dossier") }}</div>
+                                <div class="col-sm-9">{{ form_widget(dossierForm.nom) }}</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-3">{{ form_label(dossierForm.parent, "Dossier parent") }}</div>
+                                <div class="col-sm-9">{{ form_widget(dossierForm.parent) }}</div>
+                            </div>
+                            
+                            {{ form_rest(dossierForm)}}
+                            
+                        </fieldset>
+                    </form>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('ajouter-dossier-form').submit();">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="ajouter-album-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Ajouter un album</h4>
+                </div>
+                
+                <div class="modal-body">
+                    <form method="post" action="{{ path('InterneGlobal_galerie_add_album', { id : droit.id}) }}" id="ajouter-album-form">
+                        <fieldset>
+                            
+                            <div class="row">
+                                <div class="col-sm-3">{{ form_label(albumForm.nom, "Nom de l'album") }}</div>
+                                <div class="col-sm-9">{{ form_widget(albumForm.nom) }}</div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-sm-3">{{ form_label(albumForm.dossier, "Dossier parent") }}</div>
+                                <div class="col-sm-9">{{ form_widget(albumForm.dossier) }}</div>
+                            </div>
+                            
+                            {{ form_rest(albumForm)}}
+                            
+                        </fieldset>
+                        
+                    </form>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="submitAlbum" onclick="submitAlbum();">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="modal fade" id="ajouter-photos-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Ajouter des photos à "<span id="album-name"></span>"</h4>
+                </div>
+                
+                <div class="modal-body">
+                    <form method="post" class="dropzone" action="/random" id="photosForm" enctype="multipart/form-data">
+                        
+                    </form>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" style="display:none;" id="submitPhotos">Ajouter</button>
+                    <button type="button" class="btn btn-primary" onclick="countSit();">Compter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- on stocke l'id du droit ici, on en a besoin pour la requête ajax -->
+    <input type="hidden" id="droit-id" value="{{ droit.id }}" />
+    <input type="hidden" id="album-id" value="" />
+    
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{{ asset('static/js/jstree.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('static/js/dropzone.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('static/js/colorPicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('static/js/galerie-groupe.js') }}"></script>
+    <script>
+        function countSit() {
+            
+            alert('Fichiers ajoutés : ' + $('.dz-preview').length + '\n' + 'Fichiers non comformes : ' + $('.dz-error').length);
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,1240 @@
+
+/**
+ * netbs.less
+ * fichier de style principal construit sur bootstrap
+ * Réalisé avec amour par Guillaume Hochet pour la Brigade de Sauvabelin
+ * Aucune license, j'en ai rien à cirer
+ *
+ * 
+ * 
+ * Déclarations des variables utiles
+ */
+ 
+@import "mixins.less";
+@import "variables.less";
+@import "datatables.less";
+//@import "formulaires.less";
+
+
+
+@layout-border        :1px solid #b4b4b4;
+@layout-border-top    :1px solid rgba(255, 255, 255, 0.78);
+@widget-border        :1px solid #CDCDCD;
+@widget-border-light  :1px solid #e2e2e2;
+/**
+ * Déclaration des reset de base pour le bon alignement des éléments de
+ * la page
+ */
+html, body
+{
+	height:100%;
+}
+
+body
+{
+	background:#E9F0F0;
+}
+
+/**
+ * déclaration de l'aspect du ajax panel
+ * avec l'animation css du loader
+ */
+
+#ajax-panel
+{
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:999999;
+	width:100%;
+	height:100%;
+	background:rgba(255,255,255,0.4);
+	display:none;
+}
+#ajax-panel-loader
+{
+	width:50px;
+	height:50px;
+	background:#CDCDCD;
+	margin:auto;
+	margin-top:10%;
+	
+	animation: animationFrames ease 1s;
+	animation-iteration-count: infinite;
+	-webkit-animation: animationFrames ease 1s;
+	-webkit-animation-iteration-count: infinite;
+	-moz-animation: animationFrames ease 1s;
+	-moz-animation-iteration-count: infinite;
+	-o-animation: animationFrames ease 1s;
+	-o-animation-iteration-count: infinite;
+	-ms-animation: animationFrames ease 1s;
+	-ms-animation-iteration-count: infinite;
+}
+
+/**
+ * animation du loader ajax principal
+ * @minifiée
+ */
+@keyframes animationFrames{0%{left:0;top:0;opacity:1;transform:rotate(0deg) scaleX(1) scaleY(1)}50%{left:0;transform:rotate(0deg) scaleX(-1) scaleY(1)}100%{left:0;top:0;opacity:1;transform:rotate(0deg) scaleX(-1) scaleY(-1)}}@-moz-keyframes animationFrames{0%{left:0;top:0;opacity:1;-moz-transform:rotate(0deg) scaleX(1) scaleY(1)}50%{left:0;-moz-transform:rotate(0deg) scaleX(-1) scaleY(1)}100%{left:0;top:0;opacity:1;-moz-transform:rotate(0deg) scaleX(-1) scaleY(-1)}}@-webkit-keyframes animationFrames{0%{left:0;top:0;opacity:1;-webkit-transform:rotate(0deg) scaleX(1) scaleY(1)}50%{left:0;-webkit-transform:rotate(0deg) scaleX(-1) scaleY(1)}100%{left:0;top:0;opacity:1;-webkit-transform:rotate(0deg) scaleX(-1) scaleY(-1)}}@-o-keyframes animationFrames{0%{left:0;top:0;opacity:1;-o-transform:rotate(0deg) scaleX(1) scaleY(1)}50%{left:0;-o-transform:rotate(0deg) scaleX(-1) scaleY(1)}100%{left:0;top:0;opacity:1;-o-transform:rotate(0deg) scaleX(-1) scaleY(-1)}}@-ms-keyframes animationFrames{0%{left:0;top:0;opacity:1;-ms-transform:rotate(0deg) scaleX(1) scaleY(1)}50%{left:0;-ms-transform:rotate(0deg) scaleX(-1) scaleY(1)}100%{left:0;top:0;opacity:1;-ms-transform:rotate(0deg) scaleX(-1) scaleY(-1)}}
+
+*:active, *:focus
+{
+	outline:none;
+	-moz-outline:none;
+}
+
+body > .container-fluid
+{
+	height:100%;
+	
+	> .row:last-child
+	{
+		height:100%;
+	}
+}
+
+:-moz-any-link:focus {
+	outline: none;
+}
+
+#navBar, #corpus
+{
+	min-height:calc(~"100% - 50px");
+}
+
+//infobulles personnalisées
+
+body *[infobulle]:hover:after
+{
+	font-size:11px;
+	color:white;
+	content:attr(infobulle);
+	background:rgba(0,0,0,0.8);
+	padding: 4px 7px;
+	color: #fff;
+	position:fixed;
+	z-index:99999;
+	z-index: 20px;
+	border-radius:4px;
+	margin-top:-28px;
+}
+
+/**
+ * classes rapides
+ */
+.flex
+{
+	display:flex;
+}
+
+
+
+/**
+ * navbar
+ * Barre de navigation offre :
+ * - le control utilisateur
+ * - la navigation principale
+ * - l'accès à la recherche rapide
+ */
+
+#navBar
+{
+	position:fixed;
+	box-shadow:inset 0px 0 15px rgba(0,0,0,0.3);
+	width:200px;
+	float:left;
+	height:100%;
+	background:rgb(76, 70, 89);
+	
+	.user
+	{
+		width:100%;
+		
+		> img
+		{
+			display:block;
+			width:70px;
+			height:70px;
+			margin:40px auto;
+		}
+		
+		> a
+		{
+			text-align:center;
+			width:90%;
+			display:block;
+			margin:0 auto 5px auto;
+			background:rgba(255,255,255,0.3);
+			border-radius:3px;
+			padding:4px 0;
+			font-size:12px;
+			color:white;
+			transition:background .2s;
+			border:1px solid transparent;
+			cursor:pointer;
+			
+			&:hover
+			{
+				background:rgba(255,255,255,0.6);
+				text-decoration:none;
+			}
+			
+			&:last-child
+			{
+				margin-bottom:20px;
+			}
+		}
+	}
+	
+	> ul
+	{
+		width:100%;
+		padding:0;
+		margin:0;
+		
+		> li	
+		{
+			border-bottom:1px solid rgba(0,0,0,0.2);
+			box-shadow:0 1px 0 rgba(255,255,255,0.1);
+			border-left:3px solid transparent;
+
+			&.active
+			{
+				border-left:3px solid rgba(200,220,255,0.5);
+			}
+			
+			> a
+			{
+				display:block;
+				width:100%;
+				padding:10px;
+				.box-sizing(border-box);
+				color:rgba(226, 220, 239,0.8);
+				font-size:12px;
+				text-decoration:none;
+				transition:background .1s, border .1s;
+				
+				&:hover
+				{
+					background:rgba(255,255,255,0.05);
+				}
+				
+				&:active
+				{
+					background:rgba(0,0,0,0.1);
+				}
+				
+				
+				> span /* glyphicon */
+				{
+					margin-right:10px;
+					position:relative;
+					top:2px;
+					font-size:15px;
+				}
+			}
+			
+			> ul
+			{
+				display:none;
+				list-style:none;
+				padding:0;
+				margin:0;
+				border-left:3px solid transparent;
+				
+				> li > a
+				{
+					display:block;
+					color:rgba(255,255,255,0.6);
+					font-size:11px;
+					padding:10px 20px;
+					.box-sizing(border-box);
+				}
+				
+				&.active
+				{
+					display:block;
+				}
+			}
+		}
+	}
+}
+
+
+/**
+ * corpus
+ * coeur de la page, c'est lui qui comporte tous
+ * les éléments spécifiques à la page, ainsi que le contenu dynamique
+ */
+#corpus
+{
+	background:#E9F0F0;
+	width:calc(~"100% - 200px");
+	float:right;
+	
+	#flash-container
+	{
+		position:fixed;
+		top:0;
+		left:200px;
+		width:calc(~"100% - 200px");
+		z-index:200;
+		padding-top:23px;
+		
+		.alert
+		{
+			.box-shadow(0 0 10px rgba(0,0,0,0.2));
+		}
+	}
+
+	#title-data
+	{
+		display:flex;
+		justify-content:space-between;
+		height:70px;
+		border-bottom:@layout-border;
+		#gradient > .vertical(rgba(250,250,250,0.5), rgba(200,200,200,0.3));
+		
+		#main-title
+		{
+			height:70px;
+			width:300px;
+			
+			p
+			{
+				line-height:70px;
+				margin-left:35px;
+				font-weight:bold;
+				color:rgb(83, 83, 83);
+			}
+		}
+		
+		#top-data
+		{
+			width:450px;
+			display:flex;
+			height:70px;
+			margin-right:35px;
+			
+			> div
+			{
+				width:150px;
+				height:40px;
+				margin-top:15px;
+				border-left:1px solid rgba(0,0,0,0.15);
+				padding:0 10px;
+				
+				&:first-child
+				{
+					border-left:none;
+				}
+				
+				img
+				{
+					width:40px;
+					height:40px;
+					float:left;
+					margin-right:8px;
+				}
+				
+				span
+				{
+					font-size:11px;
+					display:block;
+					
+					&.title
+					{
+						font-weight:bold;
+						margin-top:5px;
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * position indique la position de l'utilisateur dans la hierarchie des pages,
+	 * et offre éventuellement des boutons pour intéragir avec le contenu
+	 */
+	#position
+	{
+		.box-sizing(border-box);
+		width:100%;
+		height:30px;
+		border-top:@layout-border-top;
+		border-bottom:@layout-border;
+		#gradient > .vertical(rgba(250,250,250,0.2), rgba(200,200,200,0.3));
+		display:flex;
+		justify-content:space-between;
+		
+		> div:first-child
+		{
+			margin-left:35px;
+			line-height:30px;
+			font-size:11px;
+			
+			span
+			{
+				color:rgb(60,60,60);
+			}
+			
+			img
+			{
+				margin:-2px 10px 0 10px;
+			}
+		}
+		
+		> div:last-child
+		{
+			margin-right:30px;
+			
+			.btn-group
+			{
+				display:block;
+				
+				button
+				{
+					.box-sizing(border-box);
+					height:30px;
+					margin:0;
+					padding:0 10px;
+					border:none;
+					border-left:@layout-border;
+					border-right:@layout-border;
+					border-bottom:1px solid transparent;
+					background:transparent;
+					font-size:11px;
+					position:relative;
+					top:-1px;
+				}
+				
+				.dropdown-menu
+				{
+					margin-top:-1px;
+					border-radius:0px;
+					border-top:none;
+					font-size:11px;
+					padding:0;
+					
+					li
+					{
+						
+						a
+						{
+							display:block;
+							padding:0 20px;
+							height:30px;
+							line-height:30px;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * dynamic-content
+	 * affiche le contenu dynamique à proprement parler
+	 * zone auto suffisante utilisant la grille bootstrap
+	 */
+	#dynamic-content
+	{
+		border-top:@layout-border-top;
+		
+		> .row
+		{
+			
+			&:first-child
+			{
+				margin-top:1%;
+			}
+			
+			margin:0 0 20px 0;
+			width:100%;
+			.box-sizing(border-box);
+			
+			#quickstart
+			{
+				margin:auto;
+				height:100px;
+				margin:30px 0 10px 0;
+				padding:0;
+				text-align:center;
+
+
+				li, li a 
+				{ 
+					border-radius: 50%; 
+				}
+
+				li 
+				{ 
+					width: 84px; 
+					height: 84px; 
+					box-shadow: inset 0 2px 0px #ccc, 0 1px 2px #fff; 
+					margin:0 7px; 
+					position: relative;
+					display: inline-block; 
+					text-align: center;  
+					border: 1px solid #dfdfdf; 
+					#gradient > .vertical(#e9e9e9, #eaeaea);
+				}
+
+				li a 
+				{ 
+					top: 8px; 
+					left: 8px;
+					width: 66px;
+					height: 66px; 
+					box-shadow:0 2px 3px #b5b5b5, 0px 1px 0 #fff inset; 
+					position: absolute;
+					#gradient > .vertical(#fafafa, #dfdfdf);
+					border: 1px solid #DFDFDF;
+					.transition(all 0.1s ease-in-out);
+				}
+
+				li a > img 
+				{ 
+					padding-top: 23px; 
+				}
+
+
+				li > a:hover  
+				{ 
+					#gradient > .vertical(#f9f9f9, #e6e6e6);
+				}
+
+				li > a:active 
+				{ 
+					box-shadow: 0 2px 2px #efefef, 0 0px 3px 0px #cdcdcd inset;
+					#gradient > .vertical(#f9f9f9, #e6e6e6);
+					.translate(0px,1px);
+				}
+			}
+		}
+		
+		[class^="col-"]:not(.nowidget)
+		{
+			padding:0 10px 0 10px;
+			
+			.widget
+			{
+				width:100%;
+				border:@widget-border;
+				border-radius:4px;
+				box-shadow:0 1px 2px rgba(0,0,0,0.05);
+				background:#F7F7F7;
+				margin-bottom:20px;
+				
+				.widget-title
+				{
+					width:100%;
+					height:40px;
+					#gradient > .vertical(#F6F6F6, #e0e0e0);
+					border-radius:3px 3px 0 0;
+					color:rgb(100,100,100);
+					.box-sizing(border-box);
+					border-bottom:@widget-border;
+					margin:0;
+					display:flex;
+					justify-content:space-between;
+					
+					span
+					{
+						height:40px;
+						line-height:40px;
+						font-weight:bold;
+						text-shadow:0 1px 0 white;
+						font-size:13px;
+						margin-left:20px;
+					}
+					
+					.widget-toolbar
+					{
+						
+						display:flex;
+						
+						button
+						{
+							.box-sizing(border-box);
+							height:40px;
+							margin:0;
+							padding:0 10px;
+							border:none;
+							border-left:@widget-border;
+							border-bottom:1px solid transparent;
+							background:transparent;
+							font-size:11px;
+							position:relative;
+							top:-1px;
+							
+							&:active
+							{
+								background:rgb(220,220,220);
+							}
+						}
+						
+						.widget-progress-bar
+						{
+							width:120px;
+							margin:17px 6px 0 6px;
+						}
+					}
+				}
+				
+				.widget-content
+				{
+					border-top:@layout-border-top;
+					min-height:20px;
+					
+					> .btn
+					{
+						margin:5px 5px 5px 0;
+						float:right;
+					}
+					
+					ul.data-liste
+					{
+						margin:15px;
+						padding:0;
+						list-style:none;
+						
+						li
+						{
+							display:flex;
+							height:28px;
+							
+							strong
+							{
+								display:block;
+								width:200px;
+								line-height:28px;
+							}
+							
+							span
+							{
+								display:block;
+								width:calc(~"100% - 200px");
+								padding:1px 10px 0px 1px;
+								font-size:11px;
+								height:25px;
+								line-height:22px;
+								margin:3px 0 0 0;
+							}
+							
+							&.separator
+							{
+								margin-top:8px;
+								margin-bottom:8px;
+								border-top:1px solid rgb(200,200,200);
+								display:block;
+								width:100%;
+								height:1px;
+							}
+						}
+					}
+					
+					> .accordeon
+					{
+						width:99%;
+						margin:5px auto;
+					}
+					
+					> p
+					{
+						padding:10px;
+						.box-sizing(border-box);
+					}
+				}
+				
+				.text-container
+				{
+					width:97%;
+					margin:10px auto;
+					background:#FEFEFE;
+					border:1px solid #DCDCDC;
+					border-radius:4px;
+					.box-sizing(border-box);
+					padding:10px;
+				}
+				
+				/**
+				 * widget-options
+				 * barre d'options pour widget
+				 */
+				.widget-options
+				{
+					display:none;
+					width:100%;
+					padding:10px;
+					.box-sizing(border-box);
+					border-bottom:1px solid rgb(220,220,220);
+					box-shadow:0 1px 0 white;
+				}
+			}
+			
+		}
+	}
+}
+
+#dossiers-n-shit
+{
+	padding:20px;
+}
+
+
+.widget
+{
+		
+	/**
+	 * Barre de progression, est composée de deux div
+	 * la premiere est le container, la deuxième la couleur
+	 */
+	.widget-progress-bar
+	{
+		height:5px;
+		background:rgb(220,220,220);
+		border:1px solid rgb(200,200,200);
+		border-radius:20px;
+		box-shadow:0 1px 0 rgba(255,255,255,0.5);
+		
+		> .color-bar
+		{
+			border-radius:20px;
+			height:5px;
+			position:relative;
+			top:-1px;
+			background:blue;
+			.box-sizing(border-box);
+			border:1px solid #5F9FCE;
+			#gradient > .vertical(#8BC1EB, #5F9FCE);
+		}
+	}
+	
+	/**
+	 * widget-data est un container d'information utilisé notamment pour les news
+	 * avec un titre en h4, un span d'infos supplémentaires dans le h4 et un contenu
+	 * en p
+	 */
+	 
+	.widget-data
+	{
+		width:98%;
+		margin:10px auto;
+		.box-sizing(border-box);
+		border:1px solid rgb(220,220,220);
+		background:rgb(245,245,245);
+		
+		> h4
+		{
+			margin:0;
+			width:100%;
+			height:30x;
+			font-size:15px;
+			line-height:30px;
+			border-bottom:1px solid rgb(220,220,220);
+			padding:0 10px;
+			.box-sizing(border-box);
+			
+			> span
+			{
+				color:rgb(160,160,160);
+				font-size:12px;
+				float:right;
+			}
+		}
+		
+		> p
+		{
+			padding:10px;
+			font-size:12px;
+		}
+	}
+	
+	/**
+	 * editables
+	 * les editables sont les span qui peuvent être modifiées
+	 * en ajax
+	 */
+	.editable
+	{
+		width:calc(~"100% - 200px");
+		border-top:1px solid transparent;
+		border-bottom:1px dotted rgb(220,220,220);
+		border-left:1px solid transparent;
+		padding:1px 10px 0px 1px;
+		font-size:11px;
+		height:23px;
+		line-height:21px;
+		margin:3px 0 0 0;
+		.transition(background .2s);
+		
+		&:hover
+		{
+			border-bottom:1px dotted rgb(150,150,150);
+		}
+		
+		&:focus
+		{
+			border:1px solid rgb(180,180,180);
+			box-shadow:0 1px 0 white,
+					   inset 0 1px 2px rgb(200,200,200);
+			.box-sizing(border-box);
+			background:rgb(220,240,255);
+		}
+	}
+	
+	.editable-working
+	{
+		background:rgb(239, 235, 194);
+	}
+	
+	.editable-success
+	{
+		background:rgb(162, 239, 166);
+	}
+	
+	.toggle-editable
+	{
+		height:20px;
+		position:relative;
+		left:5px;
+		opacity:0;
+	}
+	
+	.toggle-editable + label
+	{
+		width:40px;
+		height:17px;
+		#gradient > .vertical(rgb(200,100,100), rgb(250,150,150));
+		position:relative;
+		border-radius:200px;
+		border:1px solid rgba(0,0,0,0.4);
+		.transition(opacity .2s);
+		position:relative;
+		top:5px;
+		left:-12px;
+	}
+	
+	.toggle-editable:disabled + label
+	{
+		opacity:0.5;
+	}
+	
+	.toggle-editable + label:after
+	{
+		content:' ';
+		display:block;
+		width:15px;
+		height:15px;
+		#gradient > .vertical(rgb(252,252,252), rgb(235,235,235));
+		border-radius:50%;
+		position:relative;
+		left:0;
+		z-index:1000;
+		.transition(left .2s);
+	}
+	
+	.toggle-editable:checked + label
+	{
+		#gradient > .vertical(#92B95C, #9FC168);
+	}
+	
+	.toggle-editable:checked + label:after
+	{
+		position:relative;
+		left:23px;
+	}
+}
+
+/**
+ * Panneau d'inactivité de session
+ * le panneau prend la totalité de l'écran, rendant impossible tout interaction avec
+ * le netBS tant que la personne ne s'est pas reconnectée
+ */
+
+#session-panel
+{
+	position:fixed;
+	top:0;
+	left:0;
+	z-index:99999;
+	background:rgba(0,0,0,0.8);
+	width:100%;
+	height:100%;
+}
+
+#session-element
+{
+	text-align:center;
+	margin-top:10%;
+	color:white;
+	font:30px calibri;
+}
+
+#session-infos
+{
+	text-align:center;
+	margin-top:5px;
+	color:white;
+	font:20px calibri;
+}
+
+#session-button
+{
+	width:150px;
+	margin:auto;
+	border-radius:5px;
+	border:1px solid rgba(255,255,255,0.5);
+	margin-top:10px;
+	background:rgba(255,255,255,0.05);
+
+}
+
+#session-button button
+{
+	display:block;
+	width:150px;
+	padding:3px 0;
+	color:rgba(255,255,255,0.5);
+	line-height:25px;
+	border-radius:4px;
+	transition:color .2s, height .2s;
+	border:none;
+	cursor:pointer;
+	height:33px;
+	background:transparent;
+}
+
+#session-button button:hover
+{
+	color:white;
+}
+
+/**
+ * modales styles spéciaux
+ */
+
+.modal-data
+{
+	width:100%;
+	border-bottom:1px solid rgb(230,230,230);
+	margin-bottom:25px;
+	
+	> h4
+	{
+		width:100%;
+		
+		> span
+		{
+			font-size:12px;
+			float:right;
+			color:rgb(160,160,160);
+		}
+	}
+	
+	&:last-child
+	{
+		border-bottom:none;
+		margin-bottom:0px;
+	}
+}
+
+/**
+ * apparence de l'affichage des hierarchies des groupes
+ * groupes enfants ...
+ */
+
+.groupe-container
+{
+	width:100%;
+	padding:10px;
+	.box-sizing(border-box);
+	margin-bottom:20px;
+	
+	&:last-child
+	{
+		margin-bottom:0px;
+	}
+	
+	.groupe
+	{
+		display:block;
+		width:140px;
+		height:65px;
+		text-align:center;
+		line-height:65px;
+		background:rgb(210,230,255);
+		color:black;
+		border-radius:10px;
+		box-shadow:inset 0 -5px 20px rgba(0,0,0,0.1),
+				   inset 0 5px  20px rgba(255,255,255,0.6),
+				   	     0 1px  2px  rgba(0,0,0,0.5);
+		.transition(background .2s);
+				   	     
+		&:hover
+		{
+			text-decoration:none;
+			background:rgb(180,200,225);
+		}
+	}
+	
+	span
+	{
+		display:block;
+		font-size:30px;
+		margin:15px 20px 0 20px;
+		opacity:0.3;
+
+		&:last-child
+		{
+			display:none;
+		}
+	}
+}
+
+/**
+ * A mettre dans formulaires.less a la fin
+ ##############################################################################3
+ */
+
+/**
+ * Style des éléments de formulaire
+ * les styles sont valables pour tous les éléments de formulaire,
+ * si ils sont dans un formulaire, ou a l'exterieur en ayant la classe
+ * field
+ */
+
+
+form
+{
+	width:100%;
+	font-size:12px;
+	
+	fieldset
+	{
+		border:none;
+		
+		> .row
+		{
+			border-bottom:@widget-border;
+			border-top:1px solid white;
+			width:100%;
+			margin:auto;
+			
+			p
+			{
+				padding:20px 10px;
+			}
+			
+			&:first-child
+			{
+				border-top:none;
+			}
+			
+			&:last-child
+			{
+				border-bottom:none;
+				margin-bottom:20px;
+			}
+			
+			label
+			{
+				font-weight:normal;
+				line-height:70px;
+				color:rgb(100,100,100);
+				margin:0 0 0 10px;
+				width:400px;
+				.box-sizing(border-box);
+			}
+			
+			input,
+			select,
+			.slider,
+			textarea
+			{
+				margin:20px 0;
+			}
+			
+			textarea
+			{
+				width:calc(~"100% - 13px");
+				height:100px;
+				margin:20px 13px 20px 0;
+			}
+			
+			.col-md-4
+			{
+				label
+				{
+					padding-left:10px;
+					.box-sizing(border-box);
+				}
+			}
+			
+			input[type=date] + [id$="_time"]
+			{
+				select
+				{
+					width:50px;
+					margin:5px 0;
+					
+					&:first-child
+					{
+						margin-right:4px;
+					}
+					
+					&:last-child
+					{
+						margin-left:4px;
+					}
+				}
+			}
+			
+			[class^="col-"] > input[type=text],
+			[class^="col-"] > input[type=date],
+			[class^="col-"] > input[type=file],
+			[class^="col-"] > input[type=email]
+			{
+				width:calc(~"100% - 13px");
+				.box-sizing(border-box);
+			}
+			
+		}
+	}
+	
+	input[type=submit]
+	{
+		font-size:12px;
+
+		&:active, &:focus
+		{
+			outline:none;
+		}
+	}
+}
+
+form .row,
+.field
+{
+	input:not([type=submit]),
+	input:not([type=checkbox]),
+	select,
+	textarea
+	{
+		font-size:11px;
+		border:1px solid #D7D7D7;
+		padding:0 10px 0 5px;
+		box-shadow:0 1px 0 white,
+				   inset 0 1px 2px rgb(240,240,240);
+			
+		.transition(box-shadow .2s);
+		.box-sizing(border-box);
+		
+		&:focus
+		{
+			box-shadow:0 0 2px rgba(100,100,255,0.5);
+			border:1px solid rgba(100,100,255,0.5);
+		}
+	}
+	
+	textarea
+	{
+		padding:10px 5px;
+		resize:none;
+	}
+	
+	select
+	{
+		border:1px solid rgb(204, 204, 204);
+		box-shadow:inset 0 2px 2px rgb(240,240,240), 0 1px 0px white;
+		cursor:pointer;
+		color:rgb(100,100,100);
+		padding:5px 0;
+	}
+	
+	.slider
+	{
+		width:16px;
+		height:16px;
+		margin:0;
+		display:inline-block;
+		outline:none;
+		position:relative;
+		top:-4px;
+		left:10px;
+	}
+	
+	.slider + label
+	{
+		display:inline-block;
+		width:50px;
+		#gradient > .vertical(#D27969, #DC7E6E);
+		position:relative;
+		left:-25px;
+		border-radius:2px;
+		border:1px solid #BD6E61;
+		.box-sizing(border-box);
+		.transition(background .2s);
+		margin-top:21px;
+		cursor:pointer;
+		box-shadow:0 1px 0 white;
+		.noTextSelection();
+	}
+	
+	.slider + label:after
+	{
+		content:' ';
+		display:block;
+		width:20px;
+		height:20px;
+		#gradient > .vertical(rgb(252,252,252), rgb(235,235,235));
+		border-radius:1px;
+		position:relative;
+		left:0px;
+		.transition(left .2s);
+	}
+	
+	.slider:checked + label
+	{
+		#gradient > .vertical(#92B95C, #9FC168);
+		border:1px solid #849D51;
+	}
+	
+	.slider:checked + label:after
+	{
+		position:relative;
+		left:28px;
+	}
+	
+	input[type=file]
+	{
+		width:auto;
+		height:auto;
+		padding:3px;
+		background:rgb(253,253,253);
+	}
+	
+	input
+	{
+		height:30px;
+	}
+	
+	.btn
+	{
+		font-size:12px;
+	}
+	
+	.color
+	{
+		height:22px;
+		line-height:19px;
+	}
+}
+
+
+/**
+ * importation des feuilles indépendantes en bas
+ * pour éviter influences
+ */
+@import "chosen.less";

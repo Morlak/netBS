@@ -1,0 +1,15 @@
+                            
+                            
+                            <div class="form-element">
+								{{ form_label(distinctionForm.nom, "Nom") }}
+							    {{ form_errors(distinctionForm.nom) }}
+							    {{ form_widget(distinctionForm.nom) }}
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(distinctionForm.remarques, "Remarques") }}
+							    {{ form_errors(distinctionForm.remarques) }}
+							    {{ form_widget(distinctionForm.remarques) }}
+							</div>
+					
+							{{ form_rest(distinctionForm) }}

@@ -1,0 +1,98 @@
+{# 
+	Le formulaire d'ajout de membre inclus le script javascript pour cacher/afficher
+    Le formulaire imbriqué pour la famille
+#}
+
+					
+					
+							<div class="form-element">
+								{{ form_label(membreForm.famille, "Famille") }}
+							    {{ form_errors(membreForm.famille) }}
+							    {{ form_widget(membreForm.famille, { 'attr': {'class': 'chosen'} }) }}
+							</div>
+							
+							<div class="form-element">
+								<label for="FAMILLEINEXISTANTE">Famille inexistante</label>
+								<input type="checkbox" id="FAMILLEINEXISTANTE" />
+							</div>
+							
+							<div id="famille-included" class="form-inside" style="display:none">
+								{% include 'InterneFichierBundle:Form:famille_form.html.twig' %}
+							</div>
+							
+							<div class="form-element">
+								
+							    {{ form_errors(membreForm.prenom) }}
+							    
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(membreForm.naissance, "Date de naissance") }}
+							    {{ form_errors(membreForm.naissance) }}
+							    {{ form_widget(membreForm.naissance) }}
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(membreForm.sexe, "Sexe") }}
+							    {{ form_errors(membreForm.sexe) }}
+							    {{ form_widget(membreForm.sexe) }}
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(membreForm.numeroAvs, "Numéro AVS") }}
+							    {{ form_errors(membreForm.numeroAvs) }}
+							    {{ form_widget(membreForm.numeroAvs) }}
+							</div>
+
+							<div class="form-element">
+								{{ form_label(membreForm.contact.telephone, "Téléphone") }}
+							    {{ form_errors(membreForm.contact.telephone) }}
+							    {{ form_widget(membreForm.contact.telephone) }}
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(membreForm.contact.email, "Email") }}
+							    {{ form_errors(membreForm.contact.email) }}
+							    {{ form_widget(membreForm.contact.email) }}
+							</div>
+              
+              				<div class="form-element">
+								{{ form_label(membreForm.groupe, "Groupe") }}
+							    {{ form_errors(membreForm.groupe) }}
+							    {{ form_widget(membreForm.groupe) }}
+							</div>
+							
+							
+							<p>Si le membre n'habite pas chez ses parents, ou si pour une raison inconnue il a une adresse différente, c'est ici qu'elle va. Sinon, c'est l'adresse familiale qui prime.</p>
+							
+							<div class="form-element">
+								{{ form_label(membreForm.adresse.rue, "Rue") }}
+							    {{ form_errors(membreForm.adresse.rue) }}
+							    {{ form_widget(membreForm.adresse.rue) }}
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(membreForm.adresse.npa, "NPA") }}
+							    {{ form_errors(membreForm.adresse.npa) }}
+							    {{ form_widget(membreForm.adresse.npa) }}
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(membreForm.adresse.localite, "Localité") }}
+							    {{ form_errors(membreForm.adresse.localite) }}
+							    {{ form_widget(membreForm.adresse.localite) }}
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(membreForm.adresse.facturable, "Facturable") }}
+							    {{ form_errors(membreForm.adresse.facturable) }}
+							    {{ form_widget(membreForm.adresse.facturable) }}
+							</div>
+							
+							<div class="form-element">
+								{{ form_label(membreForm.adresse.remarques, "Remarques") }}
+							    {{ form_errors(membreForm.adresse.remarques) }}
+							    {{ form_widget(membreForm.adresse.remarques) }}
+							</div>
+							
+							<div style="display:none">{{ form_rest(membreForm) }}</div>

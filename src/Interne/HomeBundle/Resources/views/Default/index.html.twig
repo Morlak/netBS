@@ -1,0 +1,268 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block stylesheets %}
+
+	<link rel="stylesheet" type="text/css" href="{{ asset('static/css/agenda.css') }}">
+
+{% endblock %}
+
+{% block body %}
+
+	<div class="row">
+		
+		<div class="nowidget col-lg-12">
+							
+			<ul id="quickstart">
+				<li infobulle="nouveau membre"><a href="#" class="tipN"><img src="{{ asset('static/images/middlenav/create.png') }}" alt="" /></a></li>
+				<li infobulle="groupe(s)"><a href="#" class="tipN"><img src="{{ asset('static/images/middlenav/group.png') }}" alt="" /></a></li>
+				<li infobulle="mon compte"><a href="#" class="tipN"><img src="{{ asset('static/images/middlenav/stats.png') }}" alt="" /></a></li>
+			</ul>
+			
+		</div>
+		
+	</div>
+	
+	<div class="row">
+		
+		<div class="col-lg-4">
+			
+			<div class="widget">
+				<div class="widget-title">
+					<span>Dernières news</span>
+					
+					<div class="widget-toolbar">
+						<button data-toggle="modal" onclick="getAllNews();" data-target="#all-news-modal">Afficher tout</button>
+					</div>
+				</div>
+				
+				<div class="widget-content">
+					
+					{% for news in newsList %}
+					
+						<div class="widget-data">
+							
+							<h4>{{ news.titre }} <span>{{ news.date|date("d.m.Y") }}</span></h4>
+							
+							<p>{{ news.contenu }}</p>
+							
+						</div>
+					
+					{% endfor %}
+					
+				</div>
+			</div>
+		</div>
+		
+		<div class="col-lg-8">
+			
+			<div class="widget">
+				
+				<div class="widget-title">
+					<span>Téléchargements</span>
+					<div class="widget-toolbar">
+						<button class="datatables-options">options</button>
+					</div>
+				</div>
+				
+				<div class="widget-content">
+					
+					<table class="datatable">
+				
+						<thead>
+							<tr>
+								<th>Nom</th>
+								<th>Description</th>
+								<th>Catégorie</th>
+								<th>Type</th>
+								<th>Taille</th>
+								<th>Ajouté le</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+			
+							{% for Download in ddlList %}
+							<tr>
+								<td><a href="{{ path('InterneStamm_download_file', {'file' : Download.path}) }}">{{ Download.nom }}</a></td>
+								<td>{{ Download.description }}</td>
+								<td>{{ Download.categorie }}</td>
+								<td>{{ Download.type }}</td>
+								<td>{{ Download.size }}</td>
+								<td>{{ Download.date|date("d.m.Y") }}</td>
+							</tr>
+			
+							{% endfor %}
+							
+						</tbody>
+						
+					</table>
+					
+				</div>
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<div class="row">
+		
+		<div class="col-lg-12">
+			
+			<div class="widget">
+				
+				<div class="widget-title">
+					<span>Calendrier BS</span>
+				</div>
+				
+				<div class="widget-content">
+				
+					<div class="agenda-btn">
+	   		
+			   			<span class="link" id="agenda-previous-month"></span>
+			   			<span id="agenda-current-month"></span>
+			   			<span class="link" id="agenda-next-month"></span>
+			   		
+			   		</div>
+				
+					<table class="agenda" cellpadding="0">
+				
+						<tbody>
+							<tr>
+								<td id="agenda-day-1"></td>
+								<td id="agenda-day-2"></td>
+								<td id="agenda-day-3"></td>
+								<td id="agenda-day-4"></td>
+								<td id="agenda-day-5"></td>
+								<td id="agenda-day-6"></td>
+								<td id="agenda-day-7"></td>
+							</tr>
+							<tr>
+								<td id="agenda1"><span class="agenda-title">1</span><p id="agenda-content-1" class="agenda-content"></p></td>
+								<td id="agenda2"><span class="agenda-title">2</span><p id="agenda-content-2" class="agenda-content"></p></td>
+								<td id="agenda3"><span class="agenda-title">3</span><p id="agenda-content-3" class="agenda-content"></p></td>
+								<td id="agenda4"><span class="agenda-title">4</span><p id="agenda-content-4" class="agenda-content"></p></td>
+								<td id="agenda5"><span class="agenda-title">5</span><p id="agenda-content-5" class="agenda-content"></p></td>
+								<td id="agenda6"><span class="agenda-title">6</span><p id="agenda-content-6" class="agenda-content"></p></td>
+								<td id="agenda7"><span class="agenda-title">7</span><p id="agenda-content-7" class="agenda-content"></p></td>
+							</tr>
+							<tr>
+								<td id="agenda8"><span class="agenda-title">8</span><p id="agenda-content-8" class="agenda-content"></p></td>
+								<td id="agenda9"><span class="agenda-title">9</span><p id="agenda-content-9" class="agenda-content"></p></td>
+								<td id="agenda10"><span class="agenda-title">10</span><p id="agenda-content-10" class="agenda-content"></p></td>
+								<td id="agenda11"><span class="agenda-title">11</span><p id="agenda-content-11" class="agenda-content"></p></td>
+								<td id="agenda12"><span class="agenda-title">12</span><p id="agenda-content-12" class="agenda-content"></p></td>
+								<td id="agenda13"><span class="agenda-title">13</span><p id="agenda-content-13" class="agenda-content"></p></td>
+								<td id="agenda14"><span class="agenda-title">14</span><p id="agenda-content-14" class="agenda-content"></p></td>
+							</tr>
+							<tr>
+								<td id="agenda15"><span class="agenda-title">15</span><p id="agenda-content-15" class="agenda-content"></p></td>
+								<td id="agenda16"><span class="agenda-title">16</span><p id="agenda-content-16" class="agenda-content"></p></td>
+								<td id="agenda17"><span class="agenda-title">17</span><p id="agenda-content-17" class="agenda-content"></p></td>
+								<td id="agenda18"><span class="agenda-title">18</span><p id="agenda-content-18" class="agenda-content"></p></td>
+								<td id="agenda19"><span class="agenda-title">19</span><p id="agenda-content-19" class="agenda-content"></p></td>
+								<td id="agenda20"><span class="agenda-title">20</span><p id="agenda-content-20" class="agenda-content"></p></td>
+								<td id="agenda21"><span class="agenda-title">21</span><p id="agenda-content-21" class="agenda-content"></p></td>
+							</tr>
+							<tr>
+								<td id="agenda22"><span class="agenda-title">22</span><p id="agenda-content-22" class="agenda-content"></p></td>
+								<td id="agenda23"><span class="agenda-title">23</span><p id="agenda-content-23" class="agenda-content"></p></td>
+								<td id="agenda24"><span class="agenda-title">24</span><p id="agenda-content-24" class="agenda-content"></p></td>
+								<td id="agenda25"><span class="agenda-title">25</span><p id="agenda-content-25" class="agenda-content"></p></td>
+								<td id="agenda26"><span class="agenda-title">26</span><p id="agenda-content-26" class="agenda-content"></p></td>
+								<td id="agenda27"><span class="agenda-title">27</span><p id="agenda-content-27" class="agenda-content"></p></td>
+								<td id="agenda28"><span class="agenda-title">28</span><p id="agenda-content-28" class="agenda-content"></p></td>
+							</tr>
+							<tr>
+								<td id="agenda29"><span class="agenda-title">29</span><p id="agenda-content-29" class="agenda-content"></p></td>
+								<td id="agenda30"><span class="agenda-title">30</span><p id="agenda-content-30" class="agenda-content"></p></td>
+								<td id="agenda31"><span class="agenda-title">31</span><p id="agenda-content-31" class="agenda-content"></p></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
+					
+				</div>
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+{# modales n' shit #}
+
+<div class="modal fade" id="all-news-modal" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+		
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
+				<h4 class="modal-title" id="myModalLabel">Toutes les news</h4>
+			</div>
+			
+			<div id="all-news-container" class="modal-body">
+			
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript" src="{{ asset('static/js/agenda.js') }}"></script>
+<script type="text/javascript">
+	
+	/**
+	 * ce petit script va récupérer l'ensemble des news à l'aide d'ajax
+	 * pour les afficher dans la modal
+	 */
+	
+	function getAllNews() {
+		
+		$.ajax({
+        
+	        url  : '/netBS/web/app_dev.php/interne/stamm/getAllNews',
+	        type : 'POST',
+	        data : '',
+	        dataType : 'json',
+	        success : function(data) {
+	
+	            /**
+	             * on affiche la liste de toutes les news dans la modale
+	             */
+	            var div = '';
+	            
+	            for(var i = 0; i < data.length; i++) {
+	            	
+	            	div += '<div class="modal-data">'
+	            		   + '<h4>' + data[i].titre + '<span>' + data[i].date + '</span></h4>'
+	            		   + '<p>' + data[i].contenu + '</p>'
+	            		   + '</div>';
+	            }
+	            
+	            $('#all-news-container').html(div);
+	            
+	        },
+	        error : function(data) {
+				
+				alert('erreur lors de la récupération de l\'ensemble des news');
+	        },
+	    });
+	}
+	
+</script>
+
+{% endblock %}

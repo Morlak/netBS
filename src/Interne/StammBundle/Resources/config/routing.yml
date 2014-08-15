@@ -1,0 +1,27 @@
+InterneStamm_newsAjax: #ajax de récupération de toutes les news
+    pattern: /getAllNews
+    defaults: { _controller: InterneStammBundle:Ajax:getAllNews }
+    
+InterneStamm_agenda_update: # update de l'agenda par AJAX
+    pattern:  /agenda/{month}/{year}
+    defaults: { _controller: InterneStammBundle:Ajax:agendaUpdate }
+    
+InterneStamm_download_file:
+    pattern:  /downloads/{file}
+    defaults: { _controller: InterneStammBundle:Stamm:downloadFile }
+    
+# dashboard
+InterneStamm_dashboard:
+    pattern:  /dashboard
+    defaults: { _controller: InterneStammBundle:Stamm:dashboardShow }
+
+# traitement formulaires ajout
+# une méthode to rule them all
+InterneStamm_dashboard_add:
+    pattern:  /dashboard/add/{entity}
+    defaults: { _controller: InterneStammBundle:Stamm:dashboardAdd }
+    
+# route de suppression
+InterneStamm_dashboard_remove:
+    pattern:  /dashboard/remove/{entity}/{id}
+    defaults: { _controller: InterneStammBundle:Stamm:dashboardRemove }

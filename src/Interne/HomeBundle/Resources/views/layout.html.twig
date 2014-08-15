@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>Net BS - {% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{{ asset('static/css/aristo.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('static/css/bootstrap-edit.css') }}" type="text/css">
+
+    {% block stylesheets %}
+
+    {% endblock %}
+   	
+    <link rel="stylesheet/less" href="{{ asset('static/less/netbs.less') }}" type="text/css">
+    <script src="{{ asset('static/js/less.js') }}" type="text/javascript"></script>
+
+</head>
+
+<body>
+    
+    <div class="container-fluid">
+	
+	<div id="ajax-panel">
+	    <div id="ajax-panel-loader"></div>
+	</div>
+    	
+    	<div class="row">
+    		
+    		{{ render(controller('InterneHomeBundle:Layout:menu')) }}
+			
+			<div id="corpus">
+			    
+			    <div id="flash-container">
+				
+				{% for flash in app.session.flashBag.get('notice') %}
+				    
+				    <div class="row">
+					<div class="alert alert-info alert-dismissible col-lg-6 col-lg-offset-3" role="alert">
+					    <button type="button" class="close" data-dismiss="alert">
+						<span aria-hidden="true">&times;</span>
+						<span class="sr-only">Close</span>
+					    </button>
+					    <strong>{{ flash }}</strong>
+					</div>
+				    </div>
+				    
+				{% endfor %}
+				
+				{% for flash in app.session.flashBag.get('error') %}
+				    
+				    <div class="row">
+					<div class="alert alert-danger alert-dismissible col-lg-6 col-lg-offset-3" role="alert">
+					    <button type="button" class="close" data-dismiss="alert">
+						<span aria-hidden="true">&times;</span>
+						<span class="sr-only">Close</span>
+					    </button>
+					    <strong>{{ flash }}</strong>
+					</div>
+				    </div>
+				    
+				{% endfor %}
+			    
+			    </div>
+				
+				<div id="title-data">
+					
+					<div id="main-title">
+						<p>netBS - Dashboard</p>
+					</div>
+					
+					<div id="top-data">
+						
+						<div>
+							<img src="{{ asset('static/images/layout/imac.png') }}" />
+							<span class="title">Dernière fois</span>
+							<span>21.03.2014</span>
+						</div>
+						<div>
+							<img src="{{ asset('static/images/layout/licence.png') }}" />
+							<span class="title">Groupe</span>
+							<span>Montfort</span>
+						</div>
+						<div>
+							<img src="{{ asset('static/images/layout/browser.png') }}" />
+							<span class="title">Autorisations</span>
+							<span>niveau 2</span>
+						</div>
+					
+					</div>
+					
+				</div> <!-- /#title-data -->
+				
+				<div id="position">
+					
+					<div>
+						<span>netBS</span>
+						<img src="{{ asset('static/images/layout/arrow-right.png') }}" />
+						<span>{{ block('title') }}</span>
+					</div>
+					
+					<div>
+
+						<div class="btn-group">
+						
+							{% block layoutOptions %}
+							
+							{% endblock %}
+							
+						</div>
+						
+					</div>
+					
+				</div> <!-- /#position -->
+				
+				<div id="dynamic-content">
+					
+					{% block body %}
+					
+					{% endblock %}
+					
+				</div> <!-- /#dynamic-content -->
+				
+			</div>
+    		
+    	</div>
+    	
+    </div>
+    
+    
+    <!-- javascript n' shit -->
+    
+    <div class="debogger"></div>
+	
+    <script src="{{ asset('static/js/jquery.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('static/js/bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('static/js/jquery-ui.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('static/js/expirationSession.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('static/js/jquery.dataTables.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('static/js/chosen.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('static/js/fonctions.js') }}" type="text/javascript"></script>
+
+
+    {% block javascript %}
+    {% endblock %}
+    
+
+</body>
+
+</html>
+

@@ -1,0 +1,158 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}{{ groupe.nom }}{% endblock %}
+
+
+{% block body %}
+
+	<div class="row">
+		
+		<div class="col-lg-6 col-lg-offset-1">
+			
+			<div class="no-widget">
+				
+				<h2>{{ groupe.nom }}</h2>
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<div class="row">
+		
+		<div class="col-lg-2">
+			
+			<div class="widget">
+				<div class="widget-title">
+					<span>Groupe parent</span>
+				</div>
+				
+				<div class="widget-content">
+					
+					<div class="flex groupe-container">
+						
+						{% if groupe.parent != null %}
+					
+							<a class="groupe" href="{{ path('InterneStructure_voir_groupe', {id: groupe.parent.id}) }}">
+								{{ groupe.parent.nom }}
+							</a>
+							
+						{% endif %}
+						
+					</div>
+					
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="col-lg-10">
+			<div class="widget">
+				<div class="widget-title">
+					<span>Groupes enfants</span>
+				</div>
+				
+				<div class="widget-content">
+				
+					<div class="groupe-container flex">
+					
+						{% for enfant in groupe.enfants  %}
+						
+							<a class="groupe" href="{{ path('InterneStructure_voir_groupe', {id: enfant.id}) }}">
+								{{ enfant.nom }}
+							</a>
+							
+							<span class="glyphicon glyphicon-chevron-right"></span>
+						
+						{% endfor %}
+						
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		
+		<div class="col-lg-12">
+			
+			<div class="widget">
+				
+				<div class="widget-title">
+					<span>Attributions liées</span>
+					
+					<div class="widget-toolbar">
+						<button>Génerer liste</button>
+						<button class="widget-options-button">rechercher</button>
+					</div>
+				</div>
+				
+				<div class="widget-content">
+				
+					<div class="widget-options field">
+					
+						<h4>Rechercher des attributions liées</h4>
+							
+							<select>
+								<option value="main">Ce groupe uniquement</option>
+								<option value="all">Ce groupe et ses enfants</option>
+								<option value="children">Ses enfants uniquement</option>
+							</select>
+							
+							<input placeholder="Début" type="text" id="date1" class="datepicker" />
+							<input placeholder="Fin" type="text" id="date2" class="datepicker" />
+							
+							<button class="btn btn-primary" onclick="retrieveAttributions({{ groupe.id}}, this);">Valider</button>
+					
+					</div>
+					
+					<table id="attributionsTable" class="datatable">
+					
+						<thead>
+							<tr>
+								<th>nom</th>
+								<th>prenom</th>
+								<th>fonction</th>
+								<th>groupe</th>
+								<th>debut</th>
+								<th>fin</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						
+							{% for attribution in attrs %}
+								
+								<tr>
+									<td>{{ attribution.membre.famille.nom }}</td>
+									<td><a href="{{ path('InterneFichier_voir_membre', {'id' : attribution.membre.id}) }}">{{ attribution.membre.prenom }}</a></td>
+									<td>{{ attribution.fonction.nom }}</td>
+									<td><a href="{{ path('InterneStructure_voir_groupe', {'id' : attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></td>
+									<td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
+									<td>{{ attribution.dateFin|date("d.m.Y") }}</td>
+								</tr>
+								
+							{% endfor %}
+						
+						</tbody>
+						
+					</table>
+					
+				</div>
+				
+			</div>
+			
+		</div>
+		
+	</div>
+			
+
+{% endblock %}
+
+{% block javascript %}
+
+	<script type="text/javascript" src="{{ asset('static/js/groupes.js') }}"></script>
+
+{% endblock %}

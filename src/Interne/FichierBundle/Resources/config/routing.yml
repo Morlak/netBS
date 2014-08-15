@@ -1,0 +1,20 @@
+
+InterneFichier_creer_membre:
+    pattern:  /creer/membre
+    defaults: { _controller: InterneFichierBundle:Fichier:creerMembre }
+
+InterneFichier_voir_membre:
+    pattern:  /voir/membre/{id}
+    defaults: { _controller: InterneFichierBundle:Fichier:voirMembre }
+
+InterneFichier_voir_famille:
+    pattern:  /voir/famille/{id}
+    defaults: { _controller: InterneFichierBundle:Fichier:voirFamille }
+    
+#adder
+#méthode unique en ajax pour lier facilement des entités aux membres
+InterneFichier_adder:
+    pattern:  /adder
+    defaults: { _controller: InterneFichierBundle:Adder:adder }
+    
+    

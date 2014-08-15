@@ -1,0 +1,33 @@
+InterneStructure_hierarchie:
+    pattern:  /hierarchie
+    defaults: { _controller: InterneStructureBundle:Structure:hierarchie }
+
+InterneStructure_distinctions:
+    pattern:  /distinctions
+    defaults: { _controller: InterneStructureBundle:Distinction:distinctions }
+
+InterneStructure_attributions_fonctions:
+    pattern:  /attributions-fonctions
+    defaults: { _controller: InterneStructureBundle:Attribution:attributionsFonctions }
+
+InterneStructure_voir_groupe:
+    pattern:  /groupe/{id}
+    defaults: { _controller: InterneStructureBundle:Structure:voirGroupe }
+    
+InterneStructure_remove_attribution:
+    pattern:  /remove/attribution/{attributionId}
+    defaults: { _controller: InterneStructureBundle:Attribution:removeAttribution }
+    
+#ajax
+InterneStructure_full_hierarchie_AJAX:
+    pattern:  /ajax/full_hierarchie
+    defaults: { _controller: InterneStructureBundle:Structure:AJAXGetFullHierarchie }
+  
+InterneStructure_attributions_groupes_enfants_AJAX:
+    pattern:  /ajax/attributions_from_groupes/{id}/{hierarchie}/{date1}/{date2}
+    defaults: { _controller: InterneStructureBundle:Attribution:AJAXGetAttributionsGroupes }
+      
+    
+InterneStructure_debog:
+    pattern:  /debog
+    defaults: { _controller: InterneStructureBundle:Structure:debog }

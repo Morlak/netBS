@@ -1,0 +1,254 @@
+@import "mixins.less";
+
+body, html
+{
+	height:100%;
+}
+
+body
+{
+	display:flex;
+}
+
+nav
+{
+	width:250px;
+	height:100%;
+	background:rgb(220,220,220);
+	position:fixed;
+	z-index:10;
+	top:0;
+	left:0;
+	.box-shadow(0 0 15px 1px black);
+	overflow:hidden;
+	background:rgb(242,244,248);
+	
+	#insiders-container
+	{
+		display:none;
+	}
+	
+	header
+	{
+		height:130px;
+		background:#4C4659;
+		box-shadow:	inset 0 -1px 0 rgba(0,0,0,0.2),
+				0 0 10px rgba(0,0,0,0.8);
+		border-bottom:1px solid rgb(186, 180, 189);
+				
+		
+		img
+		{
+			width:70px;
+			display:block;
+			margin:auto;
+			padding-top:20px;
+		}
+	}
+	
+	#options
+	{
+		height:50px;
+		
+		button
+		{
+			margin:10px 10px 0 10px;
+			.box-sizing(border-box);
+			width:calc(~"50% - 17px");
+			height:35px;
+			font-size:17px;
+			border:none;
+			background:rgb(230,230,230);
+			border:none;
+			border-radius:3px;
+			.box-shadow(0 1px 1px rgba(0,0,0,0.2));
+			.transition(background .2s);
+			
+			&:hover
+			{
+				background:white;
+			}
+			
+			&:first-child
+			{
+				margin-right:5px;
+			}
+			
+			&:last-child
+			{
+				margin-left:5px;
+			}
+		}
+	}
+	
+	.insider
+	{
+		margin-bottom:20px;
+		padding:0;
+		
+		.i-container
+		{
+			padding:0;
+		}
+		
+		h3
+		{
+			width:calc(~"100% - 20px");
+			margin:auto;
+			
+			span:first-child
+			{
+				display:block;
+				height:0px;
+				position:relative;
+				z-index:11;
+				top:15px;
+				width:100%;
+				border-bottom:1px solid rgb(200,200,200);
+				.box-shadow(0 1px 0 white);
+				background:green;
+			}
+			
+			span:last-child
+			{
+				font-size:14px;
+				position:relative;
+				z-index:123;
+				padding-right:10px;
+				text-align:center;
+				background:#F2F4F8;
+				margin:auto;
+			}
+		}
+		padding:10px 0;
+		.box-sizing(border-box);
+		
+		button
+		{
+			display:block;
+			width:250px;
+			height:50px;
+			border:none;
+			margin-bottom:5px;
+			display:flex;
+			background:transparent;
+			.transition(background .2s);
+			font-size:13px;
+			
+			&:hover
+			{
+				background:white;
+			}
+			
+			> span
+			{
+				display:block;
+				
+				&:first-child
+				{
+					width:40px;
+					height:40px;
+					margin-left:10px;
+					margin-top:2px;
+					border-radius:100%;
+					margin-right:10px;
+					line-height:40px;
+				}
+				
+				&:last-child
+				{
+					width:calc(~"100% - 40px - 20px - 10px");
+					height:50px;
+					line-height: 45px;
+					text-align: left;
+					overflow:hidden;
+					
+					> span
+					{
+						display: inline-block;
+						vertical-align: middle;
+						word-wrap:break-word;
+						line-height: normal;
+					}
+				}
+			}
+		}
+	}
+}
+
+.vakata-context { 
+ z-index:999 !important; 
+}
+
+section
+{
+	position:relative;
+	margin-left:250px;
+	z-index:1;
+	width:calc(~"100% - 250px");
+	height:100%;
+	
+	#gallery
+	{
+		width:100%;
+		height:100%;
+		
+		a
+		{
+			.box-shadow(inset 0 0 10px rgba(0,0,0,0.05));
+		}
+		
+		img
+		{
+			opacity:0.9;
+			.transition(opacity .4s);
+			
+			&:hover
+			{
+				opacity:1;
+			}
+		}
+	}
+	
+	&.overflowed
+	{
+		overflow:hidden;
+		
+		#gallery img
+		{
+			opacity:0.4;
+			
+			&:hover
+			{
+				opacity:1;
+			}
+		}
+	}
+}
+
+#albums-n-shit
+{
+	height:100%;
+	width:250px;
+	margin-left:207px;
+	background:blue;
+	
+	#albums-container
+	{
+		width:200px;
+		height:100%;
+		background:white;
+		float:right;
+		position:relative;
+		z-index:9;
+		.box-shadow(0 0 15px 1px black);
+	}
+}
+
+/*!
+ * Justified Gallery - v3.2.0
+ * http://miromannino.com/projects/justified-gallery/
+ * Copyright (c) 2014 Miro Mannino
+ * Licensed under the MIT license.
+ */
+@-webkit-keyframes justified-gallery-show-caption-animation{from{opacity:0}to{opacity:.7}}@-moz-keyframes justified-gallery-show-caption-animation{from{opacity:0}to{opacity:.7}}@-o-keyframes justified-gallery-show-caption-animation{from{opacity:0}to{opacity:.7}}@keyframes justified-gallery-show-caption-animation{from{opacity:0}to{opacity:.7}}@-webkit-keyframes justified-gallery-show-entry-animation{from{opacity:0}to{opacity:1}}@-moz-keyframes justified-gallery-show-entry-animation{from{opacity:0}to{opacity:1}}@-o-keyframes justified-gallery-show-entry-animation{from{opacity:0}to{opacity:1}}@keyframes justified-gallery-show-entry-animation{from{opacity:0}to{opacity:1}}.justified-gallery{width:100%;position:relative;overflow:hidden}.justified-gallery>a,.justified-gallery>div{position:absolute;display:inline-block;overflow:hidden;opacity:0;filter:alpha(opacity=0)}.justified-gallery>a>img,.justified-gallery>div>img{position:absolute;top:50%;left:50%;margin:0;padding:0;border:0}.justified-gallery>a>.caption,.justified-gallery>div>.caption{display:none;position:absolute;bottom:0;padding:5px;background-color:#000;left:0;right:0;margin:0;color:#fff;font-size:12px;font-weight:300;font-family:sans-serif}.justified-gallery>a>.caption.caption-visible,.justified-gallery>div>.caption.caption-visible{display:initial;opacity:.7;filter:alpha(opacity=70);-webkit-animation:justified-gallery-show-caption-animation 500ms 0 ease;-moz-animation:justified-gallery-show-caption-animation 500ms 0 ease;-ms-animation:justified-gallery-show-caption-animation 500ms 0 ease}.justified-gallery>.entry-visible{opacity:1;filter:alpha(opacity=1);-webkit-animation:justified-gallery-show-entry-animation 300ms 0 ease;-moz-animation:justified-gallery-show-entry-animation 300ms 0 ease;-ms-animation:justified-gallery-show-entry-animation 300ms 0 ease}.justified-gallery>.spinner{position:absolute;bottom:0;margin-left:-24px;padding:10px 0;left:50%;opacity:initial;filter:initial;overflow:initial}.justified-gallery>.spinner>span{display:inline-block;opacity:0;filter:alpha(opacity=0);width:8px;height:8px;margin:0 4px;background-color:#000;border-top-left-radius:6px;border-top-right-radius:6px;border-bottom-right-radius:6px;border-bottom-left-radius:6px}

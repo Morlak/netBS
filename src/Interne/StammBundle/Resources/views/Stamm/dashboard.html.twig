@@ -1,0 +1,354 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+           		
+<div class="row">
+	
+	<div class="col-lg-4">
+		
+		<div class="widget">
+			<div class="widget-title">
+				<span>Ajouter une news</span>
+			</div>
+			
+			<div class="widget-content">
+				
+				<form method="post" action="{{ path('InterneStamm_dashboard_add', {'entity' : 'News'}) }}" {{ form_enctype(newsForm) }}>
+					
+					{% if newsForm.vars['errors'] is not empty %}
+						
+						<div class="row">
+						
+							<div class="col-lg-12 form-error">{{ form_errors(newsForm) }}</div>
+							
+						</div>
+						
+					{% endif %}
+					
+					<fieldset>
+						<div class="row">
+							<div class="col-md-4">
+								{{ form_label(newsForm.titre, "Titre de la news") }}
+								<span class="form-error">{{ form_errors(newsForm.titre) }}</span>
+							</div>
+							<div class="col-md-8">{{ form_widget(newsForm.titre) }}</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-4">
+								{{ form_label(newsForm.contenu, "Contenu") }}
+								<span class="form-error">{{ form_errors(newsForm.contenu) }}</span>
+							</div>
+							<div class="col-md-8">{{ form_widget(newsForm.contenu) }}</div>
+						</div>
+						
+						{{ form_rest(newsForm) }}
+						
+						<div class="row">
+							
+							<div class="col-md-4"></div>
+							<div class="col-md-8">
+								<input type="submit" class="btn btn-success" value="Ajouter">
+							</div>
+							
+						</div>
+					</fieldset>
+					
+				</form>
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<div class="col-lg-8">
+		
+		<div class="widget">
+			<div class="widget-title">
+				<span>Gérer les news</span>
+				
+				<div class="widget-toolbar">
+					<button class="datatables-options">options</button>
+				</div>
+			</div>
+			
+			<div class="widget-content">
+				
+				<table class="datatable">
+								
+					<thead>
+						<tr>
+							<th>Titre</th>
+							<th>Date</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						{% for News in newsList %}
+						
+						<tr>
+							<td>{{ News.titre }}</td>
+							<td>{{ News.date|date('d.m.Y') }}</td>
+							<td><a href="{{ path('InterneStamm_dashboard_remove', {'entity' : 'News', 'id' : News.id }) }}" onclick="return confirm('Supprimer la news ?');">Supprimer</a></td>
+						</tr>
+						
+						{% endfor %}
+					</tbody>
+					
+				</table>
+				
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+
+<div class="row">
+	
+	<div class="col-lg-4">
+		
+		<div class="widget">
+			<div class="widget-title">
+				<span>Ajouter un téléchargement</span>
+			</div>
+			
+			<div class="widget-content">
+				<form method="post" action="{{ path('InterneStamm_dashboard_add', {'entity' : 'Download'}) }}" {{ form_enctype(ddlForm) }}>
+				
+					<fieldset>
+					
+						{% if ddlForm.vars['errors'] is not empty %}
+							
+							<div class="row">
+							
+								<div class="col-lg-12 form-error">{{ form_errors(ddlForm) }}</div>
+								
+							</div>
+							
+						{% endif %}
+						
+						<div class="row">
+							<div class="col-md-4">
+								{{ form_label(ddlForm.nom, "Nom du fichier") }}
+								<span>{{ form_errors(ddlForm.nom) }}</span>
+							</div>
+							<div class="col-md-8">
+								{{ form_widget(ddlForm.nom) }}
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-4">
+								{{ form_label(ddlForm.description, "Description du fichier") }}
+								<span>{{ form_errors(ddlForm.description) }}</span>
+							</div>
+							<div class="col-md-8">
+								{{ form_widget(ddlForm.description) }}
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-4">
+								{{ form_label(ddlForm.categorie, "Catégorie") }}
+								<span>{{ form_errors(ddlForm.categorie) }}</span>
+							</div>
+							<div class="col-md-8">
+								{{ form_widget(ddlForm.categorie) }}
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-4">
+								{{ form_label(ddlForm.file, "Fichier") }}
+								<span>{{ form_errors(ddlForm.file) }}</span>
+							</div>
+							<div class="col-md-8">
+								{{ form_widget(ddlForm.file) }}
+							</div>
+						</div>
+						
+						{{ form_rest(ddlForm) }}
+						
+						<div class="row">
+							<div class="col-md-4"></div>
+							<div class="col-md-8">
+								<input type="submit" class="btn btn-success" value="Ajouter">
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="col-lg-8">
+		
+		<div class="widget">
+			<div class="widget-title">
+				<span>Gérer les fichiers</span>
+				<div class="widget-toolbar">
+					<button class="datatables-options">options</button>
+				</div>
+			</div>
+			<div class="widget-content">
+				<table class="datatable">
+				
+					<thead>
+						<tr>
+							<th>Nom</th>
+							<th>Type</th>
+							<th>Date</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						{% for Download in ddlList %}
+						
+						<tr>
+							<td>{{ Download.nom }}</td>
+							<td>{{ Download.type }}</td>
+							<td>{{ Download.date|date('d.m.Y') }}</td>
+							<td><a href="{{ path('InterneStamm_dashboard_remove', {'entity' : 'Download', 'id' : Download.id }) }}" onclick="return confirm('Supprimer le fichier ?');">Supprimer</a></td>
+						</tr>
+						
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+
+<div class="row">
+	
+	<div class="col-lg-4">
+		<div class="widget">
+			<div class="widget-title">
+				<span>Ajouter un évenement</span>
+			</div>
+			
+			<div class="widget-content">
+				
+				<form method="post" action="{{ path('InterneStamm_dashboard_add', {'entity' : 'Evenement'}) }}">
+					
+					<fieldset>
+						{% if eventForm.vars['errors'] is not empty %}
+							
+							<div class="row">
+							
+								<div class="col-lg-12 form-error">{{ form_errors(eventForm) }}</div>
+								
+							</div>
+							
+						{% endif %}
+						
+						<div class="row">
+							<div class="col-md-4">
+								{{ form_label(eventForm.nom, "Nom") }}
+								<span>{{ form_errors(eventForm.nom) }}</span>
+							</div>
+							<div class="col-md-8">
+								{{ form_widget(eventForm.nom) }}
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-4">
+								{{ form_label(eventForm.categorie, "Catégorie") }}
+								<span>{{ form_errors(eventForm.categorie) }}</span>
+							</div>
+							<div class="col-md-8">
+								{{ form_widget(eventForm.categorie) }}
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-4">
+								{{ form_label(eventForm.debut, "Date de Début") }}
+								<span>{{ form_errors(eventForm.debut) }}</span>
+							</div>
+							<div class="col-md-8">
+								{{ form_widget(eventForm.debut) }}
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-md-4">
+								{{ form_label(eventForm.fin, "Date de fin") }}
+								<span>{{ form_errors(eventForm.fin) }}</span>
+							</div>
+							<div class="col-md-8">
+								{{ form_widget(eventForm.fin) }}
+							</div>
+						</div>
+						
+						{{ form_rest(eventForm) }}
+						
+						<div class="row">
+							<div class="col-md-4"></div>
+							<div class="col-md-8">
+								<input type="submit" class="btn btn-success" value="Ajouter">
+							</div>
+						</div>
+					</fieldset>
+				</form>
+				
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-lg-8">
+		
+		<div class="widget">
+			<div class="widget-title">
+				<span>Gérer les évenements du calendrier BS</span>
+				<div class="widget-toolbar">
+					<button class="datatables-options">options</button>
+				</div>
+			</div>
+			
+			<div class="widget-content">
+				<table class="datatable">
+									
+					<thead>
+						<tr>
+							<th>Nom</th>
+							<th>Catégorie</th>
+							<th>Début</th>
+							<th>Fin</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						{% for Evenement in eventList %}
+						
+						<tr>
+							<td>{{ Evenement.nom }}</td>
+							<td>{{ Evenement.categorie }}</td>
+							<td>{{Evenement.debut|date('d.m.Y') }}</td>
+							<td>{{Evenement.fin|date('d.m.Y') }}</td>
+							<td><a href="{{ path('InterneStamm_dashboard_remove', {'entity' : 'Evenement', 'id' : Evenement.id }) }}" onclick="return confirm('Supprimer cet event ?');">Supprimer</a></td>
+						</tr>
+						
+						{% endfor %}
+					</tbody>
+
+				</table>
+			</div>
+		</div>
+		
+	</div>
+	
+</div>
+
+{% endblock %}

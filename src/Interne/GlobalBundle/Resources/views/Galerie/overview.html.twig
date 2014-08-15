@@ -1,0 +1,88 @@
+{% extends 'InterneHomeBundle::layout.html.twig' %}
+
+{% block title %}Galerie{% endblock %}
+
+{% block body %}
+    
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Groupes inscrits dans la galerie</span>
+                    
+                    <div class="widget-toolbar">
+                        <button data-toggle="modal" data-target="#galerie-groupe-inscription-modal">Inscrire un groupe</button>
+                    </div>
+                </div>
+                
+                <div class="widget-content">
+                        
+                        <table class="datatable">
+                            
+                            <thead>
+                                <th>Nom du groupe</th>
+                                <th class="col-sm-2">Actif</th>
+                                <th class="col-sm-2">Droit de publier</th>
+                                <th class="col-sm-2">Albums visibles</th>
+                            </thead>
+                            
+                            <tbody>
+                                
+                                {% for droit in listeDroits %}
+                                    <tr>
+                                        <td>{{ droit.groupe.nom }}</td>
+                                        <td><input type="checkbox" name="ExterneGalerieBundle.droit.{{ droit.id }}.active" class="toggle-editable" {% if droit.active == 1 %}checked{% else %}{% endif %}></td>
+                                        <td><input type="checkbox" name="ExterneGalerieBundle.droit.{{ droit.id }}.droitAlbum" class="toggle-editable" {% if droit.droitAlbum == 1 %}checked{% else %}{% endif %}></td>
+                                        <td><input type="checkbox" name="ExterneGalerieBundle.droit.{{ droit.id }}.albumsVisibles" class="toggle-editable" {% if droit.albumsVisibles == 1 %}checked{% else %}{% endif %}></td>
+                                    </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                            
+                        </table>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="galerie-groupe-inscription-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Inscrire un groupe à la galerie</h4>
+                </div>
+            
+                <div class="modal-body">
+                    <form id="inscrire-groupe" method="post" action="">
+                        
+                        <div class="form-error">
+                            {{ form_errors(droitForm) }}
+                        </div>
+                        
+                        <fieldset>
+                            <div class="row">
+                                <div class="col-sm-3">{{ form_label(droitForm.groupe, "Groupe") }}</div>
+                                <div class="col-sm-9">{{ form_widget(droitForm.groupe, { attr : { class : "chosen" }}) }}</div>
+                            </div>
+                        </fieldset>
+                        
+                        {{ form_rest(droitForm) }}
+                    </form>
+                </div>
+                    
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="document.getElementById('inscrire-groupe').submit();">Ajouter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block javascript %}
+    <script src="{{ asset('static/js/modifikator.js') }}"></script>
+{% endblock %}
