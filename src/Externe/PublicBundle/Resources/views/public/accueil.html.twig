@@ -1,0 +1,147 @@
+{% extends 'ExternePublicBundle::layout.html.twig '%}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    
+    <div class="row">
+        
+        <div class="col-lg-12">
+            
+            <div id="home-panel">
+                
+                <blockquote>
+                    <p>Le bonheur ne vient pas à ceux qui l'attendent assis.</p>
+                    <footer>Baden Powell</footer>
+                </blockquote>
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    <div class="row">
+        
+        <div class="col-sm-5">
+            
+            <h4><strong>Dernières news</strong></h4>
+            
+            <div class="news">
+                <p>Centenaire !<span>Le 26.02.2014</span></p>
+                <p>Bientot le centenaire les soss tu connais les bails a l'ancienne</p>
+            </div>
+            
+        </div>
+        
+        <div class="col-sm-7">
+            
+            <h4><strong>Derniers albums ajoutés à la galerie</strong></h4>
+            
+            <div id="albums-container">
+                
+                {% for album in albums %}
+                    
+                    {% if album.photos is not empty %}
+                        
+                    <a>
+                        <img src="{{ album.photos[0]['thumbnail']|url_decode }}" />
+                        
+                        <span>{{ album.nom }}</span>
+                        <span>{{ album.droit.groupe.nom }}</span>
+                    </a>
+                    
+                    {% endif %}
+                    
+                {% endfor %}
+                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    <div class="row">
+        
+        <div class="col-sm-12">
+            
+            <h4>
+                <strong>Activités - <span>Aout</span></strong>
+            </h4>
+            
+            <div id="calendrier">
+                
+                <span title="Juillet" id="agenda-previous" class="agenda-time glyphicon glyphicon-chevron-left"></span>
+                <span title="Septembre" id="agenda-next" class="agenda-time glyphicon glyphicon-chevron-right"></span>
+
+                <table>
+                    <tr>
+                        <th>Lundi</th>
+                        <th>Mardi</th>
+                        <th>Mercredi</th>
+                        <th>Jeudi</th>
+                        <th>Vendredi</th>
+                        <th>Samedi</th>
+                        <th>Dimanche</th>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <span>
+                                <div>
+                                    <span>Camp d'automne - Montfort</span>
+                                    <span>Du 1 janvier 2014</span>
+                                    <span>Au 6 janvier 2014</span>
+                                </div>
+                            </span>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>                
+            </div>
+            
+        </div>
+        
+    </div>
+    
+{% endblock %}

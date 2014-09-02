@@ -1,0 +1,71 @@
+<!doctype html>
+    
+<html>
+    
+<head>
+    
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %} - BS</title>
+    
+    <link rel="stylesheet" type="text/css" href="{{ asset('static/css/bootstrap-edit.css')}}">
+        
+    <link rel="stylesheet/less" href="{{ asset('static/less/public.less')}}">
+    <script type="text/javascript" src="{{ asset('static/js/less.js')}}"></script>
+</head>
+
+<body>
+    
+    <div class="container">
+        
+        <nav>
+            
+            <img src="{{ asset('static/images/main_logo.png')}}" />
+            <ul>
+                <li><a href="#">La brigade</a>
+                    <ul>
+                        <li><a href="#">Le scoutisme</a></li>
+                        <li><a href="#">L'historique</a></li>
+                        <li><a href="#">Les activités</a></li>
+                        <li><a href="#">Les structures</a></li>
+                        <li><a href="#">Les chefs</a></li>
+                        <li><a href="#">La formation</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Infos parents</a></li>
+                <li><a href="#">Organisation</a></li>
+                <li><a href="#">Activités</a></li>
+                <li><a href="#">Contact</a></li>
+                <li><a href="#">Photos</a></li>
+                <li><a href="#">Connexion</a></li>
+            </ul>
+        </nav>
+    
+    </div>
+    
+    <div class="container">
+        
+        {% block body %}{% endblock %}
+    
+    </div>
+    
+    <script type="text/javascript" src="{{ asset('static/js/jquery.js') }}"></script>
+    <script type="text/javascript">
+    
+         $(window).scroll(function() {
+             
+             var el = $('#home-panel');
+             
+             var diff = $(window).scrollTop() + el.offset().top + 210;
+             var ypos = diff - ($(window).scrollTop()/3);
+             
+             var coords = '0px ' + ypos + 'px';
+             el.css({
+                 backgroundPosition: coords
+             });
+         });
+        
+    </script>
+    
+</body>
+    
+</html>
