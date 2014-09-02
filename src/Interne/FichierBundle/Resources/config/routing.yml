@@ -17,4 +17,15 @@ InterneFichier_adder:
     pattern:  /adder
     defaults: { _controller: InterneFichierBundle:Adder:adder }
     
+#listing
+InterneFichier_listing_retrieve_liste:
+    pattern:  /listing/retrieve-liste
+    defaults: { _controller: InterneFichierBundle:Listing:retrieveListe }
     
+InterneFichier_listing_export_pdf:
+    pattern:  /listing/export/pdf/{ids}
+    defaults: { _controller: InterneFichierBundle:Listing:exportPDF }
+    
+InterneFichier_listing_export_xls:
+    pattern:  /listing/export/xls/{ids}
+    defaults: { _controller: InterneFichierBundle:Listing:exportXLS }

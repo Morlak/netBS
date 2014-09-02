@@ -33,6 +33,7 @@ html, body
 body
 {
 	background:#E9F0F0;
+	width:100%;
 }
 
 /**
@@ -260,6 +261,21 @@ body *[infobulle]:hover:after
 	}
 }
 
+/**
+ * listing
+ * les options de listes dynamiques etc. a l'ancienne
+ */
+
+#listing-options
+{
+	width:100%;
+	padding:10px 0;
+	
+	button
+	{
+		
+	}
+}
 
 /**
  * corpus
@@ -270,7 +286,9 @@ body *[infobulle]:hover:after
 {
 	background:#E9F0F0;
 	width:calc(~"100% - 200px");
+	max-width:calc(~"100% - 200px");
 	float:right;
+	overflow:hidden;
 	
 	#flash-container
 	{
@@ -309,44 +327,24 @@ body *[infobulle]:hover:after
 			}
 		}
 		
-		#top-data
+		#top-links
 		{
-			width:450px;
+			width:300px;
 			display:flex;
 			height:70px;
 			margin-right:35px;
 			
-			> div
+			> button
 			{
-				width:150px;
+				width:100px;
 				height:40px;
 				margin-top:15px;
-				border-left:1px solid rgba(0,0,0,0.15);
-				padding:0 10px;
+				border:1px solid rgb(160,160,160);
+				#gradient > .vertical(rgb(245,245,245), rgb(202,202,202));
 				
-				&:first-child
+				&:hover
 				{
-					border-left:none;
-				}
-				
-				img
-				{
-					width:40px;
-					height:40px;
-					float:left;
-					margin-right:8px;
-				}
-				
-				span
-				{
-					font-size:11px;
-					display:block;
-					
-					&.title
-					{
-						font-weight:bold;
-						margin-top:5px;
-					}
+					#gradient > .vertical(white, rgb(220,220,220));
 				}
 			}
 		}

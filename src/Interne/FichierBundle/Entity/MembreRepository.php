@@ -12,6 +12,26 @@ use Doctrine\ORM\EntityRepository;
  */
 class MembreRepository extends EntityRepository
 {
-	
+    /**
+     * la méthode findCurrentAttribution va récupérer l'attribution courante
+     * d'un membre
+     */
+    public function findCurrentAttribution($id) {
+        
+        $membre = $this->find($id);
+        
+        $qb = $this->_em->createQueryBuilder();
 
+        $qb->select('a')
+           ->from('InterneStructureBundle:Attribution', 'a')
+           ->where('a.membre = :membre')
+           ->setParameter('membre', $membre)
+           ->andWhere('a.dateFin > :today')
+           ->setParameter('today', new \Datetime("now"))
+           ->setMaxResults(1);
+
+        $attributions = $qb->getQuery()->getResult();
+        
+        return ($attributions != null) ? $attributions[0] : null;
+    }
 }

@@ -1,4 +1,3 @@
-
 #routes de login
 
 login:
@@ -54,3 +53,7 @@ interne_security:
 interne_global:
     resource: "@InterneGlobalBundle/Resources/config/routing.yml"
     prefix:   /interne/global
+
+cms_admin:
+    resource: "@CMSAdminBundle/Resources/config/routing.yml"
+    prefix:   /interne/cms/admin

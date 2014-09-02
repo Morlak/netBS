@@ -24,7 +24,7 @@
         <div id="login">
         
             <div id="login-image-overlay"></div>
-            <img id="login-image" src="http://naturesoundspa.com/wp-content/uploads/2011/05/nature-sounds-white-noise.jpg" />
+            <img id="login-image" src="{{ asset('static/images/layout/home_logo.jpg') }}" />
             
             <form id="login-form" action="{{ path('login_check') }}" method="post">
                 
@@ -51,8 +51,8 @@
             <a class="options-btn" href="#">Mot de passe oublié</a>
         </div>
         
-        <script src="{{ asset('js/jquery.js') }}"></script>
-        <script src="{{ asset('js/externe/login.js') }}"></script>
+        <script src="{{ asset('static/js/jquery.js') }}"></script>
+        <script src="{{ asset('static/js/login.js') }}"></script>
     </body>
 
 </html>

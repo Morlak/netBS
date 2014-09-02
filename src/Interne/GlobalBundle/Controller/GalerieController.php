@@ -184,6 +184,8 @@ class GalerieController extends Controller
 		    return new JsonResponse(false);
                 }
 	}
+        
+        else return new JsonResponse('grosse erreur');
     }
     
     /**

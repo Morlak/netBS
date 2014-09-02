@@ -64,3 +64,18 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+#fos elastica configuration
+#fos_elastica:
+#    clients:
+#        default: { host: localhost, port: 9200 }
+#    serializer:
+#        callback_class: FOS\ElasticaBundle\Serializer\Callback
+#        serializer: serializer
+#    indexes:
+#        interne:
+#            types:
+#                membres:
+#                    mapping: ~                        
+                        
+        

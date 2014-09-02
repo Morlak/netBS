@@ -16,13 +16,27 @@ use Externe\PublicBundle\Form\ContactType;
 
 class PublicController extends Controller
 {
+    
+    /**
+     * affiche la page d'accueil du site frontal de la BS
+     * tellement d'swag et d'argent
+     */
+    public function accueilAction() {
 	
+	//On récupère les 3 derniers albums ajoutés à la galerie
+	$aRepo = $this->getDoctrine()->getManager()->getRepository('ExterneGalerieBundle:Album');
+	$albums = $aRepo->findLastAdded(3);
+	return $this->render('ExternePublicBundle:Public:accueil.html.twig', array(
+	    
+		'albums'	=> $albums
+	    )
+	);
+    }
+    
 	
-	
-	/**
-	 * le bundle externe offre uniquement l'interface de connexion, deconnexion
-	 * cette méthode permet d'afficher le formulaire de connexion
-	 */
+    /**
+     * Affiche la page de connexion à l'intranet
+     */
     public function loginAction()
     {
 

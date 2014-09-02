@@ -14,3 +14,4 @@ Les différents roles disponibles dans le netBS :
 - ROLE_ADMIN            : rôle maitre, disponible aux adminsitrateurs système
 - ROLE_DATABASE_PERSIST : rôle permettant de persister la base de donnée sans passer par le validator
 - ROLE_GALERIE          : permet à l'utilisateur de gérer la galerie de son groupe
+- ROLE_ACTIVITE_SPEC	: permet de créer une activité spéciale

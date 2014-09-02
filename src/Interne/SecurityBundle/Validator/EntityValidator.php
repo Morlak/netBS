@@ -46,7 +46,7 @@ use Interne\SecurityBundle\Entity\Validator;
              * on définit la liste des classes auxquelles le validator ne s'applique pas
              * comme les classes de la galerie (dossier, album, droit)
              */
-            var_dump($class);
+            //var_dump($class);
             $validate = true;
             $liste = array(
                 
@@ -63,9 +63,9 @@ use Interne\SecurityBundle\Entity\Validator;
                 }
             }
             
-            var_dump($validate);
+            //var_dump($validate);
 
-            $em->clear();
+            //$em->clear();
             
         }
     }

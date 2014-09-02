@@ -73,23 +73,9 @@
 						<p>netBS - Dashboard</p>
 					</div>
 					
-					<div id="top-data">
+					<div id="top-links">
 						
-						<div>
-							<img src="{{ asset('static/images/layout/imac.png') }}" />
-							<span class="title">Dernière fois</span>
-							<span>21.03.2014</span>
-						</div>
-						<div>
-							<img src="{{ asset('static/images/layout/licence.png') }}" />
-							<span class="title">Groupe</span>
-							<span>Montfort</span>
-						</div>
-						<div>
-							<img src="{{ asset('static/images/layout/browser.png') }}" />
-							<span class="title">Autorisations</span>
-							<span>niveau 2</span>
-						</div>
+						<button onclick="retrieveListing()">Listing</button>
 					
 					</div>
 					
@@ -131,6 +117,50 @@
     	
     </div>
     
+    <!-- Modales globales -->
+    
+    <div class="modal fade" id="listing-modal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+	    <div class="modal-content">
+		
+		<div class="modal-header">
+		    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
+		    <h4 class="modal-title" id="myModalLabel">Liste dynamique<span id="listing-modal-title"></span></h4>
+		</div>
+		
+		<div id="listing-modal-content" class="modal-body">
+		    
+		    <table id="listing-table">
+			<thead>
+			    <tr>
+				<th class="col-cb"></th>
+				<th>prénom</th>
+				<th>nom</th>
+				<th>numéro BS</th>
+				<th>Fonction</th>
+				<th>Unité</th>
+			    </tr>
+			</thead>
+		    </table>
+		    
+		    <div id="listing-options">
+			
+			<button class="btn btn-danger" onclick="listingRemove();">Supprimer <span id="listing-remove-span">(0)</span></button>
+			<button class="btn btn-info" onclick="exportListing('pdf');">Exporter en PDF</button>
+			<button class="btn btn-info" onclick="exportListing('xls');">Exporter en Excel</button>
+			
+		    </div>
+		    
+		</div>
+		
+		<div class="modal-footer">
+		    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+		</div>
+		
+	    </div>
+	</div>
+    </div>
+    
     
     <!-- javascript n' shit -->
     
@@ -143,6 +173,7 @@
     <script src="{{ asset('static/js/jquery.dataTables.js') }}" type="text/javascript"></script>
     <script src="{{ asset('static/js/chosen.js') }}" type="text/javascript"></script>
     <script src="{{ asset('static/js/fonctions.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('static/js/listing.js') }}" type="text/javascript"></script>
 
 
     {% block javascript %}

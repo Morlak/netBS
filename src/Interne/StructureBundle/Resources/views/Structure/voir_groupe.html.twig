@@ -108,10 +108,11 @@
 					
 					</div>
 					
-					<table id="attributionsTable" class="datatable">
+					<table id="attributionsTable" class="datatable  datatable-membre">
 					
 						<thead>
 							<tr>
+								<th></th>
 								<th>nom</th>
 								<th>prenom</th>
 								<th>fonction</th>
@@ -126,6 +127,7 @@
 							{% for attribution in attrs %}
 								
 								<tr>
+									<td><input type="checkbox" id="membre_{{ attribution.membre.id }}" /></td>
 									<td>{{ attribution.membre.famille.nom }}</td>
 									<td><a href="{{ path('InterneFichier_voir_membre', {'id' : attribution.membre.id}) }}">{{ attribution.membre.prenom }}</a></td>
 									<td>{{ attribution.fonction.nom }}</td>

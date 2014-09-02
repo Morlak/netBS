@@ -15,36 +15,40 @@ class AlbumRepository extends EntityRepository
     /**
      * renvoie une liste d'images aléatoires
      */
-    public function findRandom() {
+    public function findRandom($nb) {
         
         $albums = $this->getEntityManager()
         ->createQuery('SELECT COUNT(a.id) FROM ExterneGalerieBundle:Album a')
         ->getSingleScalarResult();
         
-        //On prend des albums jusqu'à avoir 30 photos, ou que la boucle ait
-        //iteré 15 fois
         $photos = array();
         $exit   = 0;
         
-        while(count($photos)  < 31) {
+        while(count($photos)  < $nb) {
             
             if($exit == 15) exit;
+            
+            //On vérifie aussi que l'album ne soit pas vide
             
             $id     = rand(1, $albums);
             $album  = $this->find($id);
             
-            $pics   = $album->getPhotos();
-            $chose  = array();
-            //On récupère 6 photos par album au maximum
-            for($i = 0; $i < 6; $i++) {
+            if(!empty($album->getPhotos())) {
+            
+                $pics   = $album->getPhotos();
+                $chose  = array();
+                //On récupère 6 photos par album au maximum
+                for($i = 0; $i < 6; $i++) {
+                    
+                    $pic = rand(0, count($pics) - 1);
+                    $chose[$i]['photo']     = urldecode($pics[$pic]['photo']);
+                    $chose[$i]['thumbnail'] = urldecode($pics[$pic]['thumbnail']);
+                    $chose[$i]['album']     = $album->getNom() . ' - ' . $album->getDroit()->getGroupe()->getNom();
+                }
                 
-                $pic = rand(0, count($pics) - 1);
-                $chose[$i]['photo']     = urldecode($pics[$pic]['photo']);
-                $chose[$i]['thumbnail'] = urldecode($pics[$pic]['thumbnail']);
-                $chose[$i]['album']     = $album->getNom() . ' - ' . $album->getDroit()->getGroupe()->getNom();
+                $photos = array_merge($photos, $chose);
             }
             
-            $photos = array_merge($photos, $chose);
             $exit++;
         }
         
@@ -106,5 +110,21 @@ class AlbumRepository extends EntityRepository
             return $qb->getQuery()
                       ->getResult();
         }
+    }
+    
+    /**
+     * retourne les X derniers albums ajoutés à la galerie
+     */
+    public function findLastAdded($amount) {
+        
+        $qb = $this->_em->createQueryBuilder();
+        
+        $qb->select('a')
+                ->from('ExterneGalerieBundle:Album', 'a')
+                ->orderBy('a.creation', 'DESC')
+                ->setMaxResults($amount);
+                ;
+                
+        return $qb->getQuery()->getResult();
     }
 }

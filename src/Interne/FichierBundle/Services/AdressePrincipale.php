@@ -19,4 +19,20 @@ class AdressePrincipale {
 		else
 			return 'membre';
 	}
+	
+	
+	/**
+	 * cette méthode renvoie un objet adresse entier de l'adresse principale
+	 * du membre
+	 */
+	function getPrincipale($membre) {
+		
+		if(is_null($membre->getAdresse()->getRue()) && is_null($membre->getAdresse()->getLocalite())) {
+			
+			return $membre->getFamille()->getAdresse();
+		}
+		
+		else
+			return $membre->getAdresse();
+	}
 }

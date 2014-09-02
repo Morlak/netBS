@@ -1,7 +1,6 @@
 body
 {
-    background-image:url(http://www.wallsave.com/wallpapers/2560x1440/2560x2048/428891/x-miscellaneous-any-with-nice-blurry-edges-motion-blur-428891.jpg);
-    background-size:cover;
+    background-image:url(/netBS/web/static/images/layout/home_bg.jpg);
 }
 
 #erreur

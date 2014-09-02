@@ -1,0 +1,356 @@
+/**
+ * fichier less du site frontal de la brigade de
+ * sauvabelin.
+ * Guillaume Hochet
+ */
+
+@import "mixins.less";
+
+body
+{
+    background:rgb(244,247,249);
+}
+
+nav
+{
+    width:100%;
+    height:70px;
+    display:flex;
+    margin-top:20px;
+    border-bottom:1px solid rgb(200,200,200);
+    box-shadow:0 1px 0 white;
+    
+    img
+    {
+        width:60px;
+        height:60px;
+        margin-right:50px;
+        margin-top:5px;
+    }
+    
+    > ul
+    {
+        width:100%;
+        list-style:none;
+        display:flex;
+        padding:0;
+        
+        > li
+        {
+            margin-right:30px;
+            
+            > a
+            {
+                display:block;
+                line-height:70px;
+                height:70px;
+                font-size:15px;
+                color:black;
+                
+                &:hover
+                {
+                    text-decoration:none;
+                    color:rgb(150,150,150);
+                }
+            }
+            
+            &:last-child
+            {
+                margin-left:auto;
+                margin-right:0px;
+            }
+            
+            &:hover ul
+            {
+                display:block;
+            }
+            
+            > ul
+            {
+                display:none;
+                position:absolute;
+                z-index:100;
+                padding:10px 20px;
+                list-style:none;
+                background:rgb(240,240,240);
+                width:200px;
+                box-shadow:0 1px 1px rgb(200,200,200);
+                
+                &:before
+                {
+                    position:absolute;
+                    content: ' ';
+                    border-left:10px solid transparent;
+                    border-bottom:15px solid rgb(200,200,200);
+                    border-right:10px solid transparent;
+                    margin-top:-25px;
+                    margin-left:-3px;
+                }
+                
+                li
+                {
+                    padding:5px 0;
+                    
+                    a
+                    {
+                        color:black;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.tridata
+{
+    img
+    {
+        display:block;
+        margin:0 auto 20px auto;
+        padding:2px;
+        border:1px solid rgb(200,200,200);
+        border-radius:300px;
+        width:100px;
+        height:100px;
+    }
+}
+
+.row
+{
+    margin-bottom:40px;
+}
+
+.container
+{
+    margin-bottom:30px;
+    
+    .news
+    {
+        width:100%;
+        background:white;
+        border:1px solid rgb(200,200,200);
+        box-shadow:0 1px 1px rgb(200,200,200);
+        marign-bottom:10px;
+        
+        > p:first-child
+        {
+            font-weight:bold;
+            padding:0 6px;
+            border-bottom:1px solid rgb(200,200,200);
+            color:rgb(10,10,30);
+            height:30px;
+            line-height:30px;
+            margin:0;
+            
+            span
+            {
+                float:right;
+                font-weight:normal;
+                color:rgb(150,150,150);
+                font-size:11px;
+            }
+        }
+        
+        > p:last-child
+        {
+            padding:8px;
+            margin:0;
+            text-align:justify;
+        }
+    }
+    
+    #albums-container
+    {
+        display:flex;
+        
+        > a
+        {
+            width:20%;
+            border:1px solid rgb(200,200,200);
+            background:#fcfcfc url(/netBS/web/static/images/layout/dropzone/texture.png) 0 100% repeat-x;
+            .box-shadow(0 1px 1px rgb(200,200,200));
+            padding:10px;
+            margin:0 10px 0 0;
+            cursor:pointer;
+            .transition(transform .2s);
+            color:black;
+            
+            &:hover
+            {
+                -webkit-transform: scale(1.03);
+                -ms-transform: scale(1.03);
+                    transform: scale(1.03);
+                    
+                    text-decoration:none;
+                    color:black;
+            }
+            
+            &:last-child
+            {
+                margin-right:0px;
+            }
+            
+            > span
+            {
+                display:block;
+                text-align:center;
+            }
+            
+            > img
+            {
+                width:100%;
+                display:block;
+                margin:0 auto 10px auto;
+                border:1px solid rgb(200,200,200);
+            }
+        }
+    }
+    
+    #calendrier
+    {
+        background:white;
+        border:1px solid rgb(200,200,200);
+        box-shadow:0 1px 1px rgb(200,200,200);
+        
+        .agenda-time
+        {
+            position:absolute;
+            margin-top:235px;
+            font-size:25px;
+            color:white;
+            text-shadow:0 0 8px black;
+            opacity:0.7;
+            cursor:pointer;
+            .transition(opacity .2s);
+            
+            &:hover
+            {
+                opacity:1;
+            }
+            
+            &#agenda-previous
+            {
+                margin-left:-30px;
+            }
+            
+            &#agenda-next
+            {
+                margin-left:calc(~"100% - 30px");
+            }
+        }
+        
+        table
+        {
+            width:100%;
+            font-size:12px;
+            
+            tr
+            {
+                th
+                {
+                    height:30px;
+                    line-height:30px;
+                    width:calc(~"100% / 7");
+                    border-right:1px solid rgb(220,220,220);
+                    text-align:center;
+                    border-bottom:1px solid rgb(220,220,220);
+                    #gradient > .vertical(rgb(250,250,250), rgb(230,230,230));
+                    box-shadow:0 1px 1px rgb(220,220,220);
+                    
+                    &:last-child
+                    {
+                        border-right:none;
+                    }
+                }
+                
+                td
+                {
+                    border-right:1px dashed rgb(200,200,200);
+                    border-bottom:1px solid rgb(200,200,200);
+                    height:80px;
+                    padding:5px;
+                    
+                    &:last-child
+                    {
+                        border-right:none;
+                    }
+                    
+                    > span /* evenements */
+                    {
+                        display:block;
+                        width:30px;
+                        height:30px;
+                        background:blue;
+                        border-radius:100px;
+                        cursor:crosshair;
+                        
+                        &:hover > div
+                        {
+                            display:block;
+                        }
+                        
+                        > div
+                        {
+                            display:none;
+                            background:rgb(200,200,200);
+                            position:absolute;
+                            margin-top:40px;
+                            .box-shadow(0 1px 1px rgb(180,180,180));
+                            padding:1px;
+                            
+                            &:before
+                            {
+                                content: ' ';
+                                position:absolute;
+                                border-bottom:10px solid rgb(200,200,200);
+                                border-left:6px solid transparent;
+                                border-right:6px solid transparent;
+                                margin-top:-10px;
+                                margin-left:9px;
+                            }
+                            
+                            > span
+                            {
+                                display:block;
+                                background:rgb(240,240,240);
+                                padding:6px 3px 2px 3px;
+                                
+                                &:first-child
+                                {
+                                    font-weight:bold;
+                                    padding:5px 9px;
+                                    background:white;
+                                    border-bottom:1px solid rgb(220,220,220);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                &:last-child td
+                {
+                    border-bottom:none;
+                }
+            }
+        }
+    }
+}
+
+/* le panel parallax de l'accueil */
+#home-panel
+{
+    margin:20px 0 0 0;
+    height:350px;
+    background-image:url(/netBS/web/static/images/public/home-panel.jpg);
+    background-position:0px 350px;
+    padding-top:250px;
+    padding-left:25px;
+    box-shadow:0 1px 1px rgb(100,100,100);
+    border-radius:3px;
+    
+    blockquote
+    {
+        color:white;
+        text-shadow:0 0 10px black;
+    }
+}

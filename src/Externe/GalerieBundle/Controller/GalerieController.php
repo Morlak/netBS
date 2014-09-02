@@ -10,8 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class GalerieController extends Controller
 {
     /**
-     * démarre la galerie, sachant que l'ensemble de son fonctionnement
-     * tourne en ajax. l'ensemble des requêtes est donc renvoyé sous JSON
+     * démarre la galerie
      */
     public function launcherAction()
     {
@@ -39,7 +38,7 @@ class GalerieController extends Controller
         
         $reponse    = array(
             
-            'images'    => $albumRepo->findRandom(),
+            'images'    => $albumRepo->findRandom(31),
             'dossiers'  => $folders,
             //'albums'    => $albums,
             'enfants'   => $droitRepo->findDroitsEnfants($droitRepo->findMainParent()),

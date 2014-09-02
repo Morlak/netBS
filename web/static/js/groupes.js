@@ -48,13 +48,13 @@ function retrieveAttributions(id, btn) {
 				//On insère la table ou il faut
 				table.row.add({
 					
-					
-					"0":		data[i].membreNom,
-					"1":		'<a href="/netBS/web/app_dev.php/interne/fichier/voir/membre/' + data[i].membreId + '">' + data[i].membrePrenom + '</a>',
-					"2":		data[i].fonction,
-					"3":		'<a href="/netBS/web/app_dev.php/interne/structure/groupe/' + data[i].groupeId + '">' + data[i].groupe + '</a></td>',
-					"4":		data[i].dateDebut,
-					"5":		data[i].dateFin
+					"0":		'<input type="checkbox" id="membre_' + data[i].membreId + '"/>',
+					"1":		data[i].membreNom,
+					"2":		'<a href="/netBS/web/app_dev.php/interne/fichier/voir/membre/' + data[i].membreId + '">' + data[i].membrePrenom + '</a>',
+					"3":		data[i].fonction,
+					"4":		'<a href="/netBS/web/app_dev.php/interne/structure/groupe/' + data[i].groupeId + '">' + data[i].groupe + '</a></td>',
+					"5":		data[i].dateDebut,
+					"6":		data[i].dateFin
 					
 	
 				}).draw();

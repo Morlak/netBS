@@ -1,8 +1,5 @@
 
-ExternePublic_home:
+ExternePublic_accueil:
     pattern:  /
-    defaults: 
-        _controller: FrameworkBundle:Redirect:urlRedirect
-        path:        /login
-        permanent:   true
+    defaults: { _controller: ExternePublicBundle:Public:accueil }
         

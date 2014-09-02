@@ -19,10 +19,10 @@ class SearchController extends Controller
      */
     public function searchAction()
     {
-        $str = "guillaume montfort";
+        $str 	= "guillaume montfort";
         
         //On initialise les variables de base
-        $em			= $this->getDoctrine()->getManager();
+        $em	= $this->getDoctrine()->getManager();
         
         
         //On récupère chaque morceau d'information
@@ -30,18 +30,15 @@ class SearchController extends Controller
         
         foreach($elements as $element) {
         	
-        	//On analyse le type de donnée
-        	if(!is_numeric($element)) //La donnée est une string
-        	{
-        		/**
-        		 * ordre de recherche des string :
-        		 * 1. prenom membre
-        		 * 2. nom famille
-        		 * 3. nom groupe
-        		 */
-        		
-        		
-        	}
+            /**
+	     * pour chaque information, on va exécuter différents tests.
+	     * Cependant, la recherche va rapidement s'orienter vers une suite
+	     * logique. Par exemple, si le premier élément est une information
+	     * de membre, on va voir si le reste des informations désigne un membre
+	     * particulier
+	     * Finalement, on ne souhaitera obtenir qu'une liste de membres
+	     */
+	    
         }
         
         return new Response("<body></body>");

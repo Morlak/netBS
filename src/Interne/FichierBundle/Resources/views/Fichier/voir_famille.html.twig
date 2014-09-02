@@ -101,10 +101,11 @@
 				
 				<div class="widget-content">
 					
-					<table class="datatable">
+					<table class="datatable datatable-membre">
 			
 						<thead>
 							<tr>
+								<th></th>
 								<th>Prénom</th>
 								<th>Fonctions actuelles</th>
 								<th>Groupes d'attributions actives</th>
@@ -118,6 +119,7 @@
 			
 							{% for membre in famille.membres %}
 							<tr>
+								<td><input type="checkbox" id="membre_{{ membre.id }}" /></td>
 								<td><a href="{{ path('InterneFichier_voir_membre', {'id' : membre.id}) }}">{{ membre.prenom }}</a></td>
 								<td>{% for attr in membre.attributions %} {{ attr.fonction.nom }} - {% endfor %}</td>
 								<td>{% for attr in membre.attributions %} <a href="{{ path('InterneStructure_voir_groupe', {id: attr.groupe.id}) }}">{{ attr.groupe.nom }}</a> - {% endfor %}</td>
