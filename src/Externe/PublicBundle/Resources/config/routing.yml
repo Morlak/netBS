@@ -1,5 +1,0 @@
-
-ExternePublic_accueil:
-    pattern:  /
-    defaults: { _controller: ExternePublicBundle:Public:accueil }
-        

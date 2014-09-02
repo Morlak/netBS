@@ -23,14 +23,7 @@ class PublicController extends Controller
      */
     public function accueilAction() {
 	
-	//On récupère les 3 derniers albums ajoutés à la galerie
-	$aRepo = $this->getDoctrine()->getManager()->getRepository('ExterneGalerieBundle:Album');
-	$albums = $aRepo->findLastAdded(3);
-	return $this->render('ExternePublicBundle:Public:accueil.html.twig', array(
-	    
-		'albums'	=> $albums
-	    )
-	);
+	return $this->redirect('login');
     }
     
 	

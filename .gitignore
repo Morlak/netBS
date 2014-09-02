@@ -6,6 +6,7 @@
 /app/config/parameters.yml
 /web/photos/
 /web/uploads/
+/bin/
 
 
 # IDE folders
