@@ -34,4 +34,19 @@ class MembreRepository extends EntityRepository
         
         return ($attributions != null) ? $attributions[0] : null;
     }
+    
+    /**
+     * la méthode findMembresByIds va rechercher tous les membres avec l'id
+     * contenu dans l'array passé, puis les ordonner par ordre alphabétique de leur
+     * nom de famille
+     */
+    public function findMembresByIds($ids) {
+        
+        $qb = $this->_em->createQueryBuilder();
+
+        $query = $this->_em->createQuery('SELECT m FROM InterneFichierBundle:Membre m JOIN m.famille f WHERE m.id IN (?1) ORDER BY f.nom')
+                      ->setParameter(1, $ids);
+                      
+        return $query->getResult();
+    }
 }

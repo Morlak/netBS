@@ -23,7 +23,7 @@ class PublicController extends Controller
      */
     public function accueilAction() {
 	
-	return $this->redirect('login');
+	return $this->redirect($this->generateUrl('login'));
     }
     
 	

@@ -1,0 +1,6 @@
+accueil:
+    path: /
+    defaults:
+        _controller: ExternePublicBundle:Public:accueil
+        path: /login
+        permanent: true

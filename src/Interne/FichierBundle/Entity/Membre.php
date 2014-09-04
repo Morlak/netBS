@@ -114,8 +114,6 @@ class Membre extends Personne
 
     /**
      * Get famille
-     *
-     * @return integer 
      */
     public function getFamille()
     {

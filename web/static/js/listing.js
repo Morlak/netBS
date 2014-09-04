@@ -94,8 +94,14 @@ function retrieveListing() {
         
         //On affiche une alerte de liste vide
         $('#flash-container').html('<div class="row"><div class="alert alert-info alert-dismissible col-lg-6 col-lg-offset-3" role="alert"><button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button><strong>La liste est vide</strong></div></div>');
+        
+        //Si la modal était ouverte, ca veut dire qu'on a vidé la liste, donc on ferme la modal
+        $('#listing-modal').modal('hide');
         return 0;
     }
+    
+    //On supprime l'éventuelle premiere virgule
+    if(liste.charAt(0) == ',') liste = liste.slice(1);
     
     //Sinon on récupère la liste en ajax
     $.ajax({
@@ -246,6 +252,9 @@ function exportListing(type) {
     
     //On récupère la liste
     var liste = sessionStorage.getItem('listing');
+    
+    //On supprime l'éventuelle premiere virgule
+    if(liste.charAt(0) == ',') liste = liste.slice(1);
     
     //On télécharge le fichier
     location.href = '/netBS/web/app_dev.php/interne/fichier/listing/export/' + type + '/' + liste;

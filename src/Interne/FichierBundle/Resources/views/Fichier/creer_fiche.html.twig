@@ -12,7 +12,7 @@
 	
 	<div class="row">
 	
-		<form method="post" action="">
+		<form method="post" class="verifikaform" action="">
 				
 			<div class="col-lg-6">
 				
@@ -145,77 +145,219 @@
 							
 						</fieldset>
 						
-						<fieldset style="display:none" id="famille-included">
+						<div style="display:none" id="famille-included">
 							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.nom, "Nom de famille") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.nom) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.contact.telephone, "Téléphone familial") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.contact.telephone) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.contact.email, "E-mail familial") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.contact.email) }}</div>
-							</div>
-							
-							<duv class="row">
-								<div class="col-sm-12">
-									<p><strong>Adresse familiale</strong></p>
+							<fieldset>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.nom, "Nom de famille") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.nom) }}</div>
 								</div>
-							</duv>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.contact.telephone, "Téléphone familial") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.contact.telephone) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.contact.email, "E-mail familial") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.contact.email) }}</div>
+								</div>
+								
+								<duv class="row">
+									<div class="col-sm-12">
+										<p><strong>Adresse familiale</strong></p>
+									</div>
+								</duv>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.adresse.rue, "Rue") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.adresse.rue) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.adresse.npa, "NPA") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.adresse.npa) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.adresse.localite, "Localité") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.adresse.localite) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.adresse.facturable, "Facturable") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.adresse.facturable) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.adresse.remarques, "Remarques") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.adresse.remarques) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-12">
+										<p><strong>Informations sur le père</strong></p>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.pere.prenom, "Prénom du père") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.pere.prenom) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.pere.profession, "Profession du père") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.pere.profession) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.pere.contact.telephone, "Téléphone du père") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.pere.contact.telephone) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.pere.contact.email, "Email du père") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.pere.contact.email) }}</div>
+								</div>
 							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.adresse.rue, "Rue") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.adresse.rue) }}</div>
-							</div>
+							</fieldset>
 							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.adresse.npa, "NPA") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.adresse.npa) }}</div>
-							</div>
 							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.adresse.localite, "Localité") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.adresse.localite) }}</div>
-							</div>
+							<div class="panel-group accordeon" id="membreAdresse-accordeon">
 							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.adresse.facturable, "Facturable") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.adresse.facturable) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.adresse.remarques, "Remarques") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.adresse.remarques) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-12">
-									<p><strong>Informations sur les parents</strong></p>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="membreAdresse-accordeon" href="#adresse-pere">Adresse du père</a>
+										</h4>
+									</div>
+									
+									<div id="adresse-pere" class="panel-collapse collapse">
+										<div class="panel-body">
+									
+											<fieldset>
+												
+											<div class="row">
+												<div class="col-sm-3">{{ form_label(familleForm.pere.adresse.rue, "Rue") }}</div>
+												<div class="col-sm-9">{{ form_widget(familleForm.pere.adresse.rue) }}</div>
+											</div>
+											
+											<div class="row">
+												<div class="col-sm-3">{{ form_label(familleForm.pere.adresse.npa, "NPA") }}</div>
+												<div class="col-sm-9">{{ form_widget(familleForm.pere.adresse.npa) }}</div>
+											</div>
+											
+											<div class="row">
+												<div class="col-sm-3">{{ form_label(familleForm.pere.adresse.localite, "Localité") }}</div>
+												<div class="col-sm-9">{{ form_widget(familleForm.pere.adresse.localite) }}</div>
+											</div>
+											
+											<div class="row">
+												<div class="col-sm-3">{{ form_label(familleForm.pere.adresse.facturable, "Facturable") }}</div>
+												<div class="col-sm-9">{{ form_widget(familleForm.pere.adresse.facturable) }}</div>
+											</div>
+											
+											<div class="row">
+												<div class="col-sm-3">{{ form_label(familleForm.pere.adresse.remarques, "Remarques") }}</div>
+												<div class="col-sm-9">{{ form_widget(familleForm.pere.adresse.remarques) }}</div>
+											</div>
+											
+											</fieldset>
+									
+										</div>
+								
+									</div>
+									
 								</div>
 							</div>
+						
+							<fieldset>
+								
+								<div class="row">
+									<div class="col-sm-12">
+										<p><strong>Informations sur la mère</strong></p>
+									</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.mere.prenom, "Prénom de la mère") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.mere.prenom) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.mere.profession, "Profession de la mère") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.mere.profession) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.mere.contact.telephone, "Téléphone de la mère") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.mere.contact.telephone) }}</div>
+								</div>
+								
+								<div class="row">
+									<div class="col-sm-3">{{ form_label(familleForm.mere.contact.email, "Email de la mère") }}</div>
+									<div class="col-sm-9">{{ form_widget(familleForm.mere.contact.email) }}</div>
+								</div>
+								
+							</fieldset>
 							
+							<div class="panel-group accordeon" id="membreAdresse-accordeon">
 							
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<h4 class="panel-title">
+											<a data-toggle="collapse" data-parent="mereAdresse-accordeon" href="#adresse-mere">Adresse de la mère</a>
+										</h4>
+									</div>
+									
+									<div id="adresse-mere" class="panel-collapse collapse">
+										<div class="panel-body">
+									
+											<fieldset>
+										
+												<div class="row">
+													<div class="col-sm-3">{{ form_label(familleForm.mere.adresse.rue, "Rue") }}</div>
+													<div class="col-sm-9">{{ form_widget(familleForm.mere.adresse.rue) }}</div>
+												</div>
+												
+												<div class="row">
+													<div class="col-sm-3">{{ form_label(familleForm.mere.adresse.npa, "NPA") }}</div>
+													<div class="col-sm-9">{{ form_widget(familleForm.mere.adresse.npa) }}</div>
+												</div>
+												
+												<div class="row">
+													<div class="col-sm-3">{{ form_label(familleForm.mere.adresse.localite, "Localité") }}</div>
+													<div class="col-sm-9">{{ form_widget(familleForm.mere.adresse.localite) }}</div>
+												</div>
+												
+												<div class="row">
+													<div class="col-sm-3">{{ form_label(familleForm.mere.adresse.facturable, "Facturable") }}</div>
+													<div class="col-sm-9">{{ form_widget(familleForm.mere.adresse.facturable) }}</div>
+												</div>
+												
+												<div class="row">
+													<div class="col-sm-3">{{ form_label(familleForm.mere.adresse.remarques, "Remarques") }}</div>
+													<div class="col-sm-9">{{ form_widget(familleForm.mere.adresse.remarques) }}</div>
+												</div>
+												
+											</fieldset>
+										</div>
+									</div>
+								</div>
+							</div>
+						
+						</div>
+						
+						<fieldset>
 							<div class="row">
 								<div class="col-sm-3"></div>
-								<div class="col-sm-9"></div>
+								<div class="col-sm-9"><input type="submit" class="btn btn-primary" value="Valider et ajouter le membre" /></div>
 							</div>
-							
-							<div class="row">
-								<div class="col-sm-3"></div>
-								<div class="col-sm-9"></div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3"></div>
-								<div class="col-sm-9"></div>
-							</div>
-							
 						</fieldset>
+								
+						{{ form_rest(familleForm) }}
+							
 						
 					</div>
 				</div>
@@ -224,121 +366,6 @@
 		</form>
 		
 	</div>
-	
-							
-							<h3>Père</h3>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.prenom, "Prénom du père") }}
-							    {{ form_errors(familleForm.pere.prenom) }}
-							    {{ form_widget(familleForm.pere.prenom) }}
-							</div>
-
-							<div class="form-element">
-								{{ form_label(familleForm.pere.profession, "Profession du père") }}
-							    {{ form_errors(familleForm.pere.profession) }}
-							    {{ form_widget(familleForm.pere.profession) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.contact.telephone, "Téléphone du père") }}
-							    {{ form_errors(familleForm.pere.contact.telephone) }}
-							    {{ form_widget(familleForm.pere.contact.telephone) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.contact.email, "Email du père") }}
-							    {{ form_errors(familleForm.pere.contact.email) }}
-							    {{ form_widget(familleForm.pere.contact.email) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.adresse.rue, "Rue") }}
-							    {{ form_errors(familleForm.pere.adresse.rue) }}
-							    {{ form_widget(familleForm.pere.adresse.rue) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.adresse.npa, "NPA") }}
-							    {{ form_errors(familleForm.pere.adresse.npa) }}
-							    {{ form_widget(familleForm.pere.adresse.npa) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.adresse.localite, "Localité") }}
-							    {{ form_errors(familleForm.pere.adresse.localite) }}
-							    {{ form_widget(familleForm.pere.adresse.localite) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.adresse.facturable, "Facturable") }}
-							    {{ form_errors(familleForm.pere.adresse.facturable) }}
-							    {{ form_widget(familleForm.pere.adresse.facturable) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.adresse.remarques, "Remarques") }}
-							    {{ form_errors(familleForm.pere.adresse.remarques) }}
-							    {{ form_widget(familleForm.pere.adresse.remarques) }}
-							</div>
-							
-							<h3>Mère</h3>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.prenom, "Prénom de la mère") }}
-							    {{ form_errors(familleForm.mere.prenom) }}
-							    {{ form_widget(familleForm.mere.prenom) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.profession, "Profession de la mère") }}
-							    {{ form_errors(familleForm.mere.profession) }}
-							    {{ form_widget(familleForm.mere.profession) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.contact.telephone, "Téléphone de la mère") }}
-							    {{ form_errors(familleForm.mere.contact.telephone) }}
-							    {{ form_widget(familleForm.mere.contact.telephone) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.contact.email, "Email de la mère") }}
-							    {{ form_errors(familleForm.mere.contact.email) }}
-							    {{ form_widget(familleForm.mere.contact.email) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.adresse.rue, "Rue") }}
-							    {{ form_errors(familleForm.mere.adresse.rue) }}
-							    {{ form_widget(familleForm.mere.adresse.rue) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.adresse.npa, "NPA") }}
-							    {{ form_errors(familleForm.mere.adresse.npa) }}
-							    {{ form_widget(familleForm.mere.adresse.npa) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.adresse.localite, "Localité") }}
-							    {{ form_errors(familleForm.mere.adresse.localite) }}
-							    {{ form_widget(familleForm.mere.adresse.localite) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.adresse.facturable, "Facturable") }}
-							    {{ form_errors(familleForm.mere.adresse.facturable) }}
-							    {{ form_widget(familleForm.mere.adresse.facturable) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.adresse.remarques, "Remarques") }}
-							    {{ form_errors(familleForm.mere.adresse.remarques) }}
-							    {{ form_widget(familleForm.mere.adresse.remarques) }}
-							</div>
-							
-							{{ form_rest(familleForm) }}
 
 {% endblock %}
 
