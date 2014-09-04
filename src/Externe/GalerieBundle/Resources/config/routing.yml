@@ -5,15 +5,23 @@ ExterneGalerie_accueil:
 ExterneGalerie_update_droit:
     pattern: /update-droit/{id}
     defaults: { _controller: ExterneGalerieBundle:Galerie:updateDroit}
+    options:
+        expose: true
     
 ExterneGalerie_get_pictures:
     pattern: /get-pictures/{id}
     defaults: { _controller: ExterneGalerieBundle:Galerie:getPictures}
+    options:
+        expose: true
     
 ExterneGalerie_first_call:
     pattern: /first-call
     defaults: { _controller: ExterneGalerieBundle:Galerie:firstCall}
+    options:
+        expose: true
     
 ExterneGalerie_zip:
     pattern: /zip-album/{id}
     defaults: { _controller: ExterneGalerieBundle:Galerie:zipAlbum}
+    options:
+        expose: true

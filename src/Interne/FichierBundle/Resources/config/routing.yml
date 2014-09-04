@@ -21,7 +21,11 @@ InterneFichier_adder:
 InterneFichier_listing_retrieve_liste:
     pattern:  /listing/retrieve-liste
     defaults: { _controller: InterneFichierBundle:Listing:retrieveListe }
+    options:
+        expose: true
     
 InterneFichier_custom_listing_export:
     pattern:  /listing/export/{type}/{ids}
     defaults: { _controller: InterneFichierBundle:Listing:customListingExport }
+    options:
+        expose: true

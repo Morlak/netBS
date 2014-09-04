@@ -1,6 +1,8 @@
 InterneGlobal_modifikator:
     pattern:  /modifikator/{entity}/{content}
     defaults: { _controller: InterneGlobalBundle:Global:modifikator }
+    options:
+        expose: true
 
 #galerie
 InterneGlobal_galerie_overview:
@@ -14,15 +16,23 @@ InterneGlobal_galerie_groupe:
 InterneGlobal_galerie_retrieve_tree:
     pattern:  /galerie/retrieveTree/{id}
     defaults: { _controller: InterneGlobalBundle:Galerie:retrieveTree }
+    options:
+        expose: true
     
 InterneGlobal_galerie_update_colors:
     pattern:  /galerie/update-colors/{id}/{color1}/{color2}
     defaults: { _controller: InterneGlobalBundle:Galerie:updateColors }
+    options:
+        expose: true
 
 InterneGlobal_galerie_add_album:
     pattern:  /galerie/add-album/{id}
     defaults: { _controller: InterneGlobalBundle:Galerie:addAlbum }
+    options:
+        expose: true
     
 InterneGlobal_galerie_add_photos:
     pattern:  /galerie/add-photos/{id}
     defaults: { _controller: InterneGlobalBundle:Galerie:addPhotos }
+    options:
+        expose: true

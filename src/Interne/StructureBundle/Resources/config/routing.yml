@@ -27,10 +27,14 @@ InterneStructure_remove_attribution:
     defaults: { _controller: InterneStructureBundle:Attribution:removeAttribution }
     
 #ajax
-InterneStructure_full_hierarchie_AJAX:
+InterneStructure_full_hierarchie:
     pattern:  /ajax/full_hierarchie
     defaults: { _controller: InterneStructureBundle:Structure:AJAXGetFullHierarchie }
+    options:
+        expose: true
   
-InterneStructure_attributions_groupes_enfants_AJAX:
+InterneStructure_attributions_groupes_enfants:
     pattern:  /ajax/attributions_from_groupes/{id}/{hierarchie}/{date1}/{date2}
     defaults: { _controller: InterneStructureBundle:Attribution:AJAXGetAttributionsGroupes }
+    options:
+        expose: true
