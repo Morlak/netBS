@@ -27,7 +27,7 @@ function refreshCalendar(month, year) {
     
 	$.ajax({
         
-        url  : '/netBS/web/app_dev.php/interne/stamm/agenda/' + month + '/' + year,
+        url  : Routing.generate('InterneStamm_agenda_update', {month : month, year : year}),
         type : 'POST',
         data : '',
         dataType : 'json',

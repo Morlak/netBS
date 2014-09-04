@@ -26,7 +26,8 @@ function retrieveAttributions(id, btn) {
 	
 	$.ajax({
         
-        url  : '/netBS/web/app_dev.php/interne/structure/ajax/attributions_from_groupes/' + id + '/' + hierarchie + '/' + date1 + '/' + date2,
+        //url  : '/netBS/web/app_dev.php/interne/structure/ajax/attributions_from_groupes/' + id + '/' + hierarchie + '/' + date1 + '/' + date2,
+	url : Routing.generate('InterneStructure_attributions_groupes_enfants_AJAX', {id:id, hierarchie:hierarchie, date1:date1, date2:date2}),
         dataType : 'json',
         success : function(data) {
 
@@ -81,7 +82,8 @@ function retrieveHierarchie() {
 	$.ajax({
 		
 		type: 'POST',
-		url: "/netBS/web/app_dev.php/interne/structure/ajax/full_hierarchie",
+		//url: "/netBS/web/app_dev.php/interne/structure/ajax/full_hierarchie",
+		url : Routing.generate('InterneStructure_full_hierarchie_AJAX'),
 		dataType : 'json',
 		
 		success : function(data) {

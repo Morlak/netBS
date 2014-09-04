@@ -1,5 +1,8 @@
-#routes de login
+#FOSJSRouting
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
+#routes de login
 login:
     path:     /login
     defaults: { _controller: ExternePublicBundle:Public:login }

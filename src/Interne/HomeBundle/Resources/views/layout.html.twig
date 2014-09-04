@@ -165,7 +165,9 @@
     <!-- javascript n' shit -->
     
     <div class="debogger"></div>
-	
+    
+    
+    <!-- perso -->
     <script src="{{ asset('static/js/jquery.js') }}" type="text/javascript"></script>
     <script src="{{ asset('static/js/bootstrap.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('static/js/jquery-ui.js') }}" type="text/javascript"></script>
@@ -175,9 +177,12 @@
     <script src="{{ asset('static/js/fonctions.js') }}" type="text/javascript"></script>
     <script src="{{ asset('static/js/listing.js') }}" type="text/javascript"></script>
 
-
     {% block javascript %}
     {% endblock %}
+    
+    <!-- FOSJSBundle -->
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     
 
 </body>

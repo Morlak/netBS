@@ -106,7 +106,8 @@ function retrieveListing() {
     //Sinon on récupère la liste en ajax
     $.ajax({
         
-        url:    '/netBS/web/app_dev.php/interne/fichier/listing/retrieve-liste',
+        //url:    '/netBS/web/app_dev.php/interne/fichier/listing/retrieve-liste',
+        url: Routing.generate('InterneFichier_listing_retrieve_liste'),
         type:   'POST',
         data: { listing: liste },
         
@@ -257,7 +258,7 @@ function exportListing(type) {
     if(liste.charAt(0) == ',') liste = liste.slice(1);
     
     //On télécharge le fichier
-    location.href = '/netBS/web/app_dev.php/interne/fichier/listing/export/' + type + '/' + liste;
+    location.href = Routing.generate('InterneFichier_custom_listing_export', {type:type, ids:liste});
 }
 
 /**
