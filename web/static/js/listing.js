@@ -188,6 +188,18 @@ function addToList(btn) {
  */
 function persistList(ids) {
     
+    /**
+     * tout d'abord, on supprimme les doublons parmis les ids transmis, si il y
+     * en a
+     */
+    var tempids = [];
+    
+    $.each(ids, function(i, el){
+        if($.inArray(el, tempids) === -1) tempids.push(el);
+    });
+    
+    ids = tempids; //On reremplace
+    
     //On récupère la liste existante
     var liste = sessionStorage.getItem('listing');
     

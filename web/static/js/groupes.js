@@ -12,7 +12,7 @@ function retrieveAttributions(id, btn) {
 	//Première chose, récupérer les deux dates transmises
 	var date1		= ($('#date1').val() === "") ? "empty" : $('#date1').val();
 	var date2		= ($('#date2').val() === "") ? "empty" : $('#date2').val();
-	var hierarchie	= $('#hierarchie').val();
+	var hierarchie		= $('#hierarchie').val();
 	
 	//Si l'id passée est null, ça veut dire qu'elle provient d'un select
 	if(id === null)
