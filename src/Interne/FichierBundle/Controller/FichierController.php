@@ -126,7 +126,7 @@ class FichierController extends Controller
      * @param id l'id du membre dans la base de donnée
      */
     public function voirMembreAction($id) {
-    	
+	
     	$em			= $this->getDoctrine()->getManager();
     	$repository = $em->getRepository('InterneFichierBundle:Membre');
     	$membre		= $repository->find($id);

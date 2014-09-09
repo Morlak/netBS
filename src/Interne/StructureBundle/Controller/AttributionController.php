@@ -229,10 +229,10 @@ class AttributionController extends Controller
 	$attribution->setGroupe($groupe);
 	
 	//Si la date de début était vide, on la modifie pas
-	if(!preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $donnees[2]))
+	if($donnees[2] != '')
 	    $attribution->setDateDebut(new \Datetime($donnees[2]));
 	    
-	if(!preg_match('/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/', $donnees[3]))
+	if($donnees[3] != '')
 	    $attribution->setDateFin(new \Datetime($donnees[3]));
 	
 	$em->persist($attribution);
