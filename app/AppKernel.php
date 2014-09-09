@@ -19,16 +19,17 @@ class AppKernel extends Kernel
             new Externe\GalerieBundle\ExterneGalerieBundle(),
             new Interne\GlobalBundle\InterneGlobalBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new Externe\PublicBundle\ExternePublicBundle(),
+            new Interne\FichierBundle\InterneFichierBundle(),
+            new Interne\HomeBundle\InterneHomeBundle(),
+            new Interne\SearchBundle\InterneSearchBundle(),
+            new Interne\SecurityBundle\InterneSecurityBundle(),
+            new Interne\StammBundle\InterneStammBundle(),
+            new Interne\StructureBundle\InterneStructureBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            $bundles[] = new Externe\PublicBundle\ExternePublicBundle();
-            $bundles[] = new Interne\FichierBundle\InterneFichierBundle();
-            $bundles[] = new Interne\HomeBundle\InterneHomeBundle();
-            $bundles[] = new Interne\SearchBundle\InterneSearchBundle();
-            $bundles[] = new Interne\SecurityBundle\InterneSecurityBundle();
-            $bundles[] = new Interne\StammBundle\InterneStammBundle();
-            $bundles[] = new Interne\StructureBundle\InterneStructureBundle();
+            
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
