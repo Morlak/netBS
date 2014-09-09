@@ -32,6 +32,7 @@ class ObtentionDistinction
      * @var Distinction $distinctions
      * 
      * @ORM\ManyToOne(targetEntity="Interne\StructureBundle\Entity\Distinction", inversedBy="obtentionDistinctions")
+     * @ORM\JoinColumn(name="distinction_id", referencedColumnName="id")
      */
     private $distinction;
 
@@ -62,7 +63,7 @@ class ObtentionDistinction
      */
     public function setObtention($obtention)
     {
-        $this->obtention = $obtention;
+        $this->obtention = new \Datetime($obtention);
     
         return $this;
     }
@@ -98,28 +99,5 @@ class ObtentionDistinction
     public function getMembre()
     {
         return $this->membre;
-    }
-
-    /**
-     * Set distinction
-     *
-     * @param \Interne\StructureBundle\Entity\Distinction $distinction
-     * @return ObtentionDistinction
-     */
-    public function setDistinction(\Interne\StructureBundle\Entity\Distinction $distinction = null)
-    {
-        $this->distinction = $distinction;
-
-        return $this;
-    }
-
-    /**
-     * Get distinction
-     *
-     * @return \Interne\StructureBundle\Entity\Distinction 
-     */
-    public function getDistinction()
-    {
-        return $this->distinction;
     }
 }

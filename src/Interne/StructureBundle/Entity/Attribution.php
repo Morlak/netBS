@@ -45,7 +45,7 @@ class Attribution
      */
      private $groupe;
      
-     /**
+    /**
      * @var Interne\FichierBundle\Entity\Membre $membre
      * 
      * @ORM\ManyToOne(targetEntity="Interne\FichierBundle\Entity\Membre", inversedBy="attributions")
@@ -53,7 +53,7 @@ class Attribution
      */
      private $membre;
      
-      /**
+    /**
      * @var Fonction $fonction
      * 
      * @ORM\ManyToOne(targetEntity="Interne\StructureBundle\Entity\Fonction", inversedBy="attributions")

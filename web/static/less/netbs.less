@@ -597,7 +597,15 @@ body *[infobulle]:hover:after
 							{
 								background:rgb(220,220,220);
 							}
+							
+							.caret
+							{
+								position:relative;
+								top:17px;
+								margin-left:6px;
+							}
 						}
+
 						
 						.widget-progress-bar
 						{
@@ -1075,7 +1083,9 @@ form
 			input,
 			select,
 			.slider,
-			textarea
+			textarea,
+			button,
+			a.btn
 			{
 				margin:20px 0;
 			}
@@ -1125,11 +1135,18 @@ form
 			}
 			
 		}
+		
+		&.form-element
+		{
+			border:1px solid rgb(200,200,200);
+			background:rgb(248,248,248);
+			margin-bottom:20px;
+			.box-shadow(0 1px 1px rgb(200,200,200));
+		}
 	}
 	
 	input[type=submit]
 	{
-		font-size:12px;
 
 		&:active, &:focus
 		{
@@ -1141,8 +1158,14 @@ form
 form .row,
 .field
 {
-	input:not([type=submit]),
-	input:not([type=checkbox]),
+	input[type="text"],
+	input[type="file"],
+	input[type="date"],
+	input[type="password"],
+	input[type="number"],
+	input[type="url"],
+	input[type="email"],
+	input[type="search"],
 	select,
 	textarea
 	{
@@ -1239,7 +1262,15 @@ form .row,
 		background:rgb(253,253,253);
 	}
 	
-	input
+	
+	input[type="text"],
+	input[type="file"],
+	input[type="date"],
+	input[type="password"],
+	input[type="number"],
+	input[type="url"],
+	input[type="email"],
+	input[type="search"]
 	{
 		height:30px;
 	}
@@ -1256,6 +1287,10 @@ form .row,
 	}
 }
 
+.modal .panel-collapse
+{
+	background:rgb(248,248,248);
+}
 
 /**
  * importation des feuilles indépendantes en bas

@@ -188,6 +188,12 @@ class FichierController extends Controller
 		 */
 		$mainAdresse = $this->container->get('interne_fichier.adressePrincipale')->checkPrincipale($membre);
 		
+		//On doit aussi génerer la liste personnalisée des fonctions pour en créer, on récupère donc la liste
+		$fonctions = $em->getRepository('InterneStructureBundle:Fonction')->findAll();
+		
+		//Ainsi que la liste des groupes
+		$groupes   = $em->getRepository('InterneStructureBundle:Groupe')->findAll();
+		
     	
     	
     	return $this->render('InterneFichierBundle:Fichier:voir_membre.html.twig', array(
@@ -197,6 +203,8 @@ class FichierController extends Controller
     			'attributionForm'		=> $attributionForm->createView(),
     			'obtentionDistinctionForm'	=> $obtentionDistinctionForm->createView(),
     			'adressePrincipale'		=> $mainAdresse,
+			'fonctions'			=> $fonctions,
+			'groupes'			=> $groupes,
     		));
     }
   

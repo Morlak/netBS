@@ -13,6 +13,8 @@ InterneStructure_attributions_fonctions:
 InterneStructure_voir_groupe:
     pattern:  /groupe/{id}
     defaults: { _controller: InterneStructureBundle:Structure:voirGroupe }
+    options:
+        expose: true
     
 InterneStructure_ajouter_groupe:
     pattern:  /ajouter/groupe
@@ -21,7 +23,13 @@ InterneStructure_ajouter_groupe:
 InterneStructure_ajouter_type:
     pattern:  /ajouter/type
     defaults: { _controller: InterneStructureBundle:Structure:addType }
-    
+
+InterneStructure_add_attributions:
+    pattern:  /add/attribution/{id}
+    defaults: { _controller: InterneStructureBundle:Attribution:addAttributions }
+    options:
+        expose: true
+
 InterneStructure_remove_attribution:
     pattern:  /remove/attribution/{attributionId}
     defaults: { _controller: InterneStructureBundle:Attribution:removeAttribution }
@@ -36,5 +44,11 @@ InterneStructure_full_hierarchie:
 InterneStructure_attributions_groupes_enfants:
     pattern:  /ajax/attributions_from_groupes/{id}/{hierarchie}/{date1}/{date2}
     defaults: { _controller: InterneStructureBundle:Attribution:AJAXGetAttributionsGroupes }
+    options:
+        expose: true
+        
+InterneStructure_attribution_modify:
+    pattern:  /ajax/attributions/modify
+    defaults: { _controller: InterneStructureBundle:Attribution:AJAXModifyAttribution }
     options:
         expose: true

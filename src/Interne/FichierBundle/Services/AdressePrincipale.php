@@ -33,7 +33,7 @@ class AdressePrincipale {
 		if( (is_null($membre->getAdresse()->getRue()) && is_null($membre->getAdresse()->getNPA()) ) || !$membre->getAdresse()->getFacturable()) {
 			
 			//Adresse du membre vide, on passe à la famille
-			if( (is_null($membre->getFamille()->getAdresse()->getRue()) && is_null($membre->getFamille()->getAdresse()->getNPA()) ) || !$membre->getFamille()->getFacturable()) {
+			if( (is_null($membre->getFamille()->getAdresse()->getRue()) && is_null($membre->getFamille()->getAdresse()->getNPA()) ) || !$membre->getFamille()->getAdresse()->getFacturable()) {
 				
 				//L'adresse de la famille est inexistante également, on recherche donc une adresse chez les parents
 				//en commencant par la mère

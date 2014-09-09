@@ -221,8 +221,7 @@
 					<span>Attributions</span>
 					
 					<div class="widget-toolbar">
-						<button data-toggle="modal" data-target="#attributions-form-modal">Ajouter une attribution</button>
-						
+						<button data-toggle="modal" data-target="#modal-add-attributions-perso">Ajouter une attribution</button>
 					</div>
 				</div>
 				
@@ -236,7 +235,7 @@
 								<th>Groupe</th>
 								<th>Date de début</th>
 								<th>Date de fin</th>
-								<th>Options</th>
+								<th style="width:130px">Options</th>
 							</tr>
 						</thead>
 						
@@ -245,11 +244,44 @@
 							{% for attribution in membre.attributions %}
 							
 							<tr>
-								<td>{{ attribution.fonction.nom }} ({{ attribution.fonction.abreviation | upper }})</td>
-								<td><a href="{{ path('InterneStructure_voir_groupe', {id: attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></td>
-								<td>{{ attribution.dateDebut | date("d.m.Y") }}</td>
-								<td>{{ attribution.dateFin | datum }}</td>
-								<td><a href="{{ path('InterneStructure_remove_attribution', {attributionId: attribution.id}) }}"><span class="glyphicon glyphicon-remove" title="supprimer" onclick="return confirm('Etes-vous sur ?');"></span></a></td>
+								<td>
+								    <p class="final-val">{{ attribution.fonction.nom }}</p>
+								    <p class="modifikator-val">
+									<select>
+									    <option value="{{ attribution.fonction.id }}">{{ attribution.fonction.nom }}</option>
+									    <option disabled>──────────</option>
+									    
+									{% for fonction in fonctions %}
+									    <option value="{{ fonction.id }}">{{ fonction.nom }}</option>
+									{% endfor %}
+									</select>
+								    </p>
+								</td>
+								<td>
+								    <a class="final-val" href="{{ path('InterneStructure_voir_groupe', {id: attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a>
+								    <p class="modifikator-val">
+									<select>
+									    <option value="{{ attribution.groupe.id }}">{{ attribution.groupe.nom }}</option>
+									    <option disabled>──────────</option>
+									    
+									{% for groupe in groupes %}
+									    <option value="{{ groupe.id }}">{{ groupe.nom }}</option>
+									{% endfor %}
+									</select>
+								    </p>
+								</td>
+								<td>
+								    <p class="final-val">{{ attribution.dateDebut | date("d.m.Y") }}</p>
+								    <p class="modifikator-val"><input type="text" class="datepicker" /></p>
+								</td>
+								<td>
+								    <p class="final-val">{{ attribution.dateFin | datum }}</p>
+								    <p class="modifikator-val"><input type="text" class="datepicker" /></p>
+								</td>
+								<td>
+								    <a onclick="return confirm('Etes-vous sur de vouloir supprimer cette attribution ?  {{ attribution.fonction.nom}} - {{ attribution.groupe.nom }}');" class="btn btn-xs btn-default" href="{{ path('InterneStructure_remove_attribution', {attributionId: attribution.id}) }}"><span class="glyphicon glyphicon-lg glyphicon-remove" title="supprimer"></span></a>
+								    <a class="btn btn-xs btn-default" name="attrModifButton-{{ attribution.id }}" onclick="modifyAttribution(this, {{ attribution.id }});"><span class="glyphicon glyphicon-edit"></span></a>
+								</td>
 							</tr>
 							
 							{% endfor %}
@@ -310,40 +342,73 @@
 		
 	</div>
 	
-	
-			{% include 'InterneFichierBundle:Modal:attributions_modal.html.twig' %}
+	<div class="modal fade" id="modal-add-attributions-perso" aria-hidden="true">
+	    
+	    <div class="modal-dialog">
+		<div class="modal-content">
+		    
+		    <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			<h4 class="modal-title" id="myModalLabel">Ajouter des attributions à {{ membre.prenom|capitalize}} {{ membre.famille.nom|capitalize }}</h4>
+		    </div>
+		    
+		    <div class="modal-body">
 			
-			<div class="modal" id="addAttribution" title="nouvelle attribution">
+			<!-- on génère la liste des groupes disponibles en hidden pour pouvoir la copier au fur et à mesure -->
+			<select style="display:none" class="attributions-membre-groupes-prototype">	
+				{% for groupe in groupes %}		
+				    <option value="{{ groupe.id }}">{{ groupe.nom }}</option>
+				{% endfor %}
+			</select>
+			<!-- / -->
 			
-				<form method="post" action="#">
+                        <form method="post" action="#">
+                            
+                            <fieldset>
+
+                                <div class="row">
+                                    <div class="col-sm-3"><label>Fonction (s)</label></div>
+                                    <div class="col-sm-9">
+					<select id="attributions-membre-fonctions-dynamics" multiple class="chosen">
 					
-					{% include 'InterneStructureBundle:Form:attribution_form.html.twig' %}
+					{% for fonction in fonctions %}
 					
-					<input type="submit" value="Ajouter" />
+					    <option value="{{ fonction.id }}__{{ fonction.nom }}">{{ fonction.nom }}</option>
 					
-				</form>
+					{% endfor %}
+				    
+					</select>
+					
+				    </div>
+                                </div>
 				
-			</div>
-			
-			<div class="modal" id="addObtentionDistinction" title="nouvelle distinction">
-			
-				<form method="post" action="#">
-					
-					{% include 'InterneStructureBundle:Form:obtention_distinction_form.html.twig' %}
-					
-					<input type="submit" value="Ajouter" />
-					
-				</form>
+			    </fieldset>
+                                
+			    <!-- partie gérée dynamiquement côté javascript -->
+			    <div id="attributions-membre-fieldset-dynamics">
 				
-			</div>
-			
+			    </div>
+                            
+                        </form>
+		    
+		    </div>
+		    
+		    <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+			<button type="button" onclick="addAttributionsToMembre();" class="btn btn-primary">Valider</button>
+		    </div>
 		</div>
+	    </div>
+	</div>
+	
+	<!-- on stocke l'id du membre pour pouvoir la récupérer -->
+	<input type="hidden" value="{{ membre.id }}" id="membre-id" />
 
 {% endblock %}
 
 {% block javascript %}
     
     <script src="{{ asset('static/js/modifikator.js') }}"></script>
-    <script src="{{ asset('static/js/modal-process.js') }}"></script>
+    <script src="{{ asset('static/js/membres.js') }}"></script>
     
 {% endblock %}

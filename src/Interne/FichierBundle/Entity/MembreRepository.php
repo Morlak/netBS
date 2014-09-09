@@ -14,9 +14,10 @@ class MembreRepository extends EntityRepository
 {
     /**
      * la méthode findCurrentAttribution va récupérer l'attribution courante
-     * d'un membre
+     * d'un membre, avec une possibilité.
+     * Par défaut, la fonction ne renvoie q'un seul résultat
      */
-    public function findCurrentAttribution($id) {
+    public function findCurrentAttribution($id, $one = true) {
         
         $membre = $this->find($id);
         
@@ -26,13 +27,16 @@ class MembreRepository extends EntityRepository
            ->from('InterneStructureBundle:Attribution', 'a')
            ->where('a.membre = :membre')
            ->setParameter('membre', $membre)
-           ->andWhere('a.dateFin > :today')
-           ->setParameter('today', new \Datetime("now"))
-           ->setMaxResults(1);
+           ->andWhere('ifNull(DATE(a.dateFin), :farAway) > :today')
+           ->setParameter('today', new \Datetime("now"))           
+           ->setParameter('farAway', new \Datetime("3100-09-09"));           
 
         $attributions = $qb->getQuery()->getResult();
         
-        return ($attributions != null) ? $attributions[0] : null;
+        if($one && $attributions != null) return $attributions[0];
+        else if(!$one && $attributions != null) return $attributions;
+        else return null;
+        
     }
     
     /**

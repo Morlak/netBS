@@ -341,25 +341,25 @@ class Membre extends Personne
     
 
     /**
-     * Add distinctions
+     * Add distinction
      *
-     * @param \Interne\StructureBundle\Entity\ObtentionDistinction $distinctions
+     * @param \Interne\StructureBundle\Entity\ObtentionDistinction $distinction
      * @return Membre
      */
-    public function addDistinction(\Interne\StructureBundle\Entity\ObtentionDistinction $distinctions)
+    public function addDistinction(\Interne\StructureBundle\Entity\ObtentionDistinction $distinction)
     {
-        $this->distinctions[] = $distinctions;
-		$distinctions->setMembre($this);
+        $this->distinctions[] = $distinction;
+	$distinction->setMembre($this);
         return $this;
     }
 
     /**
-     * Remove distinctions
+     * Remove distinction
      *
-     * @param \Interne\StructureBundle\Entity\ObtentionDistinction $distinctions
+     * @param \Interne\StructureBundle\Entity\ObtentionDistinction $distinction
      */
-    public function removeDistinction(\Interne\StructureBundle\Entity\ObtentionDistinction $distinctions)
+    public function removeDistinction(\Interne\StructureBundle\Entity\ObtentionDistinction $distinction)
     {
-        $this->distinctions->removeElement($distinctions);
+        $this->distinctions->removeElement($distinction);
     }
 }

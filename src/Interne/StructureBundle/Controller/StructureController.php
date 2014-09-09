@@ -145,7 +145,6 @@ class StructureController extends Controller
     	//On récupère également l'ensemble des attributions liées à ce groupe pour afficher
     	//les membres courants, donc également trouver les membres des groupes enfants possibles
     	$attrs		= $aRepo->findCurrentAttributionsForThisGroupe($groupe);
-
     	
     	return $this->render('InterneStructureBundle:Structure:voir_groupe.html.twig', array(
     		

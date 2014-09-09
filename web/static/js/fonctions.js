@@ -83,7 +83,7 @@ $('.widget-options-button').click(function() {
 $('.datepicker').datepicker({ 
 	
 	dateFormat: "yy-mm-dd", 
-	changeYear: true, 
+	changeYear: true,
 	yearRange : "1990:" + new Date().getFullYear() 
 });
 

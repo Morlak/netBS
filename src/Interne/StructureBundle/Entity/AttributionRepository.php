@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityRepository;
  * repository methods below.
  */
 class AttributionRepository extends EntityRepository
-{
+{	
 	
 	/**
 	 * Recherche l'ensemble des attributions liées à ce groupe durant la plage de temps
@@ -20,47 +20,25 @@ class AttributionRepository extends EntityRepository
 	 
 	public function findAttributionsForThisGroupe($groupe, $date1, $date2) {
 		
+		/**
+		 * Si une des deux dates était empty, on la remplace dans le controller par une date
+		 * fictive. Ca peut poser problème avec la date de fin, qui est mise à 01-01-3000
+		 * Pour pallier a ce problème, on génère une date plus grande encore, au cas ou c'etait
+		 * NULL dans la BDD
+		 */
+		
+		$farAway = new \Datetime('3100-12-12');
+		
 		$qb = $this->createQueryBuilder('a');
 		$qb->where('a.groupe = :groupe')
 		   ->setParameter('groupe', $groupe)
-		   ->andWhere('a.dateDebut < :fin')
+		   ->andWhere('DATE(a.dateDebut) < :fin')
 	   	   ->setParameter('fin', $date2)
-	   	   ->andWhere('a.dateFin > :debut')
-	   	   ->setParameter('debut', $date1);
+	   	   ->andWhere('ifNull(a.dateFin, :farAway) > :debut')
+	   	   ->setParameter('debut', $date1)
+		   ->setParameter('farAway', $farAway);
 	   	   
 	   	return $qb->getQuery()->getResult();
-	}
-	
-	/**
-	 * Recherche les attributions pour un ensemble de groupes, pas seulement un concerné
-	 * en fonction du temps
-	 */
-	public function findAttributionsForGroupes($groupes, $date1, $date2) {
-		
-		$qb = $this->createQueryBuilder('a');
-		
-		//On récupère en premier lieu l'ensemble des attributions concernées par
-		//les dates
-		$qb->where('a.dateDebut < :fin')
-	   	   ->setParameter('fin', $date2)
-	   	   ->andWhere('a.dateFin > :debut')
-	   	   ->setParameter('debut', $date1);
-	   	
-	   	$attrs = $qb->getQuery()->getResult();
-	   	$liste = array();
-	   	$c 	   = 0;
-	   	
-	   	//On les compare ensuite avec l'ensemble de groupes qu'on a reçu
-	   	foreach($attrs as $attribution) {
-    		
-    		if(in_array($attribution->getGroupe(), $groupes, true)) {
-    			
-    			$liste[$c] = $attribution;
-    			$c++;
-    		}
-    	}
-    	
-    	return $liste;
 	}
 	
 	/**
