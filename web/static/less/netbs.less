@@ -315,7 +315,7 @@ body *[infobulle]:hover:after
 	width:calc(~"100% - 200px");
 	max-width:calc(~"100% - 200px");
 	float:right;
-	overflow:hidden;
+	overflow-x:hidden;
 	
 	#flash-container
 	{
@@ -788,7 +788,7 @@ body *[infobulle]:hover:after
 	 * les editables sont les span qui peuvent être modifiées
 	 * en ajax
 	 */
-	.editable
+	.editable, .date-editable
 	{
 		width:calc(~"100% - 200px");
 		border-top:1px solid transparent;
@@ -824,6 +824,22 @@ body *[infobulle]:hover:after
 	.editable-success
 	{
 		background:rgb(162, 239, 166);
+	}
+	
+	.date-editable-input
+	{
+		width:calc(~"100% - 200px");
+		border-top:1px solid transparent;
+		border-bottom:1px dotted rgb(220,220,220);
+		border-left:1px solid transparent;
+		border-right:none;
+		padding:1px 10px 0px 1px;
+		font-size:11px;
+		height:23px;
+		line-height:21px;
+		margin:3px 0 0 0;
+		.transition(background .2s);
+		background:transparent;
 	}
 	
 	.toggle-editable

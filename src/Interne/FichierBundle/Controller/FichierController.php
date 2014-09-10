@@ -113,11 +113,22 @@ class FichierController extends Controller
      */
     public function voirFamilleAction($id) {
     	
-    	$repository = $this->getDoctrine()->getManager()->getRepository('InterneFichierBundle:Famille');
-    	$famille	= $repository->find($id);
+    	$repository 	= $this->getDoctrine()->getManager()->getRepository('InterneFichierBundle:Famille');
+		$mRepo			= $this->getDoctrine()->getManager()->getRepository('InterneFichierBundle:Membre');
+    	$famille		= $repository->find($id);
+	
+		//On récupère les attributions courantes des membres
+		$membres 		= array();
+		
+		foreach($famille->getMembres() as $key => $membre) {
+			
+			$membres[$key]['membre'] = $membre;
+			$membres[$key]['attribution'] = $mRepo->findCurrentAttribution($membre->getId());
+		}
+	
     	
     	
-    	return $this->render('InterneFichierBundle:Fichier:voir_famille.html.twig', array('famille' => $famille));
+    	return $this->render('InterneFichierBundle:Fichier:voir_famille.html.twig', array('famille' => $famille, 'membres' => $membres));
     }
     
     
@@ -132,7 +143,6 @@ class FichierController extends Controller
     	$membre		= $repository->find($id);
     	$hierarchie = array();
     	$compteur   = 0;
-    	
     	
     	//Récupération des hierarchies de groupes pour chaque attribution si il y en a
     	foreach($membre->getAttributions() as $attribution) {

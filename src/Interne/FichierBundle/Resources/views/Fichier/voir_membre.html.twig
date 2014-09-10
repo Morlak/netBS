@@ -28,7 +28,7 @@
     						
     						<ul class="data-liste">
 		    					<li><strong>Prénom</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.prenom">{{ membre.prenom|capitalize }}</span></li>
-		    					<li><strong>Date de naissance</strong><span>{{ membre.naissance|date("d.m.Y") }}</span></li>
+		    					<li><strong>Date de naissance</strong><span name="InterneFichierBundle.membre.{{ membre.id }}.naissance" class="date-editable">{{ membre.naissance|date("d.m.Y") }}</span><input type="hidden" class="datepicker date-editable-input" /></li>
 		    					<li><strong>Téléphone</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.contact.telephone">{{ membre.contact.telephone }}</span></li>
 		    					<li><strong>E-Mail</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.contact.email">{{ membre.contact.email }}</span></li>
 		    				</ul>
@@ -39,7 +39,7 @@
     						
     						<ul class="data-liste">
     							<li><strong>Numéro BS</strong><span>{{ membre.numeroBs }}</span></li>
-    							<li><strong>Inscrit le</strong><span>{{ membre.inscription|date("d.m.Y") }}</span></li>
+    							<li><strong>Inscrit le</strong><span name="InterneFichierBundle.membre.{{ membre.id }}.inscription" class="date-editable">{{ membre.inscription|date("d.m.Y") }}</span><input type="hidden" class="datepicker date-editable-input" /></li>
     							<li><strong>Statut</strong><span>{{ membre.statut }}</span></li>
     						</ul>
     						

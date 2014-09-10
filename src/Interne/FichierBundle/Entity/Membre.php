@@ -244,7 +244,7 @@ class Membre extends Personne
      */
     public function setNaissance($naissance)
     {
-        $this->naissance = new \Datetime($naissance);
+        $this->naissance = $naissance;
     
         return $this;
     }

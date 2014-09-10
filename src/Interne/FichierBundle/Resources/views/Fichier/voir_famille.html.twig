@@ -117,15 +117,15 @@
 						
 						<tbody>
 			
-							{% for membre in famille.membres %}
+							{% for mentry in membres %}
 							<tr>
-								<td><input type="checkbox" id="membre_{{ membre.id }}" /></td>
-								<td><a href="{{ path('InterneFichier_voir_membre', {'id' : membre.id}) }}">{{ membre.prenom }}</a></td>
-								<td>{% for attr in membre.attributions %} {{ attr.fonction.nom }} - {% endfor %}</td>
-								<td>{% for attr in membre.attributions %} <a href="{{ path('InterneStructure_voir_groupe', {id: attr.groupe.id}) }}">{{ attr.groupe.nom }}</a> - {% endfor %}</td>
-								<td>{{ membre.numeroBs }}</td>
-								<td>{{ membre.sexe }}</td>
-								<td>{{ membre.naissance|date("d.m.Y") }}</td>
+								<td><input type="checkbox" id="membre_{{ mentry.membre.id }}" /></td>
+								<td><a href="{{ path('InterneFichier_voir_membre', {'id' : mentry.membre.id}) }}">{{ mentry.membre.prenom }}</a></td>
+								<td>{{ mentry.attribution.fonction.nom }}</td>
+								<td><a href="{{ path('InterneStructure_voir_groupe', {id: mentry.attribution.groupe.id}) }}">{{ mentry.attribution.groupe.nom }}</a></td>
+								<td>{{ mentry.membre.numeroBs }}</td>
+								<td>{{ mentry.membre.sexe }}</td>
+								<td>{{ mentry.membre.naissance|date("d.m.Y") }}</td>
 							</tr>
 							
 							{% endfor %}
