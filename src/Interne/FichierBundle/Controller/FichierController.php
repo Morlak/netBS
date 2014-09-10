@@ -3,7 +3,7 @@
 namespace Interne\FichierBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 //Entity
 use Interne\FichierBundle\Entity\Membre;
@@ -14,6 +14,8 @@ use Interne\StructureBundle\Entity\ObtentionDistinction;
 
 //Forms
 use Interne\FichierBundle\Form\MembreType;
+use Interne\FichierBundle\Form\MembreContactType;
+use Interne\FichierBundle\Form\MembreFamilleType;
 use Interne\FichierBundle\Form\FamilleType;
 
 use Interne\StructureBundle\Form\AttributionType;
@@ -29,7 +31,7 @@ class FichierController extends Controller
 	 * Le paramètre id est facultatif, si présent, il indique la famille à laquelle
 	 * ajouter le membre
 	 */
-    public function creerMembreAction()
+    public function creerMembreAction(Request $request)
     {
     	
     	//Récupération des entities
@@ -41,9 +43,9 @@ class FichierController extends Controller
     	
     	
     	//On vérifie si on a ajouté un nouveau membre à la famille aight
-    	if ($this->getRequest()->isMethod('POST')) {
+    	if ($request->isMethod('POST')) {
 			
-			$membreForm->bind($this->getRequest());
+			$membreForm->submit($request);
 			
 			if ($membreForm->isValid()) {
 				
@@ -123,22 +125,29 @@ class FichierController extends Controller
     
     /**
      * Permet de visualiser la fiche d'un membre
-     * @param id l'id du membre dans la base de donnée
+     * @param id l'id du membre dans la base de données
      */
     public function voirMembreAction($id) {
     	
     	$em			= $this->getDoctrine()->getManager();
     	$repository = $em->getRepository('InterneFichierBundle:Membre');
     	$membre		= $repository->find($id);
+
+        $famille    = $membre->getFamille();
+
     	$hierarchie = array();
     	$compteur   = 0;
+
+        $membreForm = $this->createForm(new MembreType, $membre);
+        $membreContactForm = $this->createForm(new MembreContactType, $membre);
+        $membreFamilleForm = $this->createForm(new MembreFamilleType, $membre);
+
+        $familleForm = $this->createForm(new FamilleType, $famille);
     	
-    	
-    	//Récupération des hierarchies de groupes pour chaque attribution si il y en a
+    	// Récupération des hierarchies de groupes pour chaque attribution si il y en a
     	foreach($membre->getAttributions() as $attribution) {
     		
-    		//On récupère seulement les hierarchies des attributions valides (non expirées)
-    		
+    		// On récupère seulement les hierarchies des attributions valides (non expirées)
     		$hierarchie[$compteur] = $em->getRepository('InterneStructureBundle:Groupe')->findHierarchie($attribution->getGroupe());
     		$compteur++;
     	}
@@ -191,12 +200,16 @@ class FichierController extends Controller
     	
     	
     	return $this->render('InterneFichierBundle:Fichier:voir_membre.html.twig', array(
-    			
-    			'membre'	  		=> $membre,
-    			'hierarchies'			=> $hierarchie,
-    			'attributionForm'		=> $attributionForm->createView(),
+                'membreForm'                => $membreForm->createView(),
+                'membreContactForm'         => $membreContactForm->createView(),
+                'membreFamilleForm'         => $membreFamilleForm->createView(),
+                'familleForm'		        => $familleForm->createView(),
+
+    			'membre'	  		        => $membre,
+    			'hierarchies'			    => $hierarchie,
+    			'attributionForm'		    => $attributionForm->createView(),
     			'obtentionDistinctionForm'	=> $obtentionDistinctionForm->createView(),
-    			'adressePrincipale'		=> $mainAdresse,
+    			'adressePrincipale'		    => $mainAdresse,
     		));
     }
   

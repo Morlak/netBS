@@ -81,7 +81,7 @@ function modifikator(entity, content, obj) {
 	error : function(data) {
 	
 		console.log(JSON.stringify(data));
-	},
+	}
     });
 }
 

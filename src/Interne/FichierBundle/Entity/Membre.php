@@ -4,7 +4,6 @@ namespace Interne\FichierBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Interne\FichierBundle\Entity\Personne;
 
 /**
  * Membre
@@ -14,12 +13,16 @@ use Interne\FichierBundle\Entity\Personne;
  */
 class Membre extends Personne
 {
-	
-	public function __construct() {
-		
-		$this->inscription = new \Datetime();
-	}
-	
+
+    public function __construct()
+    {
+
+        $this->inscription = new \Datetime();
+
+        $this->telephones = array("");
+        $this->emails = array("");
+    }
+
     /**
      * @var integer
      *
@@ -48,13 +51,13 @@ class Membre extends Personne
      * @ORM\OneToMany(targetEntity="Interne\StructureBundle\Entity\ObtentionDistinction", mappedBy="membre", cascade={"persist", "remove"})
      */
     private $distinctions;
-    
+
     /**
      * @var date
-     * 
+     *
      * @ORM\Column(name="naissance", type="date")
      */
-     private $naissance;
+    private $naissance;
 
     /**
      * @var integer
@@ -78,21 +81,40 @@ class Membre extends Personne
     private $statut;
 
     /**
-     * @ORM\OneToOne(targetEntity="Interne\FichierBundle\Entity\Contact", cascade={"persist", "remove"})
+     * @var array
+     *
+     * @ORM\Column(name="telephones", type="array")
      */
-    private $contact;
-    
+    private $telephones;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="emails", type="array")
+     */
+    private $emails;
+
     /**
      * @var date
-     * 
+     *
      * @ORM\Column(name="inscription", type="date")
      */
     private $inscription;
 
     /**
+     * @var text
+     *
+     * @ORM\Column(name="remarques", type="text", nullable=true)
+     */
+    private $remarques;
+
+
+
+
+    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -102,25 +124,53 @@ class Membre extends Personne
     /**
      * Set famille
      *
-     * @param integer $famille
+     * @param Famille $famille
      * @return Membre
      */
     public function setFamille($famille)
     {
         $this->famille = $famille;
-    
+
         return $this;
     }
 
     /**
      * Get famille
      *
-     * @return integer 
+     * @return Famille
      */
     public function getFamille()
     {
         return $this->famille;
     }
+
+    /**
+     * Set nom
+     *
+     * @param Famille $famille
+     * @return Membre
+     */
+    public function setNom($famille)
+    {
+        $this->setFamille($famille);
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+
+        if ($this->getFamille() != null)
+            return $this->getFamille()->getNom();
+        else
+            return "Pas dans une famille...";
+    }
+
 
     /**
      * Set distinctions
@@ -131,14 +181,14 @@ class Membre extends Personne
     public function setDistinctions($distinctions)
     {
         $this->distinctions = $distinctions;
-    
+
         return $this;
     }
 
     /**
      * Get distinctions
      *
-     * @return array 
+     * @return array
      */
     public function getDistinctions()
     {
@@ -154,14 +204,14 @@ class Membre extends Personne
     public function setNumeroBs($numeroBs)
     {
         $this->numeroBs = $numeroBs;
-    
+
         return $this;
     }
 
     /**
      * Get numeroBs
      *
-     * @return integer 
+     * @return integer
      */
     public function getNumeroBs()
     {
@@ -177,14 +227,14 @@ class Membre extends Personne
     public function setNumeroAvs($numeroAvs)
     {
         $this->numeroAvs = $numeroAvs;
-    
+
         return $this;
     }
 
     /**
      * Get numeroAvs
      *
-     * @return string 
+     * @return string
      */
     public function getNumeroAvs()
     {
@@ -200,43 +250,79 @@ class Membre extends Personne
     public function setStatut($statut)
     {
         $this->statut = $statut;
-    
+
         return $this;
     }
 
     /**
      * Get statut
      *
-     * @return string 
+     * @return string
      */
     public function getStatut()
     {
         return $this->statut;
     }
 
+
     /**
-     * Set contact
-     *
-     * @param \stdClass $contact
-     * @return Membre
+     * @param $telephones
+     * @return $this
      */
-    public function setContact($contact)
+    public function setTelephones($telephones)
     {
-        $this->contact = $contact;
-    
+        $this->telephones = $telephones;
+
         return $this;
     }
 
     /**
-     * Get contact
-     *
-     * @return \stdClass 
+     * @param $telephone
+     * @return $this
      */
-    public function getContact()
-    {
-        return $this->contact;
+    public function addTelephone($telephone) {
+        $this->telephones = array($this->telephones, $telephone);
+
+        return $this;
     }
-    
+
+    /**
+     * @return array
+     */
+    public function getTelephones()
+    {
+        return $this->telephones;
+    }
+
+    /**
+     * @param $emails
+     * @return $this
+     */
+    public function setEmails($emails)
+    {
+        $this->emails = $emails;
+
+        return $this;
+    }
+
+    /**
+     * @param $email
+     * @return $this
+     */
+    public function addEmail($email) {
+        $this->emails = array($this->emails, $email);
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getEmails()
+    {
+        return $this->emails;
+    }
+
 
     /**
      * Set naissance
@@ -247,14 +333,14 @@ class Membre extends Personne
     public function setNaissance($naissance)
     {
         $this->naissance = new \Datetime($naissance);
-    
+
         return $this;
     }
 
     /**
      * Get naissance
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getNaissance()
     {
@@ -270,14 +356,14 @@ class Membre extends Personne
     public function setInscription($inscription)
     {
         $this->inscription = $inscription;
-    
+
         return $this;
     }
 
     /**
      * Get inscription
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInscription()
     {
@@ -294,7 +380,7 @@ class Membre extends Personne
     public function addAttribution(\Interne\StructureBundle\Entity\Attribution $attributions)
     {
         $this->attributions[] = $attributions;
-	$attributions->setMembre($this);
+        $attributions->setMembre($this);
         return $this;
     }
 
@@ -311,7 +397,7 @@ class Membre extends Personne
     /**
      * Get attributions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getAttributions()
     {
@@ -334,13 +420,37 @@ class Membre extends Personne
     /**
      * Get adresse
      *
-     * @return \Interne\FichierBundle\Entity\Adresse 
+     * @return \Interne\FichierBundle\Entity\Adresse
      */
     public function getAdresse()
     {
         return $this->adresse;
     }
-    
+
+
+    /**
+     * Set remarques
+     *
+     * @param string $remarques
+     * @return Adresse
+     */
+    public function setRemarques($remarques)
+    {
+        $this->remarques = $remarques;
+
+        return $this;
+    }
+
+    /**
+     * Get remarques
+     *
+     * @return string
+     */
+    public function getRemarques()
+    {
+        return $this->remarques;
+    }
+
 
     /**
      * Add distinctions
@@ -351,7 +461,7 @@ class Membre extends Personne
     public function addDistinction(\Interne\StructureBundle\Entity\ObtentionDistinction $distinctions)
     {
         $this->distinctions[] = $distinctions;
-		$distinctions->setMembre($this);
+        $distinctions->setMembre($this);
         return $this;
     }
 

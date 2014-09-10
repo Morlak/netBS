@@ -14,11 +14,9 @@ class FamilleType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nom', 'text', array('required'	=> false))
-            ->add('pere', new GeniteurType, array('required' => false))
-            ->add('mere', new GeniteurType, array('required' => false))
-            ->add('adresse', new AdresseType)
-            ->add('contact', new ContactType)
+            ->add('nom',        'text', array('required'	=> false))
+            ->add('pere',       new GeniteurType, array('required' => false))
+            ->add('mere',       new GeniteurType, array('required' => false))
         ;
     }
 

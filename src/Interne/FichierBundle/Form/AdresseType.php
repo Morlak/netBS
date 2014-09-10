@@ -11,11 +11,11 @@ class AdresseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('rue', 'text', array('required' => false))
-            ->add('npa', 'number', array('required' => false))
-            ->add('localite', 'text', array('required' => false))
-            ->add('facturable', 'checkbox', array('required' => false))
-            ->add('remarques', 'textarea', array('required' => false))
+            ->add('rue',        'text',         array('required' => false))
+            ->add('npa',        'number',       array('required' => false))
+            ->add('localite',   'text',         array('required' => false))
+            ->add('facturable', 'checkbox',     array('required' => false))
+            ->add('remarques',  'textarea',     array('required' => false))
         ;
     }
 

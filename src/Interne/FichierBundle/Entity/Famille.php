@@ -138,7 +138,7 @@ class Famille
      */
     public function setNom($nom)
     {
-        $this->nom = $nom;
+        $this->nom = ucwords($nom);
     
         return $this;
     }
@@ -150,7 +150,7 @@ class Famille
      */
     public function getNom()
     {
-        return $this->nom;
+        return ucwords($this->nom);
     }
     
     
@@ -221,5 +221,15 @@ class Famille
     public function getAdresse()
     {
         return $this->adresse;
+    }
+
+    /**
+     * Doit renvoyer quelque chose qui permet d'identifier (humainement) une famille
+     * Le nom n'est pas suffisant p.ex puisqu'il peut y avoir plusieurs famille avec le même nom
+     *
+     * @return string
+     */
+    public function __toString() {
+        return "Les " . $this->getNom() . " de " . $this->getAdresse()->getLocalite(); // . " (" . sizeof($this->getMembres()) . ")";
     }
 }

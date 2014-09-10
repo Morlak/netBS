@@ -1,0 +1,131 @@
+{# src/Interne/FichierBundle/Resources/views/Form/form_template.html.twig #}
+
+{% block form_widget -%}
+    {% if compound %}
+        {{- block('form_widget_compound') -}}
+    {% else %}
+        {{- block('form_widget_simple') -}}
+    {% endif %}
+{%- endblock form_widget %}
+
+{# WIDGET OF SEVERAL FIELDS #}
+{% block form_widget_compound -%}
+    {%- if form.parent is empty -%}
+        {{ form_errors(form) }}
+    {%- endif -%}
+    {{- block('form_rows') -}}
+    {{- form_rest(form) -}}
+{%- endblock form_widget_compound %}
+
+
+{% block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    <input class="form-control" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+{%- endblock form_widget_simple %}
+
+
+
+{# ALL ROWS #}
+{% block form_rows -%}
+    {% for child in form -%}
+        {{ form_row(child) }}
+    {%- endfor %}
+{%- endblock form_rows %}
+
+
+{# SINGLE ROW #}
+{% block form_row -%}
+
+    {% if compound %}
+        <div class="form-group form-group-sm">
+            {{- form_label(form) -}}
+            <div class="col-sm-8">
+                <div class="well">
+                    {{- form_widget(form) -}} {# Recursive call #}
+                </div>
+            </div>
+            {{- form_errors(form) -}}
+        </div>
+
+    {% else %}
+        <div class="form-group form-group-sm">
+            {{- form_label(form) -}}
+            <div class="col-sm-8">
+                {{- form_widget(form) -}} {# Recursive call #}
+            </div>
+            {{- form_errors(form) -}}
+        </div>
+    {% endif %}
+
+{%- endblock form_row %}
+
+
+{# CHECKBOX SLIDER #}
+{% block checkbox_widget -%}
+    <input type="checkbox" class="toggle-editable" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+    <label for="{{  id  }}" class="small-toggle"></label>
+{%- endblock checkbox_widget %}
+
+
+{% block choice_widget_collapsed -%}
+    {% if required and empty_value is none and not empty_value_in_choices and not multiple %}
+        {% set required = false %}
+    {% endif %}
+    <select class="form-control" {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {% if empty_value is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+        {%- endif %}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {{- block('choice_widget_options') -}}
+            {% if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif %}
+        {%- endif -%}
+        {% set options = choices -%}
+        {{- block('choice_widget_options') -}}
+    </select>
+{%- endblock choice_widget_collapsed %}
+
+{# LABELS #}
+{% block form_label -%}
+    {% if label is not sameas(false) %}
+        {%- if not compound -%}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {%- endif -%}
+        {%- if required -%}
+            {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {%- endif -%}
+        {%- if label is empty -%}
+            {% set label = name|humanize %}
+        {%- endif -%}
+        <label class="col-sm-3 control-label" {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+    {%- endif %}
+{%- endblock form_label %}
+
+
+{% block chosen_widget -%}
+    {% if required and empty_value is none and not empty_value_in_choices and not multiple %}
+        {% set required = false %}
+    {% endif %}
+    <select class="chosen" {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+        {% if empty_value is not none -%}
+            <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
+        {%- endif %}
+        {%- if preferred_choices|length > 0 -%}
+            {% set options = preferred_choices %}
+            {{- block('choice_widget_options') -}}
+            {% if choices|length > 0 and separator is not none -%}
+                <option disabled="disabled">{{ separator }}</option>
+            {%- endif %}
+        {%- endif -%}
+        {% set options = choices -%}
+        {{- block('choice_widget_options') -}}
+    </select>
+{%- endblock chosen_widget %}
+
+
+{# DATEPICKER #}
+{#{% block date_widget -%}#}
+
+{#{%- endblock date_widget %}#}
