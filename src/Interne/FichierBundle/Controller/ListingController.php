@@ -38,19 +38,24 @@ class ListingController extends Controller
         
         for($i = 0; $i < count($liste); $i++) {
             
-            //On stocke les données
-            $membre = $mRepo->find($liste[$i]);
-            $attr   = $mRepo->findCurrentAttribution($membre->getId());
+            $id = $liste[$i];
             
-            $infos[$i] = array(
+            if($id != null || $id != '') {
                 
-                'id'        => $membre->getId(),
-                'prenom'    => $membre->getPrenom(),
-                'nom'       => $membre->getFamille()->getNom(),
-                'fonction'  => ($attr != null) ? $attr->getFonction()->getNom() : '',
-                'groupe'    => ($attr != null) ? $attr->getGroupe()->getNom() : '',
-                'numeroBS'  => $membre->getNumeroBS()
-            );
+                //On stocke les données
+                $membre = $mRepo->find($id);
+                $attr   = $mRepo->findCurrentAttribution($id);
+                
+                $infos[$i] = array(
+                    
+                    'id'        => $membre->getId(),
+                    'prenom'    => $membre->getPrenom(),
+                    'nom'       => $membre->getFamille()->getNom(),
+                    'fonction'  => ($attr != null) ? $attr->getFonction()->getNom() : '',
+                    'groupe'    => ($attr != null) ? $attr->getGroupe()->getNom() : '',
+                    'numeroBS'  => $membre->getNumeroBS()
+                );
+            }
             
         }
 
@@ -61,15 +66,36 @@ class ListingController extends Controller
      * méthodes d'exportation
      * ======================
      *
-     * Exportation PDF, se base sur la classe FPDF
-     * http://www.fpdf.org/
+     * Il y a plusieurs méthodes d'exportation vers le PDF, pour gérer les
+     * différents formats d'exportation. Cependant, il n'y a qu'une seule méthode
+     * d'exportation XLS, car elle fournit toutes les informations nécessaires
      */
-    public function exportPDFAction($ids) {
+    
+    /**
+     * la customListing est la méthode appelée depuis la fonctionnalité listing directe.
+     * Elle fais ensuite appel aux méthodes d'exportations plus génériques, car elle doit
+     * d'abord transformer les ids recus en array de membres
+     */
+    public function customListingExportAction($type, $ids) {
         
-        //Récupération des variables
+        $id = explode(',', $ids);
+            
         $em = $this->getDoctrine()->getManager();
         $mRepo = $em->getRepository('InterneFichierBundle:Membre');
-        $ids = explode(',', $ids);
+        $membres = $mRepo->findMembresByIds($id);
+        
+        if($type == 'pdf')
+            $this->exportPDFAction($membres);
+            
+        else if($type == 'xls')
+            $this->exportXLSAction($membres);
+        
+    }
+    
+    /**
+     * exportation basique en PDF
+     */
+    public function exportPDFAction($membres) {
         
         //On récupère FPDF
         $pdf = new \Interne\FichierBundle\Ext\PDFTemplate();
@@ -84,8 +110,8 @@ class ListingController extends Controller
          * on génère ensuite le tableau liste
          * en premier lieu, on crée le header du tableau avec les titres
          */
-        $pdf->Cell(30,9,utf8_decode('Prénom'),'B',0,'L');
         $pdf->Cell(30,9,'Nom','B',0,'L');
+        $pdf->Cell(30,9,utf8_decode('Prénom'),'B',0,'L');
         $pdf->Cell(50,9,'Rue','B',0,'L');
         $pdf->Cell(16,9,'NPA','B',0,'L');
         $pdf->Cell(32,9,utf8_decode('Localité'),'B',0,'L');
@@ -97,9 +123,9 @@ class ListingController extends Controller
          */
         $pdf->setFont('Arial', '', 9);
         
-        for($i = 0; $i < count($ids); $i++) {
+        for($i = 0; $i < count($membres); $i++) {
             
-            $membre     = $mRepo->find($ids[$i]);
+            $membre     = $membres[$i];
             
             //On récupère aussi son adresse principale
             $aService   = $this->get('interne_fichier.adressePrincipale');
@@ -109,8 +135,8 @@ class ListingController extends Controller
             $contact    = $this->get('interne_fichier.contactPrincipal');
             
             //On dessine les cellules
-            $pdf->Cell(30,7, ucfirst($membre->getPrenom()), 0,0,'L');
             $pdf->Cell(30,7, ucfirst($membre->getFamille()->getNom()), 0,0,'L');
+            $pdf->Cell(30,7, ucfirst($membre->getPrenom()), 0,0,'L');
             $pdf->Cell(50,7, $adresse->getRue(), 0,0,'L');
             $pdf->Cell(16,7, $adresse->getNPA(), 0,0,'L');
             $pdf->Cell(32,7, $adresse->getLocalite(), 0,0,'L');
@@ -141,12 +167,10 @@ class ListingController extends Controller
     /**
      * exportation en XLS
      */
-    public function exportXLSAction($ids) {
+    public function exportXLSAction($membres) {
         
-        //Récupération des variables
         $em = $this->getDoctrine()->getManager();
         $mRepo = $em->getRepository('InterneFichierBundle:Membre');
-        $ids = explode(',', $ids);
         
         //On génère un nouveau fichier xls
         $excel = new \PHPExcel();
@@ -192,9 +216,9 @@ class ListingController extends Controller
         $excel->getActiveSheet()->getStyle('A1:L1')->applyFromArray($headerStyle);
         
         //On fournis ensuite les informations au fichier xls
-        for($i = 0; $i < count($ids); $i++) {
+        for($i = 0; $i < count($membres); $i++) {
             
-            $membre = $mRepo->find($ids[$i]);
+            $membre = $membres[$i];
             $adresse = $this->get('interne_fichier.adressePrincipale')->getPrincipale($membre);
             $email = $this->get('interne_fichier.contactPrincipal')->getEmail($membre);
             $telephone = $this->get('interne_fichier.contactPrincipal')->getTelephone($membre);
@@ -227,6 +251,25 @@ class ListingController extends Controller
         //Renvoi de la reponse
         $response->setContent($writer->save('php://output'));
         return $response;
+        
+    }
+    
+    /**
+     * la méthode generateListeTroupe va génerer la liste de troupe d'un groupe ayant le type à troupe
+     * Elle va séparer les différents groupes internes (patrouilles, emsupp)
+     */
+    public function generateListeTroupe($type, $id) {
+        
+        //On génère la liste des membres
+        $em = $this->getDoctrine()->getManager();
+        $mRepo = $em->getRepository('InterneFichierBundle:Membre');
+        $gRepo = $em->getRepository('InterneStructureBundle:Groupe');
+        $groupe = $gRepo->find($id);
+        
+        //EM-Supp
+        $emSupp = findCurrentAttributionsForThisGroupe($groupe);
+        
+        //On trie ensuite l'emSupp
         
     }
 }

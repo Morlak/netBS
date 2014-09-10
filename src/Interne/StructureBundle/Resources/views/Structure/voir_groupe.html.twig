@@ -13,6 +13,21 @@
 				
 				<h2>{{ groupe.nom }}</h2>
 				
+				<div id="title-toolbar">
+					
+					<div class="btn-group">
+						<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+							Liste <span class="caret"></span>
+						</button>
+						
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="#">Format PDF</a></li>
+							<li><a href="#">Format Excel</a></li>
+						</ul>
+					</div>
+					
+				</div>
+				
 			</div>
 			
 		</div>
@@ -81,10 +96,10 @@
 			<div class="widget">
 				
 				<div class="widget-title">
-					<span>Attributions liées</span>
+					<span>Membres de ce groupe</span>
 					
 					<div class="widget-toolbar">
-						<button>Génerer liste</button>
+						
 						<button class="widget-options-button">rechercher</button>
 					</div>
 				</div>
@@ -93,9 +108,9 @@
 				
 					<div class="widget-options field">
 					
-						<h4>Rechercher des attributions liées</h4>
+						<h4>Rechercher des membres liés</h4>
 							
-							<select>
+							<select id="hierarchie">
 								<option value="main">Ce groupe uniquement</option>
 								<option value="all">Ce groupe et ses enfants</option>
 								<option value="children">Ses enfants uniquement</option>
@@ -105,6 +120,8 @@
 							<input placeholder="Fin" type="text" id="date2" class="datepicker" />
 							
 							<button class="btn btn-primary" onclick="retrieveAttributions({{ groupe.id}}, this);">Valider</button>
+							
+							<p><strong>Astuce :</strong> Laisser les deux champs de date vide retournera la liste de toutes les attributions (Peut prendre du temps)</p>
 					
 					</div>
 					
@@ -117,8 +134,8 @@
 								<th>prenom</th>
 								<th>fonction</th>
 								<th>groupe</th>
-								<th>debut</th>
-								<th>fin</th>
+								<th style="width:150px">debut</th>
+								<th style="width:150px">fin</th>
 							</tr>
 						</thead>
 						
@@ -133,7 +150,7 @@
 									<td>{{ attribution.fonction.nom }}</td>
 									<td><a href="{{ path('InterneStructure_voir_groupe', {'id' : attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></td>
 									<td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
-									<td>{{ attribution.dateFin|date("d.m.Y") }}</td>
+									<td>{% if attribution.dateFin is null %}{% else %} {{ attribution.dateFin|date("d.m.Y") }} {% endif %}</td>
 								</tr>
 								
 							{% endfor %}

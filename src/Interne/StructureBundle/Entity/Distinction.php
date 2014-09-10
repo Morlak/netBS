@@ -29,9 +29,8 @@ class Distinction
     private $nom;
 
     /**
-     * @var \stdClass
-     *
-     * @ORM\Column(name="obtentionDistinctions", type="object")
+     * @var ArrayCollection 
+     * @ORM\OneToMany(targetEntity="Interne\StructureBundle\Entity\ObtentionDistinction", mappedBy="distinction")
      */
     private $obtentionDistinctions;
     
@@ -77,29 +76,6 @@ class Distinction
     }
 
     /**
-     * Set obtentionDistinctions
-     *
-     * @param \stdClass $obtentionDistinctions
-     * @return Distinction
-     */
-    public function setObtentionDistinctions($obtentionDistinctions)
-    {
-        $this->obtentionDistinctions = $obtentionDistinctions;
-    
-        return $this;
-    }
-
-    /**
-     * Get obtentionDistinctions
-     *
-     * @return \stdClass 
-     */
-    public function getObtentionDistinctions()
-    {
-        return $this->obtentionDistinctions;
-    }
-
-    /**
      * Set remarques
      *
      * @param string $remarques
@@ -120,5 +96,45 @@ class Distinction
     public function getRemarques()
     {
         return $this->remarques;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->obtentionDistinctions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add obtentionDistinctions
+     *
+     * @param \Interne\StructureBundle\Entity\ObtentionDistinction $obtentionDistinctions
+     * @return Distinction
+     */
+    public function addObtentionDistinction(\Interne\StructureBundle\Entity\ObtentionDistinction $obtentionDistinctions)
+    {
+        $this->obtentionDistinctions[] = $obtentionDistinctions;
+
+        return $this;
+    }
+
+    /**
+     * Remove obtentionDistinctions
+     *
+     * @param \Interne\StructureBundle\Entity\ObtentionDistinction $obtentionDistinctions
+     */
+    public function removeObtentionDistinction(\Interne\StructureBundle\Entity\ObtentionDistinction $obtentionDistinctions)
+    {
+        $this->obtentionDistinctions->removeElement($obtentionDistinctions);
+    }
+
+    /**
+     * Get obtentionDistinctions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getObtentionDistinctions()
+    {
+        return $this->obtentionDistinctions;
     }
 }

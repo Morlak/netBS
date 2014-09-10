@@ -7,428 +7,80 @@
 
 {% block body %}
 
-	<div class="row">
-		<div class="col-lg-11">
-			<h3>Ajouter un scout</h3>
-		</div>
-	</div>
-
-	<div class="row">
-
-        <div class="col-lg-6">
-            <form class="form-horizontal" role="form" method="post" {{ form_enctype(membreForm) }}>
-                <div class="widget">
-
-                    <div class="widget-title">
-                        <span>Informations sur le membre</span>
-                    </div>
-
-                    <div class="widget-content">
-                        {{  form_widget(membreForm) }}
-                    </div>
-                </div>
-            </form>
-            <input type="submit" class="btn btn-primary" />
+    <div class="row">
+        <div class="col-lg-11">
+            <h3>Ajouter un scout</h3>
         </div>
+    </div>
 
-        <div class="col-lg-5">
-            <form method="post" {{ form_enctype(familleForm) }}>
-                <div class="widget">
+    <div class="row">
 
-                    <div class="widget-title">
-                        <span>Informations sur sa famille</span>
-                    </div>
+    <div class="col-lg-6">
+        <form class="form-horizontal" role="form" method="post" {{ form_enctype(membreForm) }}>
+            <div class="widget">
 
-                    <div class="widget-content">
-                        {{  form_widget(familleForm) }}
-                    </div>
+                <div class="widget-title">
+                    <span>Informations sur le membre</span>
                 </div>
-            </form>
-            <input type="submit" class="btn btn-primary" />
-        </div>
+
+                <div class="widget-content">
+                    {{ form_widget(membreForm) }}
+                </div>
+            </div>
+        </form>
+        <input type="submit" class="btn btn-primary"/>
+    </div>
+
+    <div class="col-lg-5">
+        <form class="form-horizontal" role="form" method="post" {{ form_enctype(familleForm) }}>
+            <div class="widget">
+
+                <div class="widget-title">
+                    <span>Informations sur sa famille</span>
+                </div>
+
+                <div class="widget-content">
+                    {{ form_widget(familleForm) }}
+                </div>
+            </div>
+        </form>
+        <input type="submit" class="btn btn-primary"/>
+    </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <form method="post" action="">
-
-			<div class="col-lg-6">
-				
-				<div class="widget">
-					<div class="widget-title">
-						<span>Informations préliminaires</span>
-					</div>
-					
-					<div class="widget-content">
-
-						<fieldset>
-		
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(membreForm.prenom, "Prénom") }}</div>
-								<div class="col-sm-9">{{ form_widget(membreForm.prenom) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(membreForm.naissance, "Date de naissance") }}</div>
-								<div class="col-sm-9">{{ form_widget(membreForm.naissance, { 'attr': {'class': 'datepicker'} }) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(membreForm.sexe, "Sexe") }}</div>
-								<div class="col-sm-9">{{ form_widget(membreForm.sexe) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(membreForm.numeroAvs, "Numéro AVS") }}</div>
-								<div class="col-sm-9">{{ form_widget(membreForm.numeroAvs) }}</div>
-							</div>
-{#
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(membreForm.contact.telephone, "Téléphone") }}</div>
-								<div class="col-sm-9">{{ form_widget(membreForm.contact.telephone) }}</div>
-							</div>
-
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(membreForm.contact.email, "Email") }}</div>
-								<div class="col-sm-9">{{ form_widget(membreForm.contact.email) }}</div>
-							</div>
-
-                            <div class="row">
-								<div class="col-sm-3">{{ form_label(membreForm.groupe, "Unité") }}</div>
-								<div class="col-sm-9">{{ form_widget(membreForm.groupe) }}</div>
-							</div>
-#}
-							<div class="row">
-								<div class="col-sm-12">
-									<p>
-										Si le scout n'habite pas chez ses parents, c'est une autre adresse qu'il faut utiliser pour lui envoyer le courier. L'adresse suivante pourra être
-										utilisée ainsi, mais si il habite chez ses parents, ou chez un parent, c'est dans la section famille qu'il faut mettre l'adresse.
-									</p>
-								</div>
-							</div>
-						
-						</fieldset>
-						
-						<div class="panel-group accordeon" id="membreAdresse-accordeon">
-							
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="membreAdresse-accordeon" href="#collapseOne">Adresse du membre</a>
-									</h4>
-								</div>
-								
-								<div id="collapseOne" class="panel-collapse collapse">
-									<div class="panel-body">
-									
-										<fieldset>
-											
-											<div class="row">
-												<div class="col-sm-3">{{ form_label(membreForm.adresse.rue, "Rue") }}</div>
-												<div class="col-sm-9">{{ form_widget(membreForm.adresse.rue) }}</div>
-											</div>
-											
-											<div class="row">
-												<div class="col-sm-3">{{ form_label(membreForm.adresse.npa, "NPA") }}</div>
-												<div class="col-sm-9">{{ form_widget(membreForm.adresse.npa) }}</div>
-											</div>
-											
-											<div class="row">
-												<div class="col-sm-3">{{ form_label(membreForm.adresse.localite, "Localité") }}</div>
-												<div class="col-sm-9">{{ form_widget(membreForm.adresse.localite) }}</div>
-											</div>
-											
-											<div class="row">
-												<div class="col-sm-3">{{ form_label(membreForm.adresse.facturable, "Facturable") }}</div>
-												<div class="col-sm-9">{{ form_widget(membreForm.adresse.facturable) }}</div>
-											</div>
-											
-											<div class="row">
-												<div class="col-sm-3">{{ form_label(membreForm.adresse.remarques, "Remarques") }}</div>
-												<div class="col-sm-9">{{ form_widget(membreForm.adresse.remarques) }}</div>
-											</div>
-											
-										</fieldset>
-									
-									</div>
-								</div>
-							</div>
-							
-						</div>
-						
-					</div>
-				</div>
-				
-			</div>
-			
-			<div class="col-lg-6">
-				<div class="widget">
-					<div class="widget-title">
-						<span>Informations sur la famille</span>
-					</div>
-					
-					<div class="widget-content">
-						
-						<fieldset>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(membreForm.famille, "Famille") }}</div>
-								<div class="col-sm-9 chosen-in">{{ form_widget(membreForm.famille, { 'attr': {'class': 'chosen'} }) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3"><label>Famille inexistante</label></div>
-								<div class="col-sm-9"><input type="checkbox" class="slider" id="famille_inexistante" /><label for="famille_inexistante"></label></div>
-							</div>
-							
-						</fieldset>
-						
-						<fieldset style="display:none" id="famille-included">
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.nom, "Nom de famille") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.nom) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.contact.telephone, "Téléphone familial") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.contact.telephone) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.contact.email, "E-mail familial") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.contact.email) }}</div>
-							</div>
-							
-							<duv class="row">
-								<div class="col-sm-12">
-									<p><strong>Adresse familiale</strong></p>
-								</div>
-							</duv>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.adresse.rue, "Rue") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.adresse.rue) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.adresse.npa, "NPA") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.adresse.npa) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.adresse.localite, "Localité") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.adresse.localite) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.adresse.facturable, "Facturable") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.adresse.facturable) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3">{{ form_label(familleForm.adresse.remarques, "Remarques") }}</div>
-								<div class="col-sm-9">{{ form_widget(familleForm.adresse.remarques) }}</div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-12">
-									<p><strong>Informations sur les parents</strong></p>
-								</div>
-							</div>
-							
-							
-							<div class="row">
-								<div class="col-sm-3"></div>
-								<div class="col-sm-9"></div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3"></div>
-								<div class="col-sm-9"></div>
-							</div>
-							
-							<div class="row">
-								<div class="col-sm-3"></div>
-								<div class="col-sm-9"></div>
-							</div>
-							
-						</fieldset>
-						
-					</div>
-				</div>
-			</div>
-				
-		</form>
-
-
-
-		
-	</div>
-	
-	{#
-							<h3>Père</h3>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.prenom, "Prénom du père") }}
-							    {{ form_errors(familleForm.pere.prenom) }}
-							    {{ form_widget(familleForm.pere.prenom) }}
-							</div>
-
-							<div class="form-element">
-								{{ form_label(familleForm.pere.profession, "Profession du père") }}
-							    {{ form_errors(familleForm.pere.profession) }}
-							    {{ form_widget(familleForm.pere.profession) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.contact.telephone, "Téléphone du père") }}
-							    {{ form_errors(familleForm.pere.contact.telephone) }}
-							    {{ form_widget(familleForm.pere.contact.telephone) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.contact.email, "Email du père") }}
-							    {{ form_errors(familleForm.pere.contact.email) }}
-							    {{ form_widget(familleForm.pere.contact.email) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.adresse.rue, "Rue") }}
-							    {{ form_errors(familleForm.pere.adresse.rue) }}
-							    {{ form_widget(familleForm.pere.adresse.rue) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.adresse.npa, "NPA") }}
-							    {{ form_errors(familleForm.pere.adresse.npa) }}
-							    {{ form_widget(familleForm.pere.adresse.npa) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.adresse.localite, "Localité") }}
-							    {{ form_errors(familleForm.pere.adresse.localite) }}
-							    {{ form_widget(familleForm.pere.adresse.localite) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.adresse.facturable, "Facturable") }}
-							    {{ form_errors(familleForm.pere.adresse.facturable) }}
-							    {{ form_widget(familleForm.pere.adresse.facturable) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.pere.adresse.remarques, "Remarques") }}
-							    {{ form_errors(familleForm.pere.adresse.remarques) }}
-							    {{ form_widget(familleForm.pere.adresse.remarques) }}
-							</div>
-							
-							<h3>Mère</h3>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.prenom, "Prénom de la mère") }}
-							    {{ form_errors(familleForm.mere.prenom) }}
-							    {{ form_widget(familleForm.mere.prenom) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.profession, "Profession de la mère") }}
-							    {{ form_errors(familleForm.mere.profession) }}
-							    {{ form_widget(familleForm.mere.profession) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.contact.telephone, "Téléphone de la mère") }}
-							    {{ form_errors(familleForm.mere.contact.telephone) }}
-							    {{ form_widget(familleForm.mere.contact.telephone) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.contact.email, "Email de la mère") }}
-							    {{ form_errors(familleForm.mere.contact.email) }}
-							    {{ form_widget(familleForm.mere.contact.email) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.adresse.rue, "Rue") }}
-							    {{ form_errors(familleForm.mere.adresse.rue) }}
-							    {{ form_widget(familleForm.mere.adresse.rue) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.adresse.npa, "NPA") }}
-							    {{ form_errors(familleForm.mere.adresse.npa) }}
-							    {{ form_widget(familleForm.mere.adresse.npa) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.adresse.localite, "Localité") }}
-							    {{ form_errors(familleForm.mere.adresse.localite) }}
-							    {{ form_widget(familleForm.mere.adresse.localite) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.adresse.facturable, "Facturable") }}
-							    {{ form_errors(familleForm.mere.adresse.facturable) }}
-							    {{ form_widget(familleForm.mere.adresse.facturable) }}
-							</div>
-							
-							<div class="form-element">
-								{{ form_label(familleForm.mere.adresse.remarques, "Remarques") }}
-							    {{ form_errors(familleForm.mere.adresse.remarques) }}
-							    {{ form_widget(familleForm.mere.adresse.remarques) }}
-							</div>
-							
-							{{ form_rest(familleForm) }}
-#}
 {% endblock %}
 
 {% block javascript %}
-	
-	<script type="text/javascript">
-		
-		$('#famille_inexistante').change(function () {
-		    	
-		    	/**
-		    	 * On gère également l'activation des champs requis en fonction
-		    	 * de l'option togglée
-		    	 */
-		    	
-		    	if($('#famille_inexistante').is(':checked')) {
-		    		
-		    		//Pas de famille trouvée
-		    		//On rend le champ famille non requis, le formulaire de famille est requis
-		    		$('#interne_fichierbundle_membretype_famille').removeAttr("required");
-		    		$('#interne_fichierbundle_familletype_nom').attr("required", "required");
-		    		
-		    	}
-		    	
-		    	else {
-		    		$('#interne_fichierbundle_membretype_famille').attr("required", "required");
-		    		$('#interne_fichierbundle_familletype_nom').removeAttr("required");
-		    		
-		    	}
-		    	
-		    	$('#interne_fichierbundle_membretype_famille').prop('disabled', $('#famille_inexistante').is(':checked'));
-		    	$('#famille-included').fadeToggle(150);
-		    	$('#interne_fichierbundle_membretype_famille_chosen').fadeToggle(150);
-		    
-		 });
-	</script>
-	
+
+    <script type="text/javascript">
+
+        $('#famille_inexistante').change(function () {
+
+            /**
+             * On gère également l'activation des champs requis en fonction
+             * de l'option togglée
+             */
+
+            if ($('#famille_inexistante').is(':checked')) {
+
+                //Pas de famille trouvée
+                //On rend le champ famille non requis, le formulaire de famille est requis
+                $('#interne_fichierbundle_membretype_famille').removeAttr("required");
+                $('#interne_fichierbundle_familletype_nom').attr("required", "required");
+
+            }
+
+            else {
+                $('#interne_fichierbundle_membretype_famille').attr("required", "required");
+                $('#interne_fichierbundle_familletype_nom').removeAttr("required");
+
+            }
+
+            $('#interne_fichierbundle_membretype_famille').prop('disabled', $('#famille_inexistante').is(':checked'));
+            $('#famille-included').fadeToggle(150);
+            $('#interne_fichierbundle_membretype_famille_chosen').fadeToggle(150);
+
+        });
+    </script>
+
 {% endblock %}

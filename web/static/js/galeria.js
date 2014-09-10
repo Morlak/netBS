@@ -14,7 +14,8 @@ $(document).ready(function() {
     //On récupère une liste d'images à afficher
     $.ajax({
         
-        'url' : '/netBS/web/app_dev.php/galerie/first-call',
+        //'url' : '/netBS/web/app_dev.php/galerie/first-call',
+        'url' : Routing.generate('ExterneGalerie_first_call'),
         'type' : 'GET',
         'datatype' : 'JSON',
         
@@ -140,7 +141,8 @@ function populateGalerie(id) {
     
     $.ajax({
 	
-	url: '/netBS/web/app_dev.php/galerie/get-pictures/' + id,
+	//url: '/netBS/web/app_dev.php/galerie/get-pictures/' + id,
+	url: Routing.generate('ExterneGalerie_get_pictures', { id : id}),
 	type: 'GET',
 	datatype: 'json',
 	success: function(data) {
@@ -185,7 +187,8 @@ function updateFromDroit(id) {
 	
     $.ajax({
 	
-	url: '/netBS/web/app_dev.php/galerie/update-droit/' + id,
+	//url: '/netBS/web/app_dev.php/galerie/update-droit/' + id,
+	url: Routing.generate('ExterneGalerie_update_droit', {id:id}),
 	type: 'GET',
 	'datatype' : 'JSON',
 	success: function(data) {
@@ -252,7 +255,8 @@ function customMenu(node) {
 		//On réalise la procédure de téléchargement en ajax
 		$.ajax({
 		    
-		    url: '/netBS/web/app_dev.php/galerie/zip-album/' + id,
+		    //url: '/netBS/web/app_dev.php/galerie/zip-album/' + id,
+		    url: Routing.generate('ExterneGalerie_zip', {id:id}),
 		    type: 'POST',
 		    datatype: 'json',
 		    success: function() {},

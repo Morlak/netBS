@@ -115,11 +115,22 @@ class FichierController extends Controller
      */
     public function voirFamilleAction($id) {
     	
-    	$repository = $this->getDoctrine()->getManager()->getRepository('InterneFichierBundle:Famille');
-    	$famille	= $repository->find($id);
+    	$repository 	= $this->getDoctrine()->getManager()->getRepository('InterneFichierBundle:Famille');
+		$mRepo			= $this->getDoctrine()->getManager()->getRepository('InterneFichierBundle:Membre');
+    	$famille		= $repository->find($id);
+	
+		//On récupère les attributions courantes des membres
+		$membres 		= array();
+		
+		foreach($famille->getMembres() as $key => $membre) {
+			
+			$membres[$key]['membre'] = $membre;
+			$membres[$key]['attribution'] = $mRepo->findCurrentAttribution($membre->getId());
+		}
+	
     	
     	
-    	return $this->render('InterneFichierBundle:Fichier:voir_famille.html.twig', array('famille' => $famille));
+    	return $this->render('InterneFichierBundle:Fichier:voir_famille.html.twig', array('famille' => $famille, 'membres' => $membres));
     }
     
     
@@ -128,7 +139,7 @@ class FichierController extends Controller
      * @param id l'id du membre dans la base de données
      */
     public function voirMembreAction($id) {
-    	
+	
     	$em			= $this->getDoctrine()->getManager();
     	$repository = $em->getRepository('InterneFichierBundle:Membre');
     	$membre		= $repository->find($id);
@@ -144,7 +155,7 @@ class FichierController extends Controller
 
         $familleForm = $this->createForm(new FamilleType, $famille);
     	
-    	// Récupération des hierarchies de groupes pour chaque attribution si il y en a
+    	//Récupération des hierarchies de groupes pour chaque attribution si il y en a
     	foreach($membre->getAttributions() as $attribution) {
     		
     		// On récupère seulement les hierarchies des attributions valides (non expirées)
@@ -197,6 +208,12 @@ class FichierController extends Controller
 		 */
 		$mainAdresse = $this->container->get('interne_fichier.adressePrincipale')->checkPrincipale($membre);
 		
+		//On doit aussi génerer la liste personnalisée des fonctions pour en créer, on récupère donc la liste
+		$fonctions = $em->getRepository('InterneStructureBundle:Fonction')->findAll();
+		
+		//Ainsi que la liste des groupes
+		$groupes   = $em->getRepository('InterneStructureBundle:Groupe')->findAll();
+		
     	
     	
     	return $this->render('InterneFichierBundle:Fichier:voir_membre.html.twig', array(
@@ -210,6 +227,8 @@ class FichierController extends Controller
     			'attributionForm'		    => $attributionForm->createView(),
     			'obtentionDistinctionForm'	=> $obtentionDistinctionForm->createView(),
     			'adressePrincipale'		    => $mainAdresse,
+                'fonctions'			        => $fonctions,
+                'groupes'			        => $groupes,
     		));
     }
   

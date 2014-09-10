@@ -10,6 +10,11 @@
 		</div>
 		
 		<div class="row">
+			<div class="col-sm-3">{{ form_label(groupeForm.type, "Type du groupe") }}</div>
+			<div class="col-sm-9">{{ form_widget(groupeForm.type) }}</div>
+		</div>
+		
+		<div class="row">
 			<div class="col-sm-3">{{ form_label(groupeForm.parent, "Groupe parent") }}</div>
 			<div class="col-sm-9">{{ form_widget(groupeForm.parent, { attr : { class : "chosen" }}) }}</div>
 		</div>

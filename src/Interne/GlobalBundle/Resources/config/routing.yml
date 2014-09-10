@@ -1,6 +1,8 @@
 InterneGlobal_modifikator:
     pattern:  /modifikator/{entity}/{content}
     defaults: { _controller: InterneGlobalBundle:Global:modifikator }
+    options:
+        expose: true
 
 #galerie
 InterneGlobal_galerie_overview:
@@ -14,15 +16,60 @@ InterneGlobal_galerie_groupe:
 InterneGlobal_galerie_retrieve_tree:
     pattern:  /galerie/retrieveTree/{id}
     defaults: { _controller: InterneGlobalBundle:Galerie:retrieveTree }
+    options:
+        expose: true
     
 InterneGlobal_galerie_update_colors:
     pattern:  /galerie/update-colors/{id}/{color1}/{color2}
     defaults: { _controller: InterneGlobalBundle:Galerie:updateColors }
+    options:
+        expose: true
 
 InterneGlobal_galerie_add_album:
     pattern:  /galerie/add-album/{id}
     defaults: { _controller: InterneGlobalBundle:Galerie:addAlbum }
+    options:
+        expose: true
     
 InterneGlobal_galerie_add_photos:
     pattern:  /galerie/add-photos/{id}
     defaults: { _controller: InterneGlobalBundle:Galerie:addPhotos }
+    options:
+        expose: true
+        
+#adder
+InterneGlobal_adder_get_basic_data_attributions:
+    pattern: /adder/basicData/attributions
+    defaults: { _controller: InterneGlobalBundle:Adder:getBasicDataAttributions }
+    options:
+        expose: true
+        
+InterneGlobal_adder_get_basic_data_distinctions:
+    pattern: /adder/basicData/distinctions
+    defaults: { _controller: InterneGlobalBundle:Adder:getBasicDataDistinctions }
+    options:
+        expose: true
+        
+InterneGlobal_adder_add_attributions:
+    pattern: /adder/add/attributions
+    defaults: { _controller: InterneGlobalBundle:Adder:addAttributions }
+    options:
+        expose: true
+        
+InterneGlobal_adder_add_distinctions:
+    pattern: /adder/add/distinctions
+    defaults: { _controller: InterneGlobalBundle:Adder:addDistinctions }
+    options:
+        expose: true
+        
+InterneGlobal_adder_end_attributions:
+    pattern: /adder/end/attributions
+    defaults: { _controller: InterneGlobalBundle:Adder:endAttributions }
+    options:
+        expose: true
+        
+InterneGlobal_adder_test:
+    pattern: /adder/test/{ids}/{distinctions}/{obtention}
+    defaults: { _controller: InterneGlobalBundle:Adder:test, obtention: null }
+    options:
+        expose: true

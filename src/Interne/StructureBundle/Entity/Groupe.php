@@ -208,7 +208,7 @@ class Groupe
     public function setType(\Interne\StructureBundle\Entity\Type $type = null)
     {
         $this->type = $type;
-    
+	$type->addGroupe($this);
         return $this;
     }
 

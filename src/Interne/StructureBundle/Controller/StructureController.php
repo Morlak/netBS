@@ -9,7 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Interne\StructureBundle\Entity\Groupe;
+use Interne\StructureBundle\Entity\Type;
 use Interne\StructureBundle\Form\GroupeType;
+use Interne\StructureBundle\Form\TypeType;
 
 class StructureController extends Controller
 {
@@ -22,6 +24,27 @@ class StructureController extends Controller
     public function hierarchieAction()
     {
     	$groupe  = new Groupe();
+	$form 	 = $this->createForm(new GroupeType, $groupe);
+	$em      = $this->getDoctrine()->getManager();
+	$session = new Session();
+	
+	//On récupère aussi le formulaire de type
+	$type = new Type();
+	$typeForm = $this->createForm(new TypeType, $type);
+
+        return $this->render('InterneStructureBundle:Structure:hierarchie.html.twig', array(
+	    
+	    'groupeForm'	=> $form->createView(),
+	    'typeForm'		=> $typeForm->createView()
+        ));
+    }
+    
+    /**
+     * permet d'ajouter un groupe
+     */
+    public function addGroupeAction() {
+	
+	$groupe  = new Groupe();
 	$form 	 = $this->createForm(new GroupeType, $groupe);
 	$em      = $this->getDoctrine()->getManager();
 	$session = new Session();
@@ -40,14 +63,41 @@ class StructureController extends Controller
 		}
 		
 		else
-		    $session->getFlashBag()->add('error', 'Erreur lors de l\'ajout du groupe');
+		    $session->getFlashBag()->add('error', 'Erreur lors du traitement des données');
 	}
 	
+	return $this->redirect($this->generateUrl('InterneStructure_hierarchie'));
+    }
+    
+    /**
+     * permet d'ajouter un type de groupe
+     */
+    public function addTypeAction() {
 	
-        return $this->render('InterneStructureBundle:Structure:hierarchie.html.twig', array(
-	    
-	    'groupeForm'	=> $form->createView()
-        ));
+	$em      = $this->getDoctrine()->getManager();
+	$session = new Session();
+	
+	//On récupère aussi le formulaire de type
+	$type = new Type();
+	$typeForm = $this->createForm(new TypeType, $type);
+	
+	if ($this->getRequest()->isMethod('POST')) {
+		
+		$typeForm->bind($this->getRequest());
+		
+		
+		if($typeForm->isValid() ) {
+		    
+		    $em->persist($type);
+		    $em->flush();
+		    $session->getFlashBag()->add('notice', 'Type ajouté avec succès');
+		}
+		
+		else
+		    $session->getFlashBag()->add('error', 'Erreur lors du traitement des données');
+	}
+	
+	return $this->redirect($this->generateUrl('InterneStructure_hierarchie'));
     }
     
     /**
@@ -82,16 +132,25 @@ class StructureController extends Controller
     	
     	//On récupère les attributions liées à ce groupe
     	$aRepo		= $em->getRepository('InterneStructureBundle:Attribution');
+	
+	$troupe = false;
+	
+	//Si le groupe en question est un troupe
+	//alors on affiche la barre d'action spéciale troupe
+	if($groupe->getType() != null && strtolower($groupe->getType()->getNom()) == 'troupe') {
+	    
+	    $troupe = true;
+	}
 
     	//On récupère également l'ensemble des attributions liées à ce groupe pour afficher
     	//les membres courants, donc également trouver les membres des groupes enfants possibles
     	$attrs		= $aRepo->findCurrentAttributionsForThisGroupe($groupe);
-
     	
     	return $this->render('InterneStructureBundle:Structure:voir_groupe.html.twig', array(
     		
     		'groupe'		=> $groupe,
-    		'attrs'			=> $attrs
+    		'attrs'			=> $attrs,
+		'isTroupe'		=> $troupe
     	));
     }
     

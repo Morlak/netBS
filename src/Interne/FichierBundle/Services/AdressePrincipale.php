@@ -23,13 +23,30 @@ class AdressePrincipale {
 	
 	/**
 	 * cette méthode renvoie un objet adresse entier de l'adresse principale
-	 * du membre
+	 * du membre.
+	 * - Si l'adresse du membre est inexistante ou non facturable, elle prend celle de la famille
+	 * - Si celle de la famille est inexistante ou non facturable, elle prend celle du premier parent
+	 *   dont l'adresse est facturable
 	 */
 	function getPrincipale($membre) {
 		
-		if(is_null($membre->getAdresse()->getRue()) && is_null($membre->getAdresse()->getLocalite())) {
+		if( (is_null($membre->getAdresse()->getRue()) && is_null($membre->getAdresse()->getNPA()) ) || !$membre->getAdresse()->getFacturable()) {
 			
-			return $membre->getFamille()->getAdresse();
+			//Adresse du membre vide, on passe à la famille
+			if( (is_null($membre->getFamille()->getAdresse()->getRue()) && is_null($membre->getFamille()->getAdresse()->getNPA()) ) || !$membre->getFamille()->getAdresse()->getFacturable()) {
+				
+				//L'adresse de la famille est inexistante également, on recherche donc une adresse chez les parents
+				//en commencant par la mère
+				if( (is_null($membre->getFamille()->getMere()->getAdresse()->getRue()) && is_null($membre->getFamille()->getMere()->getAdresse()->getNPA()) ) || !$membre->getFamille()->getMere()->getAdresse()->getFacturable())
+					return $membre->getFamille()->getPere()->getAdresse();
+				
+				else
+					return $membre->getFamille()->getMere()->getAdresse();
+			
+			}
+			
+			else
+				return $membre->getFamille()->getAdresse();
 		}
 		
 		else

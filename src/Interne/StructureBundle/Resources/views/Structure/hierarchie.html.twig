@@ -29,19 +29,51 @@
 	</div>
 	
 	<div class="col-lg-4">
-		<div class="widget">
-			<div class="widget-title">
-				<span>Ajouter un groupe</span>
-			</div>
+		
+		<div class="row">
 			
-			<div class="widget-content">
-				<form method="post" action="">
+			<div class="col-lg-12">
+			
+				<div class="widget">
+					<div class="widget-title">
+						<span>Ajouter un groupe</span>
+					</div>
 					
-					{% include 'InterneStructureBundle:Form:groupe_form.html.twig' %}
-					
-				</form>
+					<div class="widget-content">
+						<form method="post" action="{{ path('InterneStructure_ajouter_groupe') }}">
+							
+							{% include 'InterneStructureBundle:Form:groupe_form.html.twig' %}
+							
+						</form>
+					</div>
+				</div>
+				
 			</div>
+		
 		</div>
+		
+		<div class="row">
+			
+			<div class="col-lg-12">
+			
+				<div class="widget">
+					<div class="widget-title">
+						<span>Ajouter un type de groupe</span>
+					</div>
+					
+					<div class="widget-content">
+						<form method="post" action="{{ path('InterneStructure_ajouter_type') }}">
+							
+							{% include 'InterneStructureBundle:Form:type_form.html.twig' %}
+							
+						</form>
+					</div>
+				</div>
+				
+			</div>
+		
+		</div>
+		
 	</div>
 	
 </div>

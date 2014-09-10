@@ -17,6 +17,11 @@ class GroupeType extends AbstractType
             		'class'		=> 'InterneStructureBundle:Groupe',
             		'property'	=> 'nom'
             	))
+	    ->add('type', 'entity', array(
+			
+			'class'		=> 'InterneStructureBundle:Type',
+			'property'	=> 'nom'
+	    ))
         ;
     }
 

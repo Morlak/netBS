@@ -12,7 +12,7 @@ function retrieveAttributions(id, btn) {
 	//Première chose, récupérer les deux dates transmises
 	var date1		= ($('#date1').val() === "") ? "empty" : $('#date1').val();
 	var date2		= ($('#date2').val() === "") ? "empty" : $('#date2').val();
-	var hierarchie	= $('#hierarchie').val();
+	var hierarchie		= $('#hierarchie').val();
 	
 	//Si l'id passée est null, ça veut dire qu'elle provient d'un select
 	if(id === null)
@@ -26,7 +26,8 @@ function retrieveAttributions(id, btn) {
 	
 	$.ajax({
         
-        url  : '/netBS/web/app_dev.php/interne/structure/ajax/attributions_from_groupes/' + id + '/' + hierarchie + '/' + date1 + '/' + date2,
+        //url  : '/netBS/web/app_dev.php/interne/structure/ajax/attributions_from_groupes/' + id + '/' + hierarchie + '/' + date1 + '/' + date2,
+	url : Routing.generate('InterneStructure_attributions_groupes_enfants', {id:id, hierarchie:hierarchie, date1:date1, date2:date2}),
         dataType : 'json',
         success : function(data) {
 
@@ -81,7 +82,8 @@ function retrieveHierarchie() {
 	$.ajax({
 		
 		type: 'POST',
-		url: "/netBS/web/app_dev.php/interne/structure/ajax/full_hierarchie",
+		//url: "/netBS/web/app_dev.php/interne/structure/ajax/full_hierarchie",
+		url : Routing.generate('InterneStructure_full_hierarchie'),
 		dataType : 'json',
 		
 		success : function(data) {

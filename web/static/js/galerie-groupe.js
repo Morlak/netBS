@@ -11,7 +11,8 @@ $(document).ready(function() {
     $.ajax({
         
         type : 'POST',
-        url  : '/netBS/web/app_dev.php/interne/global/galerie/retrieveTree/' + id,
+        //url  : '/netBS/web/app_dev.php/interne/global/galerie/retrieveTree/' + id,
+        url  : Routing.generate('InterneGlobal_galerie_retrieve_tree', {id:id}),
         dataType : 'json',
         success: function(data) {
             
@@ -31,6 +32,7 @@ $(document).ready(function() {
         error: function(data) {alert('Erreur lors de la récupération des dossiers')}
     });
 });
+
 
 /**
  * génère le context menu pour chaque node
@@ -160,7 +162,8 @@ function updateColors() {
 	
     $.ajax({
 	
-	url : '/netBS/web/app_dev.php/interne/global/galerie/update-colors/' + id + '/' + color1a + '/' + color2a,
+	//url : '/netBS/web/app_dev.php/interne/global/galerie/update-colors/' + id + '/' + color1a + '/' + color2a,
+	url : Routing.generate('InterneGlobal_galerie_update_colors', {id:id, color1:color1a, color2:color2a}),
 	type : 'GET',
 	
 	success: function() { alert('Couleurs modifiées');},

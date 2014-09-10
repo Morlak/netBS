@@ -29,19 +29,19 @@ class ObtentionDistinction
     private $obtention;
 
     /**
-     * @var \stdClass
-     *
-     * @ORM\Column(name="distinction", type="object")
+     * @var Distinction $distinctions
+     * 
+     * @ORM\ManyToOne(targetEntity="Interne\StructureBundle\Entity\Distinction", inversedBy="obtentionDistinctions")
      */
     private $distinction;
 
 
-	/**
-	 * @var membre
-	 * 
-	 * @ORM\ManyToOne(targetEntity="Interne\FichierBundle\Entity\Membre", inversedBy="distinctions")
-	 */
-	private $membre;
+    /**
+     * @var membre
+     * 
+     * @ORM\ManyToOne(targetEntity="Interne\FichierBundle\Entity\Membre", inversedBy="distinctions")
+     */
+    private $membre;
 
 
     /**
@@ -62,7 +62,7 @@ class ObtentionDistinction
      */
     public function setObtention($obtention)
     {
-        $this->obtention = new \Datetime($obtention);
+        $this->obtention = $obtention;
     
         return $this;
     }
@@ -75,29 +75,6 @@ class ObtentionDistinction
     public function getObtention()
     {
         return $this->obtention;
-    }
-
-    /**
-     * Set distinction
-     *
-     * @param \stdClass $distinction
-     * @return ObtentionDistinction
-     */
-    public function setDistinction($distinction)
-    {
-        $this->distinction = $distinction;
-    
-        return $this;
-    }
-
-    /**
-     * Get distinction
-     *
-     * @return \stdClass 
-     */
-    public function getDistinction()
-    {
-        return $this->distinction;
     }
 
     /**
@@ -121,5 +98,28 @@ class ObtentionDistinction
     public function getMembre()
     {
         return $this->membre;
+    }
+
+    /**
+     * Set distinction
+     *
+     * @param \Interne\StructureBundle\Entity\Distinction $distinction
+     * @return ObtentionDistinction
+     */
+    public function setDistinction(\Interne\StructureBundle\Entity\Distinction $distinction = null)
+    {
+        $this->distinction = $distinction;
+
+        return $this;
+    }
+
+    /**
+     * Get distinction
+     *
+     * @return \Interne\StructureBundle\Entity\Distinction 
+     */
+    public function getDistinction()
+    {
+        return $this->distinction;
     }
 }

@@ -31,10 +31,11 @@ class GlobalController extends Controller
     	$id     = $data[2];
     	$link   = array();
     	
-    	//On formate le content en tant que boolean si nécessaire
+    	//On formate le content en tant que boolean ou date si nécessaire
     	if($content == 'true')  		$content = true;
     	else if($content == 'false') 		$content = false;
     	else if($content == 'NULL_CONTENT') 	$content = null;
+	else if(preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1]).(0[1-9]|1[0-2]).[0-9]{4}$/", $content)) { $c = explode('.', $content); $content = new \Datetime($c[2] . '-' . $c[1] . '-' . $c[0]); }
     	else 					$content = urldecode($content);
     	
     	for($i = 0; $i < count($data) - 3; $i++) {

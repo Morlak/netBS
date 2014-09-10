@@ -1,10 +1,14 @@
 InterneStamm_newsAjax: #ajax de récupération de toutes les news
     pattern: /getAllNews
     defaults: { _controller: InterneStammBundle:Ajax:getAllNews }
+    options:
+        expose: true
     
 InterneStamm_agenda_update: # update de l'agenda par AJAX
     pattern:  /agenda/{month}/{year}
     defaults: { _controller: InterneStammBundle:Ajax:agendaUpdate }
+    options:
+        expose: true
     
 InterneStamm_download_file:
     pattern:  /downloads/{file}

@@ -16,13 +16,13 @@
 var $ajaxPanel = $('#ajax-panel').hide();
 $(document).ajaxStart(function () {
 	
-	$ajaxPanel.show();
+	$ajaxPanel.fadeIn(100);
 })
 .ajaxStop(function () {
 
-	$ajaxPanel.hide();
+	$ajaxPanel.fadeOut(100);
 });
- 
+
 
 /**
  * Fonctions d'UI
@@ -83,7 +83,7 @@ $('.widget-options-button').click(function() {
 $('.datepicker').datepicker({ 
 	
 	dateFormat: "yy-mm-dd", 
-	changeYear: true, 
+	changeYear: true,
 	yearRange : "1990:" + new Date().getFullYear() 
 });
 
