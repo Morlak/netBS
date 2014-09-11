@@ -12,64 +12,68 @@ use Externe\GalerieBundle\Form\DroitType;
 
 class GlobalController extends Controller
 {
-    
-    /**
-     * Méthode magique permettant de modifier l'attribut d'une entité par requête ajax 
-     * le système reçoit l'entité ainsi que son nouveau contenu, la modifie, et c'est parti
-     * la règle est :
-     * bundle.entity.ID.truc.machin, par exemple InterneFichierBundle.famille.4.pere.contact.telephone
-     * aussi appelée LE MODIFIKATOR
-     */
-    public function modifikatorAction($entity, $content) {
-    	
-    	
-    	//Première chose, on récupère les informations sur l'entité
-    	$entity = urldecode($entity);
-    	$data   = explode('.', $entity);
-	$bundle = $data[0];
-    	$main   = $data[1]; //Entité mère (famille, membre...)
-    	$id     = $data[2];
-    	$link   = array();
-    	
-    	//On formate le content en tant que boolean ou date si nécessaire
-    	if($content == 'true')  		$content = true;
-    	else if($content == 'false') 		$content = false;
-    	else if($content == 'NULL_CONTENT') 	$content = null;
-	else if(preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1]).(0[1-9]|1[0-2]).[0-9]{4}$/", $content)) { $c = explode('.', $content); $content = new \Datetime($c[2] . '-' . $c[1] . '-' . $c[0]); }
-    	else 					$content = urldecode($content);
-    	
-    	for($i = 0; $i < count($data) - 3; $i++) {
-    		
-    		$link[$i] = $data[$i + 3]; //On stocke le chemin dans l'entité
-    	}
-    	
-    	//On récupère l'entité avec l'em
-    	$em   = $this->getDoctrine()->getManager();
-    	$repo = $em->getRepository($bundle . ':' . ucfirst($main));
-    	
-    	$entity   = $repo->find($id); //entity stockée
-    	$res      = $entity;
-    	$calls    = count($link) -1;
-    	
-    	
-    	//On parcourt ensuite l'entité en fonction du nombre de paramètres présents dans link
-    	
-    	for($i = 0; $i < $calls; $i++) { //Le -1 parce que le dernier paramètre ne sera pas get mais set
-    		
-    		if($calls != 0) {
-    			
-    		
-	    		$function = 'get' . ucfirst($link[$i]);
-	    		$res = $res->$function();
 
-    		}
-    	}
-    	
-    	$set = 'set' . ucfirst($link[count($link) - 1]);
-	    $res->$set($content);
-    	
-    	$em->persist($entity);
-    	$em->flush();
-    	return new Response(1);
+    /**
+     * Mï¿½thode magique permettant de modifier l'attribut d'une entitï¿½ par requï¿½te ajax
+     * le systï¿½me reï¿½oit l'entitï¿½ ainsi que son nouveau contenu, la modifie, et c'est parti
+     * la rï¿½gle est :
+     * bundle.entity.ID.truc.machin, par exemple InterneFichierBundle.famille.4.pere.contact.telephone
+     * aussi appelï¿½e LE MODIFIKATOR
+     */
+    public function modifikatorAction($entity, $content)
+    {
+
+
+        //Premiï¿½re chose, on rï¿½cupï¿½re les informations sur l'entitï¿½
+        $entity = urldecode($entity);
+        $data = explode('.', $entity);
+        $bundle = $data[0];
+        $main = $data[1]; //Entitï¿½ mï¿½re (famille, membre...)
+        $id = $data[2];
+        $link = array();
+
+        //On formate le content en tant que boolean ou date si nï¿½cessaire
+        if ($content == 'true') $content = true;
+        else if ($content == 'false') $content = false;
+        else if ($content == 'NULL_CONTENT') $content = null;
+        else if (preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1]).(0[1-9]|1[0-2]).[0-9]{4}$/", $content)) {
+            $c = explode('.', $content);
+            $content = new \Datetime($c[2] . '-' . $c[1] . '-' . $c[0]);
+        } else {
+            $content = urldecode($content);
+        }
+
+        for ($i = 0; $i < count($data) - 3; $i++) {
+            $link[$i] = $data[$i + 3]; //On stocke le chemin dans l'entitï¿½
+        }
+
+        //On rï¿½cupï¿½re l'entitï¿½ avec l'em
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository($bundle . ':' . ucfirst($main));
+
+        $entity = $repo->find($id); //entity stockï¿½e
+        $res = $entity;
+        $calls = count($link) - 1;
+
+
+        //On parcourt ensuite l'entitï¿½ en fonction du nombre de paramï¿½tres prï¿½sents dans link
+
+        for ($i = 0; $i < $calls; $i++) { //Le -1 parce que le dernier paramï¿½tre ne sera pas get mais set
+
+            if ($calls != 0) {
+
+
+                $function = 'get' . ucfirst($link[$i]);
+                $res = $res->$function();
+
+            }
+        }
+
+        $set = 'set' . ucfirst($link[count($link) - 1]);
+        $res->$set($content);
+
+        $em->persist($entity);
+        $em->flush();
+        return new Response(1);
     }
 }

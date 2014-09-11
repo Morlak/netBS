@@ -60,13 +60,6 @@
 {%- endblock form_row %}
 
 
-{# CHECKBOX SLIDER #}
-{% block checkbox_widget -%}
-    <input type="checkbox" class="toggle-editable" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
-    <label for="{{  id  }}" class="small-toggle"></label>
-{%- endblock checkbox_widget %}
-
-
 {% block choice_widget_collapsed -%}
     {% if required and empty_value is none and not empty_value_in_choices and not multiple %}
         {% set required = false %}

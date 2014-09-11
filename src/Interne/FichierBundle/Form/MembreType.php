@@ -10,8 +10,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class MembreType extends AbstractType
 {
 	/**
-	 * Formulaire pour ajouter un membre, gestion automatique de la détection
-	 * de famille
+	 * Formulaire pour ajouter un membre, gestion automatique de la détection de famille
 	 */
     
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -87,11 +86,7 @@ class MembreType extends AbstractType
 
     public function getName()
     {
-        return 'interne_fichierbundle_membretype';
+        return 'InterneFichierBundle_membre';
     }
 
-    public function getLabel()
-    {
-        return "Informations personelles";
-    }
 }
