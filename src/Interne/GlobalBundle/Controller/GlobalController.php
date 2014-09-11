@@ -22,8 +22,6 @@ class GlobalController extends Controller
      */
     public function modifikatorAction($entity, $content)
     {
-
-
         //Premi�re chose, on r�cup�re les informations sur l'entit�
         $entity = urldecode($entity);
         $data = explode('.', $entity);
