@@ -35,26 +35,6 @@
         </div>
 
 
-        <div class="col-lg-5">
-            <form class="form-horizontal" role="form" method="post" {{ form_enctype(membreContactForm) }}>
-                <div class="widget">
-
-                    <div class="widget-title">
-                        <span>Informations de contact</span>
-                    </div>
-
-                    <div class="widget-content">
-                        {{  form_widget(membreContactForm) }}
-                    </div>
-                </div>
-            </form>
-        </div>
-
-
-    </div>
-
-    <div class="row">
-
         <div class="col-lg-6">
             <form class="form-horizontal" role="form" method="post" {{ form_enctype(membreFamilleForm) }}>
                 <div class="widget">
@@ -70,6 +50,28 @@
                 </div>
             </form>
         </div>
+
+
+
+
+    </div>
+
+    <div class="row">
+
+        {#        <div class="col-lg-5">
+                    <form class="form-horizontal" role="form" method="post" {{ form_enctype(membreContactForm) }}>
+                        <div class="widget">
+
+                            <div class="widget-title">
+                                <span>Informations de contact</span>
+                            </div>
+
+                            <div class="widget-content">
+                                {{  form_widget(membreContactForm) }}
+                            </div>
+                        </div>
+                    </form>
+                </div>#}
 
     </div>
 

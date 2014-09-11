@@ -20,19 +20,23 @@ class GlobalController extends Controller
      * bundle.entity.ID.truc.machin, par exemple InterneFichierBundle.famille.4.pere.contact.telephone
      * aussi appel�e LE MODIFIKATOR
      */
-    public function modifikatorAction($entity, $content)
+    public function modifikatorAction($entity, $id)
     {
 
+        $request = $this->get('request');
+
+        $content = $request->get('value');
 
         //Premi�re chose, on r�cup�re les informations sur l'entit�
         $entity = urldecode($entity);
         $data = explode('.', $entity);
         $bundle = $data[0];
-        $main = $data[1]; //Entit� m�re (famille, membre...)
-        $id = $data[2];
+        $entite = $data[1]; //Entit� m�re (famille, membre...)
+        $field = $data[2];
         $link = array();
 
         //On formate le content en tant que boolean ou date si n�cessaire
+/*
         if ($content == 'true') $content = true;
         else if ($content == 'false') $content = false;
         else if ($content == 'NULL_CONTENT') $content = null;
@@ -42,14 +46,15 @@ class GlobalController extends Controller
         } else {
             $content = urldecode($content);
         }
+*/
 
-        for ($i = 0; $i < count($data) - 3; $i++) {
-            $link[$i] = $data[$i + 3]; //On stocke le chemin dans l'entit�
+        for ($i = 0; $i < count($data) - 2; $i++) {
+            $link[$i] = $data[$i + 2]; //On stocke le chemin dans l'entit�
         }
 
         //On r�cup�re l'entit� avec l'em
         $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository($bundle . ':' . ucfirst($main));
+        $repo = $em->getRepository($bundle . ':' . ucfirst($entite));
 
         $entity = $repo->find($id); //entity stock�e
         $res = $entity;

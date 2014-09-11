@@ -1,5 +1,5 @@
 InterneGlobal_modifikator:
-    pattern:  /modifikator/{entity}/{content}
+    pattern:  /modifikator/{entity}/{id}
     defaults: { _controller: InterneGlobalBundle:Global:modifikator }
     options:
         expose: true

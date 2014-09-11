@@ -1,6 +1,7 @@
 {# src/Interne/FichierBundle/Resources/views/Form/form_template.html.twig #}
 
 {% block form_widget -%}
+
     {% if compound %}
         {{- block('form_widget_compound') -}}
     {% else %}
@@ -36,6 +37,10 @@
 {# SINGLE ROW #}
 {% block form_row -%}
 
+    {% if root is not defined %}
+        {% set root = form.parent %}
+    {% endif %}
+
     {% if compound %}
         <div class="form-group form-group-sm">
             {{- form_label(form) -}}
@@ -51,7 +56,7 @@
         <div class="form-group form-group-sm">
             {{- form_label(form) -}}
             <div class="col-sm-8">
-                {{- form_widget(form) -}} {# Recursive call #}
+                {{- form_widget(form, { 'attr': {'entity-id': root.vars.value.getId()}, 'root': root }) -}} {# Recursive call #}
             </div>
             {{- form_errors(form) -}}
         </div>
