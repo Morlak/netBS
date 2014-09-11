@@ -206,7 +206,7 @@ class FichierController extends Controller
 		 * - sinon on affiche celle de la famille
 		 * Pour toute personne, on procède ainsi
 		 */
-		$mainAdresse = $this->container->get('interne_fichier.adressePrincipale')->checkPrincipale($membre);
+		$mainAdresse = $membre->getAdressePrincipale();
 		
 		//On doit aussi génerer la liste personnalisée des fonctions pour en créer, on récupère donc la liste
 		$fonctions = $em->getRepository('InterneStructureBundle:Fonction')->findAll();

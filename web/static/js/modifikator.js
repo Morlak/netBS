@@ -81,15 +81,14 @@ $("form.ajaxedit input").focusout(function () {
 
 function modifikator(entity, content, obj) {
 
-    //Si le contenu est vide, on envoie un mot clé nullcontent
-    if (content === '') content = 'NULL_CONTENT';
-
     $(obj).parent().addClass("has-warning");
 
     $.ajax({
-        url: Routing.generate('InterneGlobal_modifikator', {'entity': entity, 'content': content}),
+        url: Routing.generate('InterneGlobal_modifikator', {'entity': entity, 'id': $(obj).attr('entity-id')}),
         type: 'POST',
-        data: '',
+        data: {
+            value: content
+        },
         dataType: 'json',
 
         success: function (data) {

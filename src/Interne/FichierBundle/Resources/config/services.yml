@@ -2,8 +2,3 @@ parameters:
 #    interne_fichier.example.class: Interne\FichierBundle\Example
 
 services:
-    interne_fichier.adressePrincipale:
-        class: Interne\FichierBundle\Services\AdressePrincipale
-        
-    interne_fichier.contactPrincipal:
-        class: Interne\FichierBundle\Services\ContactPrincipal

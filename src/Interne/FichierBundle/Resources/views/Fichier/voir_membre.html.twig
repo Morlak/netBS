@@ -35,26 +35,6 @@
         </div>
 
 
-        <div class="col-lg-5">
-            <form class="form-horizontal" role="form" method="post" {{ form_enctype(membreContactForm) }}>
-                <div class="widget">
-
-                    <div class="widget-title">
-                        <span>Informations de contact</span>
-                    </div>
-
-                    <div class="widget-content">
-                        {{  form_widget(membreContactForm) }}
-                    </div>
-                </div>
-            </form>
-        </div>
-
-
-    </div>
-
-    <div class="row">
-
         <div class="col-lg-6">
             <form class="form-horizontal" role="form" method="post" {{ form_enctype(membreFamilleForm) }}>
                 <div class="widget">
@@ -70,6 +50,28 @@
                 </div>
             </form>
         </div>
+
+
+
+
+    </div>
+
+    <div class="row">
+
+        {#        <div class="col-lg-5">
+                    <form class="form-horizontal" role="form" method="post" {{ form_enctype(membreContactForm) }}>
+                        <div class="widget">
+
+                            <div class="widget-title">
+                                <span>Informations de contact</span>
+                            </div>
+
+                            <div class="widget-content">
+                                {{  form_widget(membreContactForm) }}
+                            </div>
+                        </div>
+                    </form>
+                </div>#}
 
     </div>
 
@@ -243,12 +245,6 @@
     				<div class="row">
 
 
-
-
-
-
-
-
     					<div class="col-md-6">
     						
     						<ul class="data-liste">
@@ -289,8 +285,8 @@
     				<ul class="data-liste">
     					<li><strong>Nom de famille</strong><span><a href="{{ path('InterneFichier_voir_famille', {'id' : membre.famille.id}) }}">{{ membre.famille.nom|capitalize }}</a></span></li>
     					<li><strong>Parents</strong><span>{{ membre.famille.pere.prenom|capitalize }} et {{ membre.famille.mere.prenom|capitalize }}</span></li>
-    					<li><strong>Téléphone familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.telephone">{{ membre.famille.contact.telephone }}</span></li>
-    					<li><strong>E-Mail familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.email">{{ membre.famille.contact.email }}</span></li>
+    					{#<li><strong>Téléphone familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.telephone">{{ membre.famille.contact.telephone }}</span></li>#}
+    					{#<li><strong>E-Mail familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.email">{{ membre.famille.contact.email }}</span></li>#}
     				</ul>
     				
     			</div>
@@ -309,7 +305,7 @@
     			</div>
     			<div class="widget-content">
     				
-    				{% if adressePrincipale == 'famille' %}
+{#    				{% if adressePrincipale == 'famille' %}
     				
     					<ul class="data-liste">
     						<li><h4>Adresse familiale</h4></li>
@@ -331,7 +327,7 @@
 	    					<li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.remarques">{{ membre.adresse.remarques }}</span></li>
 	    				</ul>
     				
-    				{% endif %}
+    				{% endif %}#}
     				
     			</div>
     		</div>

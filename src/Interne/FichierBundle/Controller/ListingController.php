@@ -128,11 +128,7 @@ class ListingController extends Controller
             $membre     = $membres[$i];
             
             //On récupère aussi son adresse principale
-            $aService   = $this->get('interne_fichier.adressePrincipale');
-            $adresse    = $aService->getPrincipale($membre);
-            
-            //Et ses contacts principaux
-            $contact    = $this->get('interne_fichier.contactPrincipal');
+            $adresse    = $membre->getAdressePrincipale($membre);
             
             //On dessine les cellules
             $pdf->Cell(30,7, ucfirst($membre->getFamille()->getNom()), 0,0,'L');
@@ -140,7 +136,8 @@ class ListingController extends Controller
             $pdf->Cell(50,7, $adresse->getRue(), 0,0,'L');
             $pdf->Cell(16,7, $adresse->getNPA(), 0,0,'L');
             $pdf->Cell(32,7, $adresse->getLocalite(), 0,0,'L');
-            $pdf->Cell(32,7, $contact->getTelephone($membre), 0,0,'L');
+            $pdf->Cell(32,7, $membre->getTelephones()[0], 0,0,'L');
+            $pdf->Cell(32,7, $membre->getEmails()[0], 0,0,'L');
             $pdf->ln();
         }
         
@@ -219,9 +216,7 @@ class ListingController extends Controller
         for($i = 0; $i < count($membres); $i++) {
             
             $membre = $membres[$i];
-            $adresse = $this->get('interne_fichier.adressePrincipale')->getPrincipale($membre);
-            $email = $this->get('interne_fichier.contactPrincipal')->getEmail($membre);
-            $telephone = $this->get('interne_fichier.contactPrincipal')->getTelephone($membre);
+            $adresse = $membre->getAdressePrincipale();
             $attribution = $mRepo->findCurrentAttribution($membre->getId());
             
             $excel->getActiveSheet()->setCellValue('A' . ($i + 2), ucfirst($membre->getPrenom()));
@@ -229,8 +224,8 @@ class ListingController extends Controller
             $excel->getActiveSheet()->setCellValue('C' . ($i + 2), $adresse->getRue());
             $excel->getActiveSheet()->setCellValue('D' . ($i + 2), $adresse->getNPA());
             $excel->getActiveSheet()->setCellValue('E' . ($i + 2), $adresse->getLocalite());
-            $excel->getActiveSheet()->setCellValueExplicit('F' . ($i + 2), $telephone, \PHPExcel_Cell_DataType::TYPE_STRING);
-            $excel->getActiveSheet()->setCellValue('G' . ($i + 2), $email);
+            $excel->getActiveSheet()->setCellValueExplicit('F' . ($i + 2), $membre->getTelephones()[0], \PHPExcel_Cell_DataType::TYPE_STRING);
+            $excel->getActiveSheet()->setCellValue('G' . ($i + 2), $membre->getEmails()[0]);
             $excel->getActiveSheet()->setCellValue('H' . ($i + 2), $membre->getNumeroBs());
             $excel->getActiveSheet()->setCellValue('I' . ($i + 2), $membre->getNaissance()->format('d.m.Y'));
             $excel->getActiveSheet()->setCellValue('J' . ($i + 2), $membre->getInscription()->format('d.m.Y'));
