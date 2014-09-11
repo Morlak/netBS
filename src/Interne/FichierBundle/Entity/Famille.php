@@ -33,11 +33,7 @@ class Famille
      * @orm\OneToOne(targetEntity="Interne\FichierBundle\Entity\Adresse", cascade={"persist", "remove"})
      */
     private $adresse;
-	
-    /**
-     * @ORM\OneToOne(targetEntity="Interne\FichierBundle\Entity\Contact", cascade={"persist", "remove"})
-     */
-    private $contact;
+
 
     /**
      * @ORM\OneToOne(targetEntity="Interne\FichierBundle\Entity\Geniteur", cascade={"persist", "remove"}, fetch="EAGER")
@@ -177,29 +173,6 @@ class Famille
         $this->membres->removeElement($membres);
     }
 
-    /**
-     * Set contact
-     *
-     * @param \Interne\FichierBundle\Entity\Contact $contact
-     * @return Famille
-     */
-    public function setContact(\Interne\FichierBundle\Entity\Contact $contact = null)
-    {
-        $this->contact = $contact;
-    
-        return $this;
-    }
-
-    /**
-     * Get contact
-     *
-     * @return \Interne\FichierBundle\Entity\Contact 
-     */
-    public function getContact()
-    {
-        return $this->contact;
-    }
-    
     /**
      * Set adresse
      *

@@ -16,11 +16,7 @@ class Membre extends Personne
 
     public function __construct()
     {
-
         $this->inscription = new \Datetime();
-
-        $this->telephones = array("");
-        $this->emails = array("");
     }
 
     /**
@@ -33,6 +29,8 @@ class Membre extends Personne
     private $id;
 
     /**
+     * @var Famille
+     *
      * @ORM\ManyToOne(targetEntity="Interne\FichierBundle\Entity\Famille", inversedBy="membres")
      * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
      */
@@ -81,20 +79,6 @@ class Membre extends Personne
     private $statut;
 
     /**
-     * @var array
-     *
-     * @ORM\Column(name="telephones", type="array")
-     */
-    private $telephones;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="emails", type="array")
-     */
-    private $emails;
-
-    /**
      * @var date
      *
      * @ORM\Column(name="inscription", type="date")
@@ -109,6 +93,12 @@ class Membre extends Personne
     private $remarques;
 
 
+    /**
+     * @var Adresse
+     *
+     * @ORM\ManyToOne(targetEntity="Adresse")
+     */
+    protected $adressePrincipale;
 
 
     /**
@@ -136,11 +126,8 @@ class Membre extends Personne
 
     /**
      * Get famille
-<<<<<<< HEAD
      *
      * @return Famille
-=======
->>>>>>> master
      */
     public function getFamille()
     {
@@ -268,64 +255,6 @@ class Membre extends Personne
     }
 
 
-    /**
-     * @param $telephones
-     * @return $this
-     */
-    public function setTelephones($telephones)
-    {
-        $this->telephones = $telephones;
-
-        return $this;
-    }
-
-    /**
-     * @param $telephone
-     * @return $this
-     */
-    public function addTelephone($telephone) {
-        $this->telephones = array($this->telephones, $telephone);
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTelephones()
-    {
-        return $this->telephones;
-    }
-
-    /**
-     * @param $emails
-     * @return $this
-     */
-    public function setEmails($emails)
-    {
-        $this->emails = $emails;
-
-        return $this;
-    }
-
-    /**
-     * @param $email
-     * @return $this
-     */
-    public function addEmail($email) {
-        $this->emails = array($this->emails, $email);
-
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getEmails()
-    {
-        return $this->emails;
-    }
-
 
     /**
      * Set naissance
@@ -407,6 +336,11 @@ class Membre extends Personne
         return $this->attributions;
     }
 
+
+
+
+
+
     /**
      * Set adresse
      *
@@ -430,12 +364,37 @@ class Membre extends Personne
         return $this->adresse;
     }
 
+    /**
+     * @param Adresse $adresse
+     * @return Membre
+     */
+    public function setAdressePrincipale(\Interne\FichierBundle\Entity\Adresse $adresse = null) {
+        $this->adressePrincipale = $adresse;
+
+        return $this;
+    }
+
+    /**
+     * @return Adresse
+     */
+    public function getAdressePrincipale()
+    {
+        if ($this->adressePrincipale != null)
+            return $this->adressePrincipale;
+
+        if ($this->getAdresse() != null)
+            return $this->adresse;
+
+        if ($this->getFamille()->getAdresse() != null)
+            return $this->getFamille()->getAdresse();
+    }
+
 
     /**
      * Set remarques
      *
-     * @param string $remarques
-     * @return Adresse
+     * @param $remarques
+     * @return Membre
      */
     public function setRemarques($remarques)
     {

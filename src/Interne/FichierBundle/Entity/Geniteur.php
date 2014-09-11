@@ -23,10 +23,6 @@ class Geniteur extends Personne
      */
     private $id;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Interne\FichierBundle\Entity\Contact", cascade={"persist", "remove"})
-     */
-    private $contact;
     
     /**
      * @var string
@@ -34,7 +30,7 @@ class Geniteur extends Personne
      * @ORM\Column(name="profession", type="string", nullable=true)
      */
     private $profession;
-    
+
 
     /**
      * Get id
@@ -44,29 +40,6 @@ class Geniteur extends Personne
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set contact
-     *
-     * @param \Interne\FichierBundle\Entity\Contact $contact
-     * @return Geniteur
-     */
-    public function setContact($contact)
-    {
-        $this->contact = $contact;
-    
-        return $this;
-    }
-
-    /**
-     * Get contact
-     *
-     * @return \Interne\FichierBundle\Entity\Contact
-     */
-    public function getContact()
-    {
-        return $this->contact;
     }
 
     /**

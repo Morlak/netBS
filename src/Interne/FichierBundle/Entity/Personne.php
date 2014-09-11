@@ -24,11 +24,28 @@ abstract class Personne
      * @ORM\Column(name="sexe", type="string", length=255)
      */
     protected $sexe;
-    
+
+
     /**
      * @ORM\OneToOne(targetEntity="Interne\FichierBundle\Entity\Adresse", cascade={"persist", "remove"})
      */
     protected $adresse;
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="telephones", type="array")
+     */
+    private $telephones = 'a:1:{i:0;s:0:"";}';
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="emails", type="array")
+     */
+    private $emails = 'a:1:{i:0;s:0:"";}';
+
 
 
     /**
@@ -99,4 +116,64 @@ abstract class Personne
     {
         return $this->adresse;
     }
+
+
+    /**
+     * @param $telephones
+     * @return $this
+     */
+    public function setTelephones($telephones)
+    {
+        $this->telephones = $telephones;
+
+        return $this;
+    }
+
+    /**
+     * @param $telephone
+     * @return $this
+     */
+    public function addTelephone($telephone) {
+        $this->telephones = array($this->telephones, $telephone);
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTelephones()
+    {
+        return $this->telephones;
+    }
+
+    /**
+     * @param $emails
+     * @return $this
+     */
+    public function setEmails($emails)
+    {
+        $this->emails = $emails;
+
+        return $this;
+    }
+
+    /**
+     * @param $email
+     * @return $this
+     */
+    public function addEmail($email) {
+        $this->emails = array($this->emails, $email);
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getEmails()
+    {
+        return $this->emails;
+    }
+
 }
