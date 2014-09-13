@@ -22,14 +22,11 @@ class GlobalController extends Controller
      */
     public function modifikatorAction($entity, $id)
     {
-<<<<<<< HEAD
-=======
 
         $request = $this->get('request');
 
         $content = $request->get('value');
 
->>>>>>> 4ca736b70cf37f89b9ea0a4945facd369e33a47e
         //Premi�re chose, on r�cup�re les informations sur l'entit�
         $entity = urldecode($entity);
         $data = explode('.', $entity);

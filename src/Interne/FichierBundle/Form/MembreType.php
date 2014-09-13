@@ -61,19 +61,11 @@ class MembreType extends AbstractType
                 'remarques',
                 'textarea'
             )
-<<<<<<< HEAD
-	    
-	    ->add(
-		  'id',
-		  'hidden'
-	    )
-=======
 
             ->add(
                 'id',
                 'hidden'
             )
->>>>>>> 4ca736b70cf37f89b9ea0a4945facd369e33a47e
         ;
         
 //        $groupeValidator = function(FormEvent $event) {

@@ -29,6 +29,6 @@ class FamilleType extends AbstractType
 
     public function getName()
     {
-        return 'famille';
+        return 'InterneFichierBundle_famille';
     }
 }
