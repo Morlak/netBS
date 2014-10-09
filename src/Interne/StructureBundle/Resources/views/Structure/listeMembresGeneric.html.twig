@@ -1,0 +1,92 @@
+<div class="widget">
+
+    <div class="widget-title">
+        <span>{{ title }}</span>
+
+        <div class="widget-toolbar">
+
+            <button class="widget-options-button">Recherche</button>
+        </div>
+    </div>
+
+    <div class="widget-content">
+
+        <div class="widget-options field">
+
+            <h4>Rechercher des membres liés</h4>
+
+            <select id="hierarchie">
+                <option value="main">Ce groupe uniquement</option>
+                <option value="all">Ce groupe et ses enfants</option>
+                <option value="children">Ses enfants uniquement</option>
+            </select>
+
+            <input placeholder="Début" type="text" id="date1" class="datepicker"/>
+            <input placeholder="Fin" type="text" id="date2" class="datepicker"/>
+
+            <button class="btn btn-primary" onclick="retrieveAttributions({{ groupe.id }}, this);">Valider</button>
+
+            <p><strong>Astuce :</strong> Laisser les deux champs de date vide retournera la liste de toutes les
+                attributions (Peut prendre du temps)</p>
+
+        </div>
+
+        <table id="membersTable" class="datatable  datatable-membre">
+
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>Prénom</th>
+                <th>Nom</th>
+
+                {#
+                                <th>Date de naissance</th>
+
+                                <th>Adresse</th>
+                                <th>NPA</th>
+                                <th>Localité</th>
+
+                                <th>fonction</th>
+                                <th>groupe</th>
+
+                                <th style="width:150px">debut</th>
+                                <th style="width:150px">fin</th>
+                #}
+
+            </tr>
+            </thead>
+
+            <tbody>
+
+            {% for member in membersList %}
+
+                <tr>
+                    <td><input type="checkbox" id="membre_{{ member.id }}"/></td>
+                    <td><span class="glyphicon glyphicon-list"></span></td>
+                    <td><span class="glyphicon glyphicon-remove"></span></td>
+                    <td><a href="{{ path('InterneFichier_voir_membre', {'id' : member.id}) }}">{{ member.prenom }}</a>
+                    </td>
+                    <td>{{ member.famille.nom }}</td>
+                    {#
+                                        <tr>{{ member.naissance|date('d.m.Y') }}</tr>
+                                        <tr>{{ member.adresse.rue }} Rue</tr>
+                                        <tr>{{ member.adresse.npa }} NPA</tr>
+                                        <tr>{{ member.adresse.localite }} Loc</tr>
+                                        <td>{{ attribution.fonction.nom }}</td>
+                                        <td><a href="{{ path('InterneStructure_voir_groupe', {'id' : attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></td>
+                                        <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
+                                        <td>{% if attribution.dateFin is not null %}{{ attribution.dateFin|date("d.m.Y") }} {% endif %}</td>
+                    #}
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

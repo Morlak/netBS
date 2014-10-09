@@ -74,7 +74,7 @@ class Groupe
      */
     public function setNom($nom)
     {
-        $this->nom = $nom;
+        $this->nom = ucwords($nom);
     
         return $this;
     }
@@ -86,7 +86,7 @@ class Groupe
      */
     public function getNom()
     {
-        return $this->nom;
+        return ucwords($this->nom);
     }
 
     /**
@@ -220,5 +220,32 @@ class Groupe
     public function getType()
     {
         return $this->type;
+    }
+
+    public function getMembers()
+    {
+
+        $members = array();
+
+        foreach ($this->getAttributions()->toArray() as $attribution) {
+            if ($attribution->getDateFin() == NULL) // FIXME: or date fin > today
+                $members[] = $attribution->getMembre();
+
+        }
+
+        return $members;
+
+    }
+
+    public function getMembersRecursive()
+    {
+
+        $members = $this->getMembers();
+
+        foreach ($this->getEnfants() as $childGroup) {
+            array_merge($members, $childGroup->getMembersRecursive());
+        }
+
+        return $members;
     }
 }

@@ -16,17 +16,14 @@
 					<li><a href="{{ path('InterneHome_rechercher')}}"><span class="glyphicon glyphicon-search"></span> rechercher</a></li>
 					<li><a href="{{ path('InterneStamm_dashboard')}}"><span class="glyphicon glyphicon-tasks"></span> administration</a></li>
 
-                	
-					<li><a><span class="glyphicon glyphicon-th-large"></span> Groupe {% if user.attributions|length > 1 %} (s) {% endif %}</a>
-						
-						<ul>
+
+                    <li><a><span class="glyphicon glyphicon-th-large"></span>
+                            Groupe{% if user.attributions|length > 1 %}s{% endif %}</a>
+
+                        <ul>
 							{% for attribution in user.attributions %}
-								
 								<li><a href="{{ path('InterneStructure_voir_groupe', {'id' : attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></li>
-							
 							{% endfor %}
-							
-							<li><a href="{{ path('InterneFichier_creer_membre') }}">Ajouter un membre</a></li>
 						</ul>
 						
 					</li>
@@ -34,10 +31,11 @@
 					<li><a><span class="glyphicon glyphicon-th"></span> Brigade</a>
 					
 						<ul>
-							<li><a href="{{ path('InterneStructure_hierarchie') }}">hierarchie des groupes</a></li>
-							<li><a href="{{ path('InterneStructure_attributions_fonctions') }}">attributions - fonctions</a></li>
-							<li><a href="{{ path('InterneStructure_distinctions') }}">distinctions</a></li>
-						</ul>
+                            <li><a href="{{ path('InterneStructure_hierarchie') }}">Hiérarchie des groupes</a></li>
+                            <li><a href="{{ path('InterneStructure_attributions_fonctions') }}">Attributions et
+                                    fonctions</a></li>
+                            <li><a href="{{ path('InterneStructure_distinctions') }}">Distinctions</a></li>
+                        </ul>
 					</li>
 					
 					<li><a><span class="glyphicon glyphicon-folder-open"></span> Galerie</a>

@@ -60,7 +60,7 @@ class Fonction
      */
     public function setNom($nom)
     {
-        $this->nom = $nom;
+        $this->nom = ucfirst($nom);
 
         return $this;
     }
@@ -72,7 +72,7 @@ class Fonction
      */
     public function getNom()
     {
-        return $this->nom;
+        return ucfirst($this->nom);
     }
 
     /**

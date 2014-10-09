@@ -9,10 +9,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class MembreType extends AbstractType
 {
-	/**
-	 * Formulaire pour ajouter un membre, gestion automatique de la détection de famille
-	 */
-    
+    /**
+     * Formulaire pour ajouter un membre, gestion automatique de la détection de famille
+     */
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -31,7 +31,7 @@ class MembreType extends AbstractType
             ->add(
                 'nom',
                 'text',
-                array('read_only'     => true)
+                array('read_only' => true)
             )
 
             ->add(
@@ -57,6 +57,39 @@ class MembreType extends AbstractType
                 )
             )
 
+
+//            ->add(
+//                'telephones',
+//                'collection',
+//                array(
+//                    'label'         => 'Numéros de téléphone',
+//                    'type'          => 'text',
+//                    'allow_add'     => true,
+//                    'allow_delete'  => true,
+//                    'prototype'     => true,
+//
+//                    'options' => array(
+//                        'required' => false
+//                    )
+//                )
+//            )
+//
+//            ->add(
+//                'emails',
+//                'collection',
+//                array(
+//                    'label'         => 'Courriels',
+//                    'type'          => 'email',
+//                    'allow_add'     => true,
+//                    'allow_delete'  => true,
+//                    'prototype'     => true,
+//
+//                    'options'  => array(
+//                        'required' => false
+//                    )
+//                )
+//            )
+
             ->add(
                 'remarques',
                 'textarea'
@@ -65,9 +98,8 @@ class MembreType extends AbstractType
             ->add(
                 'id',
                 'hidden'
-            )
-        ;
-        
+            );
+
 //        $groupeValidator = function(FormEvent $event) {
 //
 //            $form   = $event->getForm();

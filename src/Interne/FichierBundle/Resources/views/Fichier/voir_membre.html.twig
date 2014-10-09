@@ -6,17 +6,17 @@
 
 {% form_theme familleForm 'InterneFichierBundle:Form:form_template.html.twig' %}
 
-{% block title %}{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}{% endblock %}
+{% block title %}{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }} | Fiche de membre{% endblock %}
 
 
 {% block body %}
 
     <div class="row">
-    	<div class="col-lg-11 col-lg-offset-1">
-    		<h3>{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}</h3>
-    	</div>
+        <div class="col-lg-11 col-lg-offset-1">
+            <h3>{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}</h3>
+        </div>
     </div>
-    
+
     <div class="row">
 
         <div class="col-lg-6">
@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="widget-content">
-                        {{  form_widget(membreForm) }}
+                        {{ form_widget(membreForm) }}
                     </div>
                 </div>
             </form>
@@ -44,19 +44,18 @@
                     </div>
 
                     <div class="widget-content">
-                        {{  form_widget(membreFamilleForm) }}
-                        {{  form_widget(familleForm) }}
+                        {{ form_widget(membreFamilleForm) }}
+                        {{ form_widget(familleForm) }}
                     </div>
                 </div>
             </form>
         </div>
 
 
-
-
     </div>
 
     <div class="row">
+
 
         {#        <div class="col-lg-5">
                     <form class="form-horizontal" role="form" method="post" {{ form_enctype(membreContactForm) }}>
@@ -93,7 +92,7 @@
 
                         <div class="flex groupe-container">
 
-                            {% for groupe in hierarchie  %}
+                            {% for groupe in hierarchie %}
 
                                 <a class="groupe" href="{{ path('InterneStructure_voir_groupe', {id: groupe.id}) }}">
                                     {{ groupe.nom }}
@@ -123,7 +122,8 @@
                     <span>Attributions</span>
 
                     <div class="widget-toolbar">
-                        <button data-toggle="modal" data-target="#attributions-form-modal">Ajouter une attribution</button>
+                        <button data-toggle="modal" data-target="#attributions-form-modal">Ajouter une attribution
+                        </button>
 
                     </div>
                 </div>
@@ -148,10 +148,15 @@
 
                             <tr>
                                 <td>{{ attribution.fonction.nom }} ({{ attribution.fonction.abreviation | upper }})</td>
-                                <td><a href="{{ path('InterneStructure_voir_groupe', {id: attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></td>
+                                <td>
+                                    <a href="{{ path('InterneStructure_voir_groupe', {id: attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a>
+                                </td>
                                 <td>{{ attribution.dateDebut | date("d.m.Y") }}</td>
                                 <td>{{ attribution.dateFin | datum }}</td>
-                                <td><a href="{{ path('InterneStructure_remove_attribution', {attributionId: attribution.id}) }}"><span class="glyphicon glyphicon-remove" title="supprimer" onclick="return confirm('Etes-vous sur ?');"></span></a></td>
+                                <td>
+                                    <a href="{{ path('InterneStructure_remove_attribution', {attributionId: attribution.id}) }}"><span
+                                                class="glyphicon glyphicon-remove" title="supprimer"
+                                                onclick="return confirm('Etes-vous sur ?');"></span></a></td>
                             </tr>
 
                         {% endfor %}
@@ -192,11 +197,11 @@
 
                         {#{% for distinction in membre.distinctions %}#}
 
-                            {#<tr>#}
-                                {#<td>{{ distinction.distinction.nom }}</td>#}
-                                {#<td>{{ distinction.obtention | date("d.m.Y") }}</td>#}
-                                {#<td></td>#}
-                            {#</tr>#}
+                        {#<tr>#}
+                        {#<td>{{ distinction.distinction.nom }}</td>#}
+                        {#<td>{{ distinction.obtention | date("d.m.Y") }}</td>#}
+                        {#<td></td>#}
+                        {#</tr>#}
 
 
                         {#{% endfor %}#}
@@ -233,405 +238,453 @@
 
     <div class="row">
 
-    	<div class="col-lg-7">
-    		
-    		<div class="widget">
-    			<div class="widget-title">
-    				<span>Informations sur le membre</span>
-    			</div>
-    			
-    			<div class="widget-content">
-    				
-    				<div class="row">
+        <div class="col-lg-7">
+
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Informations sur le membre</span>
+                </div>
+
+                <div class="widget-content">
+
+                    <div class="row">
 
 
-    					<div class="col-md-6">
-    						
-    						<ul class="data-liste">
-		    					<li><strong>Prénom</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.prenom">{{ membre.prenom|capitalize }}</span></li>
-		    					<li><strong>Date de naissance</strong><span>{{ membre.naissance|date("d.m.Y") }}</span></li>
-		    					{#<li><strong>Téléphone</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.telephones">{{ membre.telephones }}</span></li>#}
-		    					{#<li><strong>E-Mail</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.emails">{{ membre.emails }}</span></li>#}
+                        <div class="col-md-6">
 
-		    				</ul>
-    						
-    					</div>
-    					
-    					<div class="col-md-6">
-    						
-    						<ul class="data-liste">
-    							<li><strong>Numéro BS</strong><span>{{ membre.numeroBs }}</span></li>
-    							<li><strong>Inscrit le</strong><span name="InterneFichierBundle.membre.{{ membre.id }}.inscription" class="date-editable">{{ membre.inscription|date("d.m.Y") }}</span><input type="hidden" class="datepicker date-editable-input" /></li>
-    							<li><strong>Statut</strong><span>{{ membre.statut }}</span></li>
-    						</ul>
-    						
-    					</div>
-    					
-    				</div>
-    				
-    			</div>
-    		</div>
-    		
-    	</div>
-    	
-    	<div class="col-lg-5">
-    		<div class="widget">
-    			<div class="widget-title">
-    				<span>Informations sur la famille</span>
-    			</div>
-    			
-    			<div class="widget-content">
-    				
-    				<ul class="data-liste">
-    					<li><strong>Nom de famille</strong><span><a href="{{ path('InterneFichier_voir_famille', {'id' : membre.famille.id}) }}">{{ membre.famille.nom|capitalize }}</a></span></li>
-    					<li><strong>Parents</strong><span>{{ membre.famille.pere.prenom|capitalize }} et {{ membre.famille.mere.prenom|capitalize }}</span></li>
-    					{#<li><strong>Téléphone familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.telephone">{{ membre.famille.contact.telephone }}</span></li>#}
-    					{#<li><strong>E-Mail familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.email">{{ membre.famille.contact.email }}</span></li>#}
-    				</ul>
-    				
-    			</div>
-    		</div>
-    	</div>
-    	
-    </div>
-    
-    <div class="row">
-    	
-    	<div class="col-lg-5">
-    		
-    		<div class="widget">
-    			<div class="widget-title">
-    				<span>Adresse principale</span>
-    			</div>
-    			<div class="widget-content">
-    				
-{#    				{% if adressePrincipale == 'famille' %}
-    				
-    					<ul class="data-liste">
-    						<li><h4>Adresse familiale</h4></li>
-	    					<li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.rue">{{ membre.famille.adresse.rue }}</span></li>
-	    					<li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.npa">{{ membre.famille.adresse.npa }}</span></li>
-	    					<li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.localite">{{ membre.famille.adresse.localite }}</span></li>
-	    					<li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.facturable" {% if membre.famille.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
-	    					<li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.remarques">{{ membre.famille.adresse.remarques }}</span></li>
-	    				</ul>
-    				
-    				{% elseif adressePrincipale == 'membre' %}
-    				
-    					<ul class="data-liste">
-    						<li><h4>Adresse du membre</h4></li>
-	    					<li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.rue">{{ membre.adresse.rue }}</span></li>
-	    					<li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.npa">{{ membre.adresse.npa }}</span></li>
-	    					<li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.localite">{{ membre.adresse.localite }}</span></li>
-	    					<li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.facturable" {% if membre.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
-	    					<li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.remarques">{{ membre.adresse.remarques }}</span></li>
-	    				</ul>
-    				
-    				{% endif %}#}
-    				
-    			</div>
-    		</div>
-    		
-    	</div>
-    	
-    	<div class="col-lg-7">
-    		
-    		<div class="widget">
-    			<div class="widget-title">
-    				<span>Adresses disponibles</span>
-    			</div>
-    			
-    			<div class="widget-content">
-    				
-					<div class="panel-group accordeon" id="adresses-accordeon">
-						
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Adresse du membre</a>
-								</h4>
-							</div>
-							
-							<div id="collapseOne" class="panel-collapse collapse">
-								<div class="panel-body">
-								
-								    <ul class="data-liste">
-				    					<li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.rue">{{ membre.adresse.rue }}</span></li>
-				    					<li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.npa">{{ membre.adresse.npa }}</span></li>
-				    					<li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.localite">{{ membre.adresse.localite }}</span></li>
-				    					<li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.facturable" {% if membre.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
-				    					<li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.remarques">{{ membre.adresse.remarques }}</span></li>
-				    				</ul>
-								
-								</div>
-							</div>
-						</div>
-						
-						<div class="panel panel-default">
-							<div class="panel-heading">
-								<h4 class="panel-title">
-									<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Adresse familiale</a>
-								</h4>
-							</div>
-							
-							<div id="collapseTwo" class="panel-collapse collapse">
-								<div class="panel-body">
-								
-								    <ul class="data-liste">
-				    					<li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.rue">{{ membre.famille.adresse.rue }}</span></li>
-				    					<li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.npa">{{ membre.famille.adresse.npa }}</span></li>
-				    					<li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.localite">{{ membre.famille.adresse.localite }}</span></li>
-				    					<li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.facturable" {% if membre.famille.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
-				    					<li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.remarques">{{ membre.famille.adresse.remarques }}</span></li>
-				    				</ul>
-								
-								</div>
-							</div>
-						</div>
-					
-					</div>
-    				
-    			</div>
-    		</div>
-    		
-    	</div>
-    	
+                            <ul class="data-liste">
+                                <li><strong>Prénom</strong><span class="editable"
+                                                                 name="InterneFichierBundle.membre.{{ membre.id }}.prenom">{{ membre.prenom|capitalize }}</span>
+                                </li>
+                                <li><strong>Date de naissance</strong><span>{{ membre.naissance|date("d.m.Y") }}</span>
+                                </li>
+                                {#<li><strong>Téléphone</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.telephones">{{ membre.telephones }}</span></li>#}
+                                {#<li><strong>E-Mail</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.emails">{{ membre.emails }}</span></li>#}
+
+                            </ul>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <ul class="data-liste">
+                                <li><strong>Numéro BS</strong><span>{{ membre.numeroBs }}</span></li>
+                                <li><strong>Inscrit le</strong><span
+                                            name="InterneFichierBundle.membre.{{ membre.id }}.inscription"
+                                            class="date-editable">{{ membre.inscription|date("d.m.Y") }}</span><input
+                                            type="hidden" class="datepicker date-editable-input"/></li>
+                                <li><strong>Statut</strong><span>{{ membre.statut }}</span></li>
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-5">
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Informations sur la famille</span>
+                </div>
+
+                <div class="widget-content">
+
+                    <ul class="data-liste">
+                        <li><strong>Nom de famille</strong><span><a
+                                        href="{{ path('InterneFichier_voir_famille', {'id' : membre.famille.id}) }}">{{ membre.famille.nom|capitalize }}</a></span>
+                        </li>
+                        <li><strong>Parents</strong><span>{{ membre.famille.pere.prenom|capitalize }}
+                                et {{ membre.famille.mere.prenom|capitalize }}</span></li>
+                        {#<li><strong>Téléphone familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.telephone">{{ membre.famille.contact.telephone }}</span></li>#}
+                        {#<li><strong>E-Mail familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.email">{{ membre.famille.contact.email }}</span></li>#}
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="row">
-    	
-    	<div class="col-lg-12">
-    		
-    		<div class="widget">
-    			<div class="widget-title">
-    				<span>Groupes par attributions actives</span>
-    			</div>
-    			
-    			<div class="widget-content">
-    				
-    				{% for hierarchie in hierarchies %}
-				
-						<div class="flex groupe-container">
-						
-							{% for groupe in hierarchie  %}
-							
-								<a class="groupe" href="{{ path('InterneStructure_voir_groupe', {id: groupe.id}) }}">
-									{{ groupe.nom }}
-								</a>
-								
-								<span class="glyphicon glyphicon-chevron-right"></span>
-							
-							{% endfor %}
-						
-					</div>
-					
-					{% endfor %}
-    				
-    			</div>
-    		</div>
-    		
-    	</div>
-    	
-    </div>
-			
-	<div class="row">
-		
-		<div class="col-lg-8">
-			
-			<div class="widget">
-				<div class="widget-title">
-					<span>Attributions</span>
-					
-					<div class="widget-toolbar">
-						<button data-toggle="modal" data-target="#modal-add-attributions-perso">Ajouter une attribution</button>
-					</div>
-				</div>
-				
-				<div class="widget-content">
-					
-					<table class="datatable">
-					
-						<thead>
-							<tr>
-								<th>Fonction</th>
-								<th>Groupe</th>
-								<th>Date de début</th>
-								<th>Date de fin</th>
-								<th style="width:130px">Options</th>
-							</tr>
-						</thead>
-						
-						<tbody>
-						
-							{% for attribution in membre.attributions %}
-							
-							<tr>
-								<td>
-								    <p class="final-val">{{ attribution.fonction.nom }}</p>
-								    <p class="modifikator-val">
-									<select>
-									    <option value="{{ attribution.fonction.id }}">{{ attribution.fonction.nom }}</option>
-									    <option disabled>──────────</option>
-									    
-									{% for fonction in fonctions %}
-									    <option value="{{ fonction.id }}">{{ fonction.nom }}</option>
-									{% endfor %}
-									</select>
-								    </p>
-								</td>
-								<td>
-								    <a class="final-val" href="{{ path('InterneStructure_voir_groupe', {id: attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a>
-								    <p class="modifikator-val">
-									<select>
-									    <option value="{{ attribution.groupe.id }}">{{ attribution.groupe.nom }}</option>
-									    <option disabled>──────────</option>
-									    
-									{% for groupe in groupes %}
-									    <option value="{{ groupe.id }}">{{ groupe.nom }}</option>
-									{% endfor %}
-									</select>
-								    </p>
-								</td>
-								<td>
-								    <p class="final-val">{{ attribution.dateDebut | date("d.m.Y") }}</p>
-								    <p class="modifikator-val"><input type="text" class="datepicker" /></p>
-								</td>
-								<td>
-								    <p class="final-val">{{ attribution.dateFin | datum }}</p>
-								    <p class="modifikator-val"><input type="text" class="datepicker" /></p>
-								</td>
-								<td>
-								    <a onclick="return confirm('Etes-vous sur de vouloir supprimer cette attribution ?  {{ attribution.fonction.nom}} - {{ attribution.groupe.nom }}');" class="btn btn-xs btn-default" href="{{ path('InterneStructure_remove_attribution', {attributionId: attribution.id}) }}"><span class="glyphicon glyphicon-lg glyphicon-remove" title="supprimer"></span></a>
-								    <a class="btn btn-xs btn-default" name="attrModifButton-{{ attribution.id }}" onclick="modifyAttribution(this, {{ attribution.id }});"><span class="glyphicon glyphicon-edit"></span></a>
-								</td>
-							</tr>
-							
-						    {% endfor %}
-						    
-							
-						</tbody>
-						
-					</table>
-					
-				</div>
-			</div>
-			
-		</div>
-		
-{#		<div class="col-lg-4">
-			
-			<div class="widget">
-				<div class="widget-title">
-					<span>Distinctions</span>
-					
-					<div class="widget-toolbar">
-						<button onclick="addObtentionDistinction()">Ajouter une distinction</button>
-					</div>
-				</div>
-				
-				<div class="widget-content">
-					
-					<table class="table datatable">
-						
-						<thead>
-							<tr>
-								<th>Nom</th>
-								<th>Date d'obtention</th>
-								<th>Options</th>
-							</tr>
-						</thead>
-						
-						<tbody>
-						
-							{% for distinction in membre.distinctions %}
-							
-							<tr>
-								<td>{{ distinction.distinction.nom }}</td>
-								<td>{{ distinction.obtention | date("d.m.Y") }}</td>
-								<td></td>
-							</tr>
-							
-							
-							{% endfor %}
-							
-						</tbody>
-						
-					</table>
-					
-				</div>
-			</div>
-			
-		</div>#}
-		
-	</div>
 
-	<div class="modal fade" id="modal-add-attributions-perso" aria-hidden="true">
-	    
-	    <div class="modal-dialog">
-		<div class="modal-content">
-		    
-		    <div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-			<h4 class="modal-title" id="myModalLabel">Ajouter des attributions à {{ membre.prenom|capitalize}} {{ membre.famille.nom|capitalize }}</h4>
-		    </div>
-		    
-		    <div class="modal-body">
-			
-			<!-- on génère la liste des groupes disponibles en hidden pour pouvoir la copier au fur et à mesure -->
-			<select style="display:none" class="attributions-membre-groupes-prototype">	
-				{% for groupe in groupes %}		
-				    <option value="{{ groupe.id }}">{{ groupe.nom }}</option>
-				{% endfor %}
-			</select>
-			<!-- / -->
-			
-                        <form method="post" action="#">
-                            
-                            <fieldset>
+        <div class="col-lg-5">
 
-                                <div class="row">
-                                    <div class="col-sm-3"><label>Fonction (s)</label></div>
-                                    <div class="col-sm-9">
-					<select id="attributions-membre-fonctions-dynamics" multiple class="chosen">
-					
-					{% for fonction in fonctions %}
-					
-					    <option value="{{ fonction.id }}__{{ fonction.nom }}">{{ fonction.nom }}</option>
-					
-					{% endfor %}
-				    
-					</select>
-					
-				    </div>
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Adresse principale</span>
+                </div>
+                <div class="widget-content">
+
+                    {#    				{% if adressePrincipale == 'famille' %}
+
+                                            <ul class="data-liste">
+                                                <li><h4>Adresse familiale</h4></li>
+                                                <li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.rue">{{ membre.famille.adresse.rue }}</span></li>
+                                                <li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.npa">{{ membre.famille.adresse.npa }}</span></li>
+                                                <li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.localite">{{ membre.famille.adresse.localite }}</span></li>
+                                                <li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.facturable" {% if membre.famille.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
+                                                <li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.remarques">{{ membre.famille.adresse.remarques }}</span></li>
+                                            </ul>
+
+                                        {% elseif adressePrincipale == 'membre' %}
+
+                                            <ul class="data-liste">
+                                                <li><h4>Adresse du membre</h4></li>
+                                                <li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.rue">{{ membre.adresse.rue }}</span></li>
+                                                <li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.npa">{{ membre.adresse.npa }}</span></li>
+                                                <li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.localite">{{ membre.adresse.localite }}</span></li>
+                                                <li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.facturable" {% if membre.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
+                                                <li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.remarques">{{ membre.adresse.remarques }}</span></li>
+                                            </ul>
+
+                                        {% endif %}#}
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-7">
+
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Adresses disponibles</span>
+                </div>
+
+                <div class="widget-content">
+
+                    <div class="panel-group accordeon" id="adresses-accordeon">
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Adresse du
+                                        membre</a>
+                                </h4>
+                            </div>
+
+                            <div id="collapseOne" class="panel-collapse collapse">
+                                <div class="panel-body">
+
+                                    <ul class="data-liste">
+                                        <li><strong>Rue</strong><span class="editable"
+                                                                      name="InterneFichierBundle.membre.{{ membre.id }}.adresse.rue">{{ membre.adresse.rue }}</span>
+                                        </li>
+                                        <li><strong>NPA</strong><span class="editable"
+                                                                      name="InterneFichierBundle.membre.{{ membre.id }}.adresse.npa">{{ membre.adresse.npa }}</span>
+                                        </li>
+                                        <li><strong>Localité</strong><span class="editable"
+                                                                           name="InterneFichierBundle.membre.{{ membre.id }}.adresse.localite">{{ membre.adresse.localite }}</span>
+                                        </li>
+                                        <li><strong>Facturable</strong><input type="checkbox" class="toggle-editable"
+                                                                              name="InterneFichierBundle.membre.{{ membre.id }}.adresse.facturable"
+                                                                              {% if membre.adresse.facturable == 1 %}checked{% else %}{% endif %}>
+                                        </li>
+                                        <li><strong>Remarques</strong><span class="editable"
+                                                                            name="InterneFichierBundle.membre.{{ membre.id }}.adresse.remarques">{{ membre.adresse.remarques }}</span>
+                                        </li>
+                                    </ul>
+
                                 </div>
-				
-			    </fieldset>
-                                
-			    <!-- partie gérée dynamiquement côté javascript -->
-			    <div id="attributions-membre-fieldset-dynamics">
-				
-			    </div>
-                            
-                        </form>
-		    
-		    </div>
-		    
-		    <div class="modal-footer">
-			<button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-			<button type="button" onclick="addAttributionsToMembre();" class="btn btn-primary">Valider</button>
-		    </div>
-		</div>
-	    </div>
-	</div>
-	
-	<!-- on stocke l'id du membre pour pouvoir la récupérer -->
-	<input type="hidden" value="{{ membre.id }}" id="membre-id" />
+                            </div>
+                        </div>
+
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Adresse
+                                        familiale</a>
+                                </h4>
+                            </div>
+
+                            <div id="collapseTwo" class="panel-collapse collapse">
+                                <div class="panel-body">
+
+                                    <ul class="data-liste">
+                                        <li><strong>Rue</strong><span class="editable"
+                                                                      name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.rue">{{ membre.famille.adresse.rue }}</span>
+                                        </li>
+                                        <li><strong>NPA</strong><span class="editable"
+                                                                      name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.npa">{{ membre.famille.adresse.npa }}</span>
+                                        </li>
+                                        <li><strong>Localité</strong><span class="editable"
+                                                                           name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.localite">{{ membre.famille.adresse.localite }}</span>
+                                        </li>
+                                        <li><strong>Facturable</strong><input type="checkbox" class="toggle-editable"
+                                                                              name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.facturable"
+                                                                              {% if membre.famille.adresse.facturable == 1 %}checked{% else %}{% endif %}>
+                                        </li>
+                                        <li><strong>Remarques</strong><span class="editable"
+                                                                            name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.remarques">{{ membre.famille.adresse.remarques }}</span>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Groupes par attributions actives</span>
+                </div>
+
+                <div class="widget-content">
+
+                    {% for hierarchie in hierarchies %}
+
+                        <div class="flex groupe-container">
+
+                            {% for groupe in hierarchie %}
+
+                                <a class="groupe" href="{{ path('InterneStructure_voir_groupe', {id: groupe.id}) }}">
+                                    {{ groupe.nom }}
+                                </a>
+
+                                <span class="glyphicon glyphicon-chevron-right"></span>
+
+                            {% endfor %}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-8">
+
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Attributions</span>
+
+                    <div class="widget-toolbar">
+                        <button data-toggle="modal" data-target="#modal-add-attributions-perso">Ajouter une
+                            attribution
+                        </button>
+                    </div>
+                </div>
+
+                <div class="widget-content">
+
+                    <table class="datatable">
+
+                        <thead>
+                        <tr>
+                            <th>Fonction</th>
+                            <th>Groupe</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                            <th style="width:130px">Options</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+
+                        {% for attribution in membre.attributions %}
+
+                            <tr>
+                                <td>
+                                    <p class="final-val">{{ attribution.fonction.nom }}</p>
+
+                                    <p class="modifikator-val">
+                                        <select>
+                                            <option value="{{ attribution.fonction.id }}">{{ attribution.fonction.nom }}</option>
+                                            <option disabled>──────────</option>
+
+                                            {% for fonction in fonctions %}
+                                                <option value="{{ fonction.id }}">{{ fonction.nom }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </p>
+                                </td>
+                                <td>
+                                    <a class="final-val"
+                                       href="{{ path('InterneStructure_voir_groupe', {id: attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a>
+
+                                    <p class="modifikator-val">
+                                        <select>
+                                            <option value="{{ attribution.groupe.id }}">{{ attribution.groupe.nom }}</option>
+                                            <option disabled>──────────</option>
+
+                                            {% for groupe in groupes %}
+                                                <option value="{{ groupe.id }}">{{ groupe.nom }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </p>
+                                </td>
+                                <td>
+                                    <p class="final-val">{{ attribution.dateDebut | date("d.m.Y") }}</p>
+
+                                    <p class="modifikator-val"><input type="text" class="datepicker"/></p>
+                                </td>
+                                <td>
+                                    <p class="final-val">{{ attribution.dateFin | datum }}</p>
+
+                                    <p class="modifikator-val"><input type="text" class="datepicker"/></p>
+                                </td>
+                                <td>
+                                    <a onclick="return confirm('Etes-vous sur de vouloir supprimer cette attribution ?  {{ attribution.fonction.nom }} - {{ attribution.groupe.nom }}');"
+                                       class="btn btn-xs btn-default"
+                                       href="{{ path('InterneStructure_remove_attribution', {attributionId: attribution.id}) }}"><span
+                                                class="glyphicon glyphicon-lg glyphicon-remove"
+                                                title="supprimer"></span></a>
+                                    <a class="btn btn-xs btn-default" name="attrModifButton-{{ attribution.id }}"
+                                       onclick="modifyAttribution(this, {{ attribution.id }});"><span
+                                                class="glyphicon glyphicon-edit"></span></a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+        {#		<div class="col-lg-4">
+
+                    <div class="widget">
+                        <div class="widget-title">
+                            <span>Distinctions</span>
+
+                            <div class="widget-toolbar">
+                                <button onclick="addObtentionDistinction()">Ajouter une distinction</button>
+                            </div>
+                        </div>
+
+                        <div class="widget-content">
+
+                            <table class="table datatable">
+
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Date d'obtention</th>
+                                        <th>Options</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    {% for distinction in membre.distinctions %}
+
+                                    <tr>
+                                        <td>{{ distinction.distinction.nom }}</td>
+                                        <td>{{ distinction.obtention | date("d.m.Y") }}</td>
+                                        <td></td>
+                                    </tr>
+
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+                    </div>
+
+                </div>#}
+
+    </div>
+
+    <div class="modal fade" id="modal-add-attributions-perso" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                                aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Ajouter des attributions
+                        à {{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- on génère la liste des groupes disponibles en hidden pour pouvoir la copier au fur et à mesure -->
+                    <select style="display:none" class="attributions-membre-groupes-prototype">
+                        {% for groupe in groupes %}
+                            <option value="{{ groupe.id }}">{{ groupe.nom }}</option>
+                        {% endfor %}
+                    </select>
+                    <!-- / -->
+
+                    <form method="post" action="#">
+
+                        <fieldset>
+
+                            <div class="row">
+                                <div class="col-sm-3"><label>Fonction (s)</label></div>
+                                <div class="col-sm-9">
+                                    <select id="attributions-membre-fonctions-dynamics" multiple class="chosen">
+
+                                        {% for fonction in fonctions %}
+
+                                            <option value="{{ fonction.id }}__{{ fonction.nom }}">{{ fonction.nom }}</option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+                            </div>
+
+                        </fieldset>
+
+                        <!-- partie gérée dynamiquement côté javascript -->
+                        <div id="attributions-membre-fieldset-dynamics">
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+                    <button type="button" onclick="addAttributionsToMembre();" class="btn btn-primary">Valider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- on stocke l'id du membre pour pouvoir la récupérer -->
+    <input type="hidden" value="{{ membre.id }}" id="membre-id"/>
 
 {% endblock %}
 
 {% block javascript %}
-    
+
     <script src="{{ asset('static/js/modifikator.js') }}"></script>
     <script src="{{ asset('static/js/membres.js') }}"></script>
-    
+
 {% endblock %}
