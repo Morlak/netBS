@@ -53,4 +53,31 @@ class SearchController extends Controller
     	$function = 'findBy' . ucfirst($field);
     	return $repo->$function($data);
     }
+
+    public function searchMembers()
+    {
+
+        $infos = array();
+
+        $mRepo = $this->getDoctrine()->getManager()->getRepository('InterneFichierBundle:Membre');
+
+        $members = $mRepo->findAll();
+
+        foreach ($members as $member) {
+
+            $attr = $member->getActiveAttributions();
+
+            $infos[] = array(
+
+                'id' => $member->getId(),
+                'prenom' => $member->getPrenom(),
+                'nom' => $member->getFamille()->getNom(),
+                'fonction' => ($attr[0] != null) ? $attr[0]->getFonction()->getNom() : '',
+                'groupe' => ($attr[0] != null) ? $attr[0]->getGroupe()->getNom() : '',
+                'numeroBS' => $member->getNumeroBS()
+            );
+        }
+
+        return new JsonResponse($infos);
+    }
 }

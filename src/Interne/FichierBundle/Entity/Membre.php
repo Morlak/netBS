@@ -255,7 +255,6 @@ class Membre extends Personne
     }
 
 
-
     /**
      * Set naissance
      *
@@ -337,8 +336,15 @@ class Membre extends Personne
     }
 
 
-
-
+    /**
+     * Get active attributions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActiveAttributions()
+    {
+        return $this->attributions; //TODO: filter active attributions
+    }
 
 
     /**
@@ -368,7 +374,8 @@ class Membre extends Personne
      * @param Adresse $adresse
      * @return Membre
      */
-    public function setAdressePrincipale(\Interne\FichierBundle\Entity\Adresse $adresse = null) {
+    public function setAdressePrincipale(\Interne\FichierBundle\Entity\Adresse $adresse = null)
+    {
         $this->adressePrincipale = $adresse;
 
         return $this;
@@ -423,7 +430,7 @@ class Membre extends Personne
     public function addDistinction(\Interne\StructureBundle\Entity\ObtentionDistinction $distinction)
     {
         $this->distinctions[] = $distinction;
-	    $distinction->setMembre($this);
+        $distinction->setMembre($this);
         return $this;
     }
 

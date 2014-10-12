@@ -38,7 +38,7 @@ class HomeController extends Controller
      * une recherche avancée, traitement des données par ajax
      */
     public function rechercherAction() {
-    	
-    	return $this->render('InterneHomeBundle:Default:rechercher.html.twig');
+
+        return $this->render('InterneSearchBundle:Search:search.html.twig');
     }
 }

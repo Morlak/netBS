@@ -3,10 +3,10 @@
 <html lang="fr">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
     <title>Net BS - {% block title %}{% endblock %}</title>
-    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{{ asset('static/css/aristo.css') }}" type="text/css">
@@ -16,7 +16,7 @@
     {% block stylesheets %}
 
     {% endblock %}
-   	
+
     <link rel="stylesheet/less" href="{{ asset('static/less/netbs.less') }}" type="text/css">
     <script src="{{ asset('static/js/less.js') }}" type="text/javascript"></script>
 
@@ -24,416 +24,442 @@
 
 <body>
 
-    <div id="error-dialog" title="Une erreur est survenue">
-        <iframe id="error-content" src="about:blank" width="0" height="0"></iframe>
+<div id="error-dialog" title="Une erreur est survenue">
+    <iframe id="error-content" src="about:blank" width="0" height="0"></iframe>
+</div>
+
+<div class="container-fluid">
+
+    <div id="ajax-panel">
+        <div id="ajax-d1"></div>
+        <div id="ajax-d2"></div>
+        <div id="ajax-d3"></div>
+        <div id="ajax-d4"></div>
+        <div id="ajax-d5"></div>
     </div>
 
-    <div class="container-fluid">
-	
-	<div id="ajax-panel">
-	    <div id="ajax-d1"></div>
-	    <div id="ajax-d2"></div>
-	    <div id="ajax-d3"></div>
-	    <div id="ajax-d4"></div>
-	    <div id="ajax-d5"></div>
-	</div>
-    	
-    	<div class="row">
-    		
-    		{{ render(controller('InterneHomeBundle:Layout:menu')) }}
-			
-			<div id="corpus">
-			    
-			    <div id="flash-container">
-				
-				{% for flash in app.session.flashBag.get('notice') %}
-				    
-				    <div class="row">
-					<div class="alert alert-info alert-dismissible col-lg-6 col-lg-offset-3" role="alert">
-					    <button type="button" class="close" data-dismiss="alert">
-						<span aria-hidden="true">&times;</span>
-						<span class="sr-only">Close</span>
-					    </button>
-					    <strong>{{ flash }}</strong>
-					</div>
-				    </div>
-				    
-				{% endfor %}
-				
-				{% for flash in app.session.flashBag.get('error') %}
-				    
-				    <div class="row">
-					<div class="alert alert-danger alert-dismissible col-lg-6 col-lg-offset-3" role="alert">
-					    <button type="button" class="close" data-dismiss="alert">
-						<span aria-hidden="true">&times;</span>
-						<span class="sr-only">Close</span>
-					    </button>
-					    <strong>{{ flash }}</strong>
-					</div>
-				    </div>
-				    
-				{% endfor %}
-			    
-			    </div>
-				
-				<div id="title-data">
-					
-					<div id="main-title">
-                        <p>NetBS - Dashboard</p>
+    <div class="row">
+
+        {{ render(controller('InterneHomeBundle:Layout:menu')) }}
+
+        <div id="corpus">
+
+            <div id="flash-container">
+
+                {% for flash in app.session.flashBag.get('notice') %}
+
+                    <div class="row">
+                        <div class="alert alert-info alert-dismissible col-lg-6 col-lg-offset-3" role="alert">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <strong>{{ flash }}</strong>
+                        </div>
                     </div>
-					
-					<div id="top-links">
-						
-						<button onclick="retrieveListing()">Listing</button>
-					
-					</div>
-					
-				</div> <!-- /#title-data -->
-				
-				<div id="position">
-					
-					<div>
-                        <span>NetBS</span>
-                        <img src="{{ asset('static/images/layout/arrow-right.png') }}" />
-						<span>{{ block('title') }}</span>
-					</div>
-					
-					<div>
 
-						<div class="btn-group">
-						
-							{% block layoutOptions %}
-							
-							{% endblock %}
-							
-						</div>
-						
-					</div>
-					
-				</div> <!-- /#position -->
-				
-				<div id="dynamic-content">
-					
-					{% block body %}
-					
-					{% endblock %}
-					
-				</div> <!-- /#dynamic-content -->
-				
-			</div>
-    		
-    	</div>
-    	
-    </div>
-    
-    <!-- Modales globales -->
-    
-    <!-- modale listing -->
-    <div class="modal fade" id="listing-modal" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-		
-		<div class="modal-header">
-		    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
-		    <h4 class="modal-title">Liste dynamique<span id="listing-modal-title"></span></h4>
-		</div>
-		
-		<div id="listing-modal-content" class="modal-body">
-		    <p><strong>Attention : </strong>Les checkbox ici ne servent que pour supprimer des éléments du listing, les autres fonctions influenceront directement tout le monde, coché ou non</p>
-		    <table id="listing-table">
-			<thead>
-			    <tr>
-				<th class="col-cb"></th>
-				<th>prénom</th>
-				<th>nom</th>
-				<th>numéro BS</th>
-				<th>Fonction</th>
-				<th>Unité</th>
-			    </tr>
-			</thead>
-		    </table>
-		    
-		    <div id="listing-options">
-			
-			<button class="btn btn-danger" onclick="listingRemove();">Supprimer <span id="listing-remove-span">(0)</span></button>
-			<button class="btn btn-info" onclick="exportListing('pdf');">Exporter en PDF</button>
-			<button class="btn btn-info" onclick="exportListing('xls');">Exporter en Excel</button>
-			
-		    </div>
-		    
-		</div>
-		
-		<div class="modal-footer">
-		    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-		</div>
-		
-	    </div>
-	</div>
-    </div>
-    
-    <!-- modale attributions adder -->
-    <div class="modal fade" id="modal-adder-attributions" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-		
-		<div class="modal-header">
-		    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
-		    <h4 class="modal-title">Masse d'attributions</h4>
-		</div>
-		
-		<div id="adder-attributions-modal-content" class="modal-body">
-		    
-		    <input type="hidden" id="adder-attributions-ids" />
-		    
-		    <div class="panel-group" id="adder-attributions">
-			<div class="panel panel-default">
-			    <div class="panel-heading">
-				
-				<h4 class="panel-title">
-				    <a data-toggle="collapse" data-parent="#adder-attributions" href="#adder-add-attributions">
-					Ajouter des attributions
-				    </a>
-				</h4>
-			    </div>
-			    
-			    <div id="adder-add-attributions" class="panel-collapse collapse">
-				<div class="panel-body">
-				    
-				    <form id="adder-add-attributions-form">
-					
-					<fieldset>
-					    
-					    <div class="row">
-						<div class="col-sm-3"><label>Fonction</label></div>
-						<div class="col-sm-9">
-						    <select id="adder-add-attributions-fonctions"></select>
-						</div>
-					    </div>
-					    
-					</fieldset>
-					    
-					    <!-- pour chaque membre, on propose de choisir un groupe pour l'attribution -->
-					    
-					<fieldset id="adder-add-attributions-membres-groupes"></fieldset>
-					
-					<fieldset>
-					    
-					    <div class="row">
-						<div class="col-sm-3"><label>Date de Début</label></div>
-						<div class="col-sm-9">
-						    <input type="text" class="datepicker" id="adder-add-attributions-debut" />
-						</div>
-					    </div>
-					    
-					    <div class="row">
-						<div class="col-sm-3"><label>Date de Fin</label></div>
-						<div class="col-sm-9">
-						    <input type="text" class="datepicker" id="adder-add-attributions-fin" />
-						</div>
-					    </div>
-					    
-					    <div class="row">
-						<div class="col-sm-3"></div>
-						<div class="col-sm-9">
-						    <a class="btn btn-primary btn-lg" onclick="adderAddAttributions();">Ajouter des attributions en masse</a>
-						</div>
-					    </div>
-					    
-					</fieldset>
-				    
-				    </form>
-				    
-				</div>
-			    </div>
-			</div>
-			
-			<div class="panel panel-default">
-			    <div class="panel-heading">
-				
-				<h4 class="panel-title">
-				    <a data-toggle="collapse" data-parent="#adder-attributions" href="#adder-end-attributions">
-					Terminer des attributions
-				    </a>
-				</h4>
-			    </div>
-			    
-			    <div id="adder-end-attributions" class="panel-collapse collapse">
-				<div class="panel-body">
-				    <p>Pour terminer des attributions, choisissez un paramètre de fin parmi la fonction, le groupe, ou la date de début de l'ensemble des attributions à terminer</p>
-				    
-				    <form>
-				     
-					<fieldset>
-					    
-					    <div class="row">
-						<div class="col-sm-3"><label>Terminer par</label></div>
-						<div class="col-sm-6">
-						    
-						    <select id="adder-end-attributions-parametre-select" onchange="updateAdderEndAttributions();">
-							<option value="fonction">Fonction</option>
-							<option value="groupe">Groupe</option>
-							<option value="debut">Date de Début</option>
-						    </select>
-						    
-						</div>
-					    </div>
-					    
-					</fieldset>
-					
-					<fieldset id="adder-end-attributions-parametre-fonction" class="adder-end-attributions-parametre-fieldset">
-					    
-					    <div class="row">
-						<div class="col-sm-3"><label>Fonction</label></div>
-						<div class="col-sm-6"><select id="adder-end-attributions-parameter-fonction"></select></div>
-					    </div>
-					    
-					</fieldset>
-					    
-					<fieldset id="adder-end-attributions-parametre-groupe" class="adder-end-attributions-parametre-fieldset" style="display:none">
-					    
-					    <div class="row">
-						<div class="col-sm-3"><label>Groupe</label></div>
-						<div class="col-sm-6"><select id="adder-end-attributions-parameter-groupe"></select></div>
-					    </div>
-					    
-					</fieldset>
-					
-					<fieldset id="adder-end-attributions-parametre-debut" class="adder-end-attributions-parametre-fieldset" style="display:none">
-					    
-					    <div class="row">
-						<div class="col-sm-3"><label>Date de début</label></div>
-						<div class="col-sm-6"><select id="adder-end-attributions-parameter-debut"></select></div>
-					    </div>
-					    
-					</fieldset>
-					
-					<fieldset>
-					    
-					    <div class="row">
-						<div class="col-sm-3"><label>Date de fin (facultatif)</label></div>
-						<div class="col-sm-6"><input type="text" id="adder-end-attributions-end" class="datepicker" /></div>
-					    </div>
-					    
-					    <div class="row">
-						<div class="col-sm-3"></div>
-						<div class="col-sm-6"><a type="button" class="btn btn-primary btn-lg" onclick="adderEndAttributions();">Finir les attributions</a></div>
-					    </div>
-					    
-					</fieldset>
-				    
-				    </form>
-				    
-				</div>
-			    </div>
-			</div>
-		    </div>
-		</div>
-		
-		<div class="modal-footer">
-		    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-		</div>
-		
-	    </div>
-	</div>
-    </div>
-	
-    <!-- modale distinctions adder -->
-    <div class="modal fade" id="modal-adder-distinctions" tabindex="-1" role="dialog" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-	    <div class="modal-content">
-		
-		<div class="modal-header">
-		    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fermer</span></button>
-		    <h4 class="modal-title">Masse de distinctions</h4>
-		</div>
-		
-		<div id="adder-distinctions-modal-content" class="modal-body">
-		       
-		    <input type="hidden" id="adder-distinctions-ids" />
-			    
-		    <div class="panel-group" id="adder-distinctions">
-			<div class="panel panel-default">
-			    <div class="panel-heading">
-				
-				<h4 class="panel-title">
-				    <a data-toggle="collapse" data-parent="#adder-distinctions" href="#adder-add-distinctions">
-					Ajouter des distinctions
-				    </a>
-				</h4>
-			    </div>
-			    
-			    <div id="adder-add-distinctions" class="panel-collapse collapse">
-				<div class="panel-body">
-				    
-				    <form id="adder-add-distinctions-form">
-					
-					<fieldset>
-					    
-					    <div class="row">
-						<div class="col-sm-3"><label>Distinction</label></div>
-						<div class="col-sm-9">
-						    <select id="adder-add-distinctions-select" multiple></select>
-						</div>
-					    </div>
-					    
-					    <div class="row">
-						<div class="col-sm-3"><label>Date d'obtention (facultatif)</label></div>
-						<div class="col-sm-9">
-						    <input type="text" class="datepicker" id="adder-add-distinctions-date" />
-						</div>
-					    </div>
-					    
-					    <div class="row">
-						<div class="col-sm-3"></div>
-						<div class="col-sm-9">
-						    <a type="button" class="btn btn-primary btn-lg" onclick="adderAddDistinctions();">Ajouter des distinctions en masse</a>
-						</div>
-					    </div>
-					    
-					</fieldset>
-				    
-				    </form>
-				    
-				</div>
-			    </div>
-			</div>
-			
-		    </div>
-		 
-		</div>
-		
-		<div class="modal-footer">
-		    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
-		</div>
-		
-	    </div>
-	</div>
-    </div>
-    
-    
-    <!-- javascript n' shit -->
-    
-    <div id="debogger"></div>
-    
-    
-    <!-- perso -->
-    <script src="{{ asset('static/js/jquery.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('static/js/bootstrap.min.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('static/js/jquery-ui.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('static/js/expirationSession.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('static/js/jquery.dataTables.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('static/js/chosen.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('static/js/fonctions.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('static/js/listing.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('static/js/adder.js') }}" type="text/javascript"></script>
+                {% endfor %}
 
-    {% block javascript %}
-    {% endblock %}
-    
-    <!-- FOSJSBundle -->
-    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
-    
+                {% for flash in app.session.flashBag.get('error') %}
+
+                    <div class="row">
+                        <div class="alert alert-danger alert-dismissible col-lg-6 col-lg-offset-3" role="alert">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">&times;</span>
+                                <span class="sr-only">Close</span>
+                            </button>
+                            <strong>{{ flash }}</strong>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+            <div id="title-data">
+
+                <div id="main-title">
+                    <p>NetBS - Dashboard</p>
+                </div>
+
+                <div id="top-links">
+                    <input id="search" type="text" height="20px"/>
+                    <button onclick="retrieveListing()">Listing</button>
+
+                </div>
+
+            </div>
+            <!-- /#title-data -->
+
+            <div id="position">
+
+                <div>
+                    <span>NetBS</span>
+                    <img src="{{ asset('static/images/layout/arrow-right.png') }}"/>
+                    <span>{{ block('title') }}</span>
+                </div>
+
+                <div>
+
+                    <div class="btn-group">
+
+                        {% block layoutOptions %}
+
+                        {% endblock %}
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- /#position -->
+
+            <div id="dynamic-content">
+
+                {% block body %}
+
+                {% endblock %}
+
+            </div>
+            <!-- /#dynamic-content -->
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Modales globales -->
+
+<!-- modale listing -->
+<div class="modal fade" id="listing-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                            class="sr-only">Fermer</span></button>
+                <h4 class="modal-title">Liste dynamique<span id="listing-modal-title"></span></h4>
+            </div>
+
+            <div id="listing-modal-content" class="modal-body">
+                <p><strong>Attention : </strong>Les checkbox ici ne servent que pour supprimer des éléments du listing,
+                    les autres fonctions influenceront directement tout le monde, coché ou non</p>
+                <table id="listing-table">
+                    <thead>
+                    <tr>
+                        <th class="col-cb"></th>
+                        <th>prénom</th>
+                        <th>nom</th>
+                        <th>numéro BS</th>
+                        <th>Fonction</th>
+                        <th>Unité</th>
+                    </tr>
+                    </thead>
+                </table>
+
+                <div id="listing-options">
+
+                    <button class="btn btn-danger" onclick="listingRemove();">Supprimer <span id="listing-remove-span">(0)</span>
+                    </button>
+                    <button class="btn btn-info" onclick="exportListing('pdf');">Exporter en PDF</button>
+                    <button class="btn btn-info" onclick="exportListing('xls');">Exporter en Excel</button>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- modale attributions adder -->
+<div class="modal fade" id="modal-adder-attributions" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                            class="sr-only">Fermer</span></button>
+                <h4 class="modal-title">Masse d'attributions</h4>
+            </div>
+
+            <div id="adder-attributions-modal-content" class="modal-body">
+
+                <input type="hidden" id="adder-attributions-ids"/>
+
+                <div class="panel-group" id="adder-attributions">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#adder-attributions"
+                                   href="#adder-add-attributions">
+                                    Ajouter des attributions
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div id="adder-add-attributions" class="panel-collapse collapse">
+                            <div class="panel-body">
+
+                                <form id="adder-add-attributions-form">
+
+                                    <fieldset>
+
+                                        <div class="row">
+                                            <div class="col-sm-3"><label>Fonction</label></div>
+                                            <div class="col-sm-9">
+                                                <select id="adder-add-attributions-fonctions"></select>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+
+                                    <!-- pour chaque membre, on propose de choisir un groupe pour l'attribution -->
+
+                                    <fieldset id="adder-add-attributions-membres-groupes"></fieldset>
+
+                                    <fieldset>
+
+                                        <div class="row">
+                                            <div class="col-sm-3"><label>Date de Début</label></div>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="datepicker"
+                                                       id="adder-add-attributions-debut"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-3"><label>Date de Fin</label></div>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="datepicker" id="adder-add-attributions-fin"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-3"></div>
+                                            <div class="col-sm-9">
+                                                <a class="btn btn-primary btn-lg" onclick="adderAddAttributions();">Ajouter
+                                                    des attributions en masse</a>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#adder-attributions"
+                                   href="#adder-end-attributions">
+                                    Terminer des attributions
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div id="adder-end-attributions" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <p>Pour terminer des attributions, choisissez un paramètre de fin parmi la fonction, le
+                                    groupe, ou la date de début de l'ensemble des attributions à terminer</p>
+
+                                <form>
+
+                                    <fieldset>
+
+                                        <div class="row">
+                                            <div class="col-sm-3"><label>Terminer par</label></div>
+                                            <div class="col-sm-6">
+
+                                                <select id="adder-end-attributions-parametre-select"
+                                                        onchange="updateAdderEndAttributions();">
+                                                    <option value="fonction">Fonction</option>
+                                                    <option value="groupe">Groupe</option>
+                                                    <option value="debut">Date de Début</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+
+                                    <fieldset id="adder-end-attributions-parametre-fonction"
+                                              class="adder-end-attributions-parametre-fieldset">
+
+                                        <div class="row">
+                                            <div class="col-sm-3"><label>Fonction</label></div>
+                                            <div class="col-sm-6"><select
+                                                        id="adder-end-attributions-parameter-fonction"></select></div>
+                                        </div>
+
+                                    </fieldset>
+
+                                    <fieldset id="adder-end-attributions-parametre-groupe"
+                                              class="adder-end-attributions-parametre-fieldset" style="display:none">
+
+                                        <div class="row">
+                                            <div class="col-sm-3"><label>Groupe</label></div>
+                                            <div class="col-sm-6"><select
+                                                        id="adder-end-attributions-parameter-groupe"></select></div>
+                                        </div>
+
+                                    </fieldset>
+
+                                    <fieldset id="adder-end-attributions-parametre-debut"
+                                              class="adder-end-attributions-parametre-fieldset" style="display:none">
+
+                                        <div class="row">
+                                            <div class="col-sm-3"><label>Date de début</label></div>
+                                            <div class="col-sm-6"><select
+                                                        id="adder-end-attributions-parameter-debut"></select></div>
+                                        </div>
+
+                                    </fieldset>
+
+                                    <fieldset>
+
+                                        <div class="row">
+                                            <div class="col-sm-3"><label>Date de fin (facultatif)</label></div>
+                                            <div class="col-sm-6"><input type="text" id="adder-end-attributions-end"
+                                                                         class="datepicker"/></div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-3"></div>
+                                            <div class="col-sm-6"><a type="button" class="btn btn-primary btn-lg"
+                                                                     onclick="adderEndAttributions();">Finir les
+                                                    attributions</a></div>
+                                        </div>
+
+                                    </fieldset>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- modale distinctions adder -->
+<div class="modal fade" id="modal-adder-distinctions" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                            class="sr-only">Fermer</span></button>
+                <h4 class="modal-title">Masse de distinctions</h4>
+            </div>
+
+            <div id="adder-distinctions-modal-content" class="modal-body">
+
+                <input type="hidden" id="adder-distinctions-ids"/>
+
+                <div class="panel-group" id="adder-distinctions">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#adder-distinctions"
+                                   href="#adder-add-distinctions">
+                                    Ajouter des distinctions
+                                </a>
+                            </h4>
+                        </div>
+
+                        <div id="adder-add-distinctions" class="panel-collapse collapse">
+                            <div class="panel-body">
+
+                                <form id="adder-add-distinctions-form">
+
+                                    <fieldset>
+
+                                        <div class="row">
+                                            <div class="col-sm-3"><label>Distinction</label></div>
+                                            <div class="col-sm-9">
+                                                <select id="adder-add-distinctions-select" multiple></select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-3"><label>Date d'obtention (facultatif)</label></div>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="datepicker" id="adder-add-distinctions-date"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-3"></div>
+                                            <div class="col-sm-9">
+                                                <a type="button" class="btn btn-primary btn-lg"
+                                                   onclick="adderAddDistinctions();">Ajouter des distinctions en
+                                                    masse</a>
+                                            </div>
+                                        </div>
+
+                                    </fieldset>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- javascript n' shit -->
+
+<div id="debogger"></div>
+
+
+<!-- perso -->
+<script src="{{ asset('static/js/jquery.js') }}" type="text/javascript"></script>
+<script src="{{ asset('static/js/bootstrap.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('static/js/jquery-ui.js') }}" type="text/javascript"></script>
+<script src="{{ asset('static/js/expirationSession.js') }}" type="text/javascript"></script>
+<script src="{{ asset('static/js/jquery.dataTables.js') }}" type="text/javascript"></script>
+<script src="{{ asset('static/js/chosen.js') }}" type="text/javascript"></script>
+<script src="{{ asset('static/js/fonctions.js') }}" type="text/javascript"></script>
+<script src="{{ asset('static/js/listing.js') }}" type="text/javascript"></script>
+<script src="{{ asset('static/js/adder.js') }}" type="text/javascript"></script>
+
+{% block javascript %}
+{% endblock %}
+
+<!-- FOSJSBundle -->
+<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
 
 </body>
 

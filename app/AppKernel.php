@@ -16,10 +16,12 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new Externe\GalerieBundle\ExterneGalerieBundle(),
-            new Interne\GlobalBundle\InterneGlobalBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+
+            new Externe\GalerieBundle\ExterneGalerieBundle(),
             new Externe\PublicBundle\ExternePublicBundle(),
+
+            new Interne\GlobalBundle\InterneGlobalBundle(),
             new Interne\FichierBundle\InterneFichierBundle(),
             new Interne\HomeBundle\InterneHomeBundle(),
             new Interne\SearchBundle\InterneSearchBundle(),
