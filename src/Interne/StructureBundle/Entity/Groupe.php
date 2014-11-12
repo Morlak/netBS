@@ -51,7 +51,7 @@ class Groupe
     /**
      * @var Type $type
      * 
-     * @ORM\ManyToOne(targetEntity="Type", inversedBy="groupes", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Type", inversedBy="groupes")
      * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      */
     private $type;

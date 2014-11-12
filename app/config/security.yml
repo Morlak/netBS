@@ -28,5 +28,5 @@ security:
                 target: /
 
     access_control:
-        - { path: ^/interne, roles: ROLE_YOLO }
+        - { path: ^/interne, roles: ROLE_ADMIN }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

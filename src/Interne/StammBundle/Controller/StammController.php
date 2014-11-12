@@ -58,8 +58,8 @@ class StammController extends Controller
      * - gérer l'agenda
      */
     public function dashboardShowAction() {
-    	
-    	// On instancie les entities
+
+        // On instancie les entities
     	$news 	= new News();
     	$event 	= new Evenement();
     	$ddl 	= new Download();
@@ -96,9 +96,10 @@ class StammController extends Controller
     	
     	if($entity != 'News' && $entity != 'Evenement' && $entity != 'Download') 
     		throw $this->createNotFoundException('Accès impossible, données transmises incompatibles');
-    	
-    	
-    	//On instancie l'entité
+
+        $persistor = $this->get('global.persistor');
+
+        //On instancie l'entité
     	$nspc = 'Interne\StammBundle\Entity' . '\\' . $entity;
     	$type = 'Interne\StammBundle\Form' . '\\' . $entity . 'Type';
     	$obj  = new $nspc();
@@ -111,13 +112,16 @@ class StammController extends Controller
 				
 				//On persiste l'objet
 			    $em = $this->getDoctrine()->getManager();
-				$em->persist($obj);
+
+                if($entity == 'Download') $em->persist($obj);
+				else $persistor->safePersist($obj);
 				$em->flush();
 			}
 		}
 		
 		// On retourne de toute facon vers le dashboard
 		return $this->redirect($this->generateUrl('InterneStamm_dashboard'));
+
     }
     
     /**

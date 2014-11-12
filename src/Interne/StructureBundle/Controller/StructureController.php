@@ -24,13 +24,13 @@ class StructureController extends Controller
     public function hierarchieAction()
     {
     	$groupe  = new Groupe();
-	$form 	 = $this->createForm(new GroupeType, $groupe);
-	$em      = $this->getDoctrine()->getManager();
-	$session = new Session();
-	
-	//On récupère aussi le formulaire de type
-	$type = new Type();
-	$typeForm = $this->createForm(new TypeType, $type);
+        $form 	 = $this->createForm(new GroupeType, $groupe);
+        $em      = $this->getDoctrine()->getManager();
+        $session = new Session();
+
+        //On récupère aussi le formulaire de type
+        $type = new Type();
+        $typeForm = $this->createForm(new TypeType, $type);
 
         return $this->render('InterneStructureBundle:Structure:hierarchie.html.twig', array(
 	    
@@ -43,30 +43,37 @@ class StructureController extends Controller
      * permet d'ajouter un groupe
      */
     public function addGroupeAction() {
-	
-	$groupe  = new Groupe();
-	$form 	 = $this->createForm(new GroupeType, $groupe);
-	$em      = $this->getDoctrine()->getManager();
-	$session = new Session();
-	
-	//On valide un éventuel formulaire d'ajout de groupe
-	if ($this->getRequest()->isMethod('POST')) {
-		
-		$form->bind($this->getRequest());
-		
-		if ($form->isValid()) {
-			
-		    //On persiste le nouveau groupe
-		    $em->persist($groupe);
-		    $em->flush();
-		    $session->getFlashBag()->add('notice', 'Groupe ajouté avec succès');
-		}
-		
-		else
-		    $session->getFlashBag()->add('error', 'Erreur lors du traitement des données');
-	}
-	
-	return $this->redirect($this->generateUrl('InterneStructure_hierarchie'));
+
+        $groupe  = new Groupe();
+        $form 	 = $this->createForm(new GroupeType, $groupe);
+        $em      = $this->getDoctrine()->getManager();
+        $session = new Session();
+
+        //On valide un éventuel formulaire d'ajout de groupe
+        if ($this->getRequest()->isMethod('POST')) {
+
+            $form->bind($this->getRequest());
+
+            if ($form->isValid()) {
+
+                //On persiste le nouveau groupe
+                $persistor = $this->get('global.persistor');
+                $persistor->safePersist($groupe);
+
+                //$em->persist($groupe);
+                $em->flush();
+
+                if($persistor->hasValidatorRoles())
+                    $session->getFlashBag()->add('notice', 'Groupe ajouté avec succès');
+                else
+                    $session->getFlashBag()->add('notice', "Une demande d'ajout de groupe a été envoyée");
+            }
+
+            else
+                $session->getFlashBag()->add('error', 'Erreur lors du traitement des données');
+        }
+
+        return $this->redirect($this->generateUrl('InterneStructure_hierarchie'));
     }
     
     /**
@@ -87,8 +94,9 @@ class StructureController extends Controller
 		
 		
 		if($typeForm->isValid() ) {
-		    
-		    $em->persist($type);
+
+            $persistor = $this->get('global.persistor');
+		    $persistor->safePersist($type);
 		    $em->flush();
 		    $session->getFlashBag()->add('notice', 'Type ajouté avec succès');
 		}
@@ -133,24 +141,27 @@ class StructureController extends Controller
     	//On récupère les attributions liées à ce groupe
     	$aRepo		= $em->getRepository('InterneStructureBundle:Attribution');
 	
-	$troupe = false;
-	
-	//Si le groupe en question est un troupe
-	//alors on affiche la barre d'action spéciale troupe
-	if($groupe->getType() != null && strtolower($groupe->getType()->getNom()) == 'troupe') {
-	    
-	    $troupe = true;
-	}
+        $troupe = false;
+
+        //Si le groupe en question est un troupe
+        //alors on affiche la barre d'action spéciale troupe
+        if($groupe->getType() != null && strtolower($groupe->getType()->getNom()) == 'troupe') {
+
+            $troupe = true;
+        }
 
     	//On récupère également l'ensemble des attributions liées à ce groupe pour afficher
     	//les membres courants, donc également trouver les membres des groupes enfants possibles
-    	$attrs		= $aRepo->findCurrentAttributionsForThisGroupe($groupe);
+    	$attrs		= $aRepo->findAll();
+    	//$attrs		= $aRepo->findCurrentAttributionsForThisGroupe($groupe);
+
+        var_dump($attrs);
     	
     	return $this->render('InterneStructureBundle:Structure:voir_groupe.html.twig', array(
     		
     		'groupe'		=> $groupe,
     		'attrs'			=> $attrs,
-		'isTroupe'		=> $troupe
+		    'isTroupe'		=> $troupe
     	));
     }
     

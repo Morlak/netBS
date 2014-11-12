@@ -1,0 +1,87 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Validation{% endblock %}
+
+
+
+{% block body %}
+
+
+    <div class="row">
+
+        <div class="col-lg-12">
+
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Valider des changements</span>
+                </div>
+
+                <div class="widget-content">
+
+                    <table id="validatorTable">
+
+                        <thead>
+                            <th class="col-cb"></th>
+                            <th>Nom de l'entité</th>
+                            <th>Statut</th>
+                            <th>Modifé par</th>
+                            <th>Date</th>
+                            <th>Options</th>
+                        </thead>
+
+                        <tbody>
+
+                        {% for validation in validations %}
+
+                            <tr>
+                                <td><input type="checkbox" class="validation-cb" id="valid{{ validation.id }}" /></td>
+                                <td>{{ validation.className }}</td>
+                                <td>
+                                    {% if validation.statut == "CREATION" %}Ajout de données
+                                    {% elseif validation.statut == "SUPPRESSION" %}Suppression de données
+                                    {% else %}Modification de données{% endif %}
+                                </td>
+                                <td>{{ validation.user.membre.prenom|capitalize }} {{ validation.user.membre.nom|capitalize }}</td>
+                                <td>{{ validation.date|date("d.m.Y") }}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-default" onclick="extendedView({{ validation.id }})" title="Details"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    <a class="btn btn-sm btn-danger" onclick="requestValidation({{ validation.id }}, 'remove');" title="Annuler la modification"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a class="btn btn-sm btn-success" onclick="requestValidation({{ validation.id }}, 'persist');"  title="Valider la modification"><span class="glyphicon glyphicon-ok"></span></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                    <button class="btn btn-success" onclick="persistMultipleValidations()">Valider la sélection</button>
+                    <button class="btn btn-danger" onclick="removeMultipleValidations()">Supprimer la sélection</button>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="validatorExtendedData-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Informations détaillées</h4>
+                </div>
+                <div class="modal-body" id="validatorExtendedData-content"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+{% endblock %}
+
+{% block javascript %}
+    <script type="text/javascript" src="{{ asset('static/js/validator.js') }}"></script>
+{% endblock %}

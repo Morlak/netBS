@@ -1,35 +1,48 @@
-			
-			
+
+
 			<div id="navBar">
-				
+
 				<div class="user">
-				
+
 					<img src="{{ asset('static/images/logo.png') }}" />
-					
+
 					<a href="{{ path('logout') }}">Déconnexion</a>
 					<a onclick="modeVeille();">Veille</a>
-					
+
 				</div>
-				
+
 				<ul>
 					<li><a href="{{ path('InterneHome_accueil')}}"><span class="glyphicon glyphicon-home"></span> accueil</a></li>
 					<li><a href="{{ path('InterneHome_rechercher')}}"><span class="glyphicon glyphicon-search"></span> rechercher</a></li>
-					<li><a href="{{ path('InterneStamm_dashboard')}}"><span class="glyphicon glyphicon-tasks"></span> administration</a></li>
-
-
-                    <li><a><span class="glyphicon glyphicon-th-large"></span>
-                            Groupe{% if user.attributions|length > 1 %}s{% endif %}</a>
+					<li><a><span class="glyphicon glyphicon-tasks"></span> administration</a>
 
                         <ul>
-							{% for attribution in user.attributions %}
-								<li><a href="{{ path('InterneStructure_voir_groupe', {'id' : attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></li>
-							{% endfor %}
-						</ul>
-						
-					</li>
-					
+                            <li><a href="{{ path('InterneStamm_dashboard') }}">Stamm</a></li>
+                            <li><a href="{{ path('InterneGlobal_validator_dashboard') }}">Validation</a></li>
+                        </ul>
+                    </li>
+
+
+                    {%  if user.attributions is not null %}
+
+                        <li><a><span class="glyphicon glyphicon-th-large"></span>
+                                Groupe{% if user.attributions|length > 1 %}s{% endif %}</a>
+
+                            <ul>
+
+                                    {% for attribution in user.attributions %}
+                                        <li><a href="{{ path('InterneStructure_voir_groupe', {'id' : attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></li>
+                                    {% endfor %}
+
+
+                            </ul>
+
+                        </li>
+
+                    {% endif %}
+
 					<li><a><span class="glyphicon glyphicon-th"></span> Brigade</a>
-					
+
 						<ul>
                             <li><a href="{{ path('InterneStructure_hierarchie') }}">Hiérarchie des groupes</a></li>
                             <li><a href="{{ path('InterneStructure_attributions_fonctions') }}">Attributions et
@@ -37,19 +50,8 @@
                             <li><a href="{{ path('InterneStructure_distinctions') }}">Distinctions</a></li>
                         </ul>
 					</li>
-					
-					<li><a><span class="glyphicon glyphicon-folder-open"></span> Galerie</a>
-					
-						<ul>
-							<li><a href="{{ path('InterneGlobal_galerie_overview') }}">Paramètres</a></li>
-							
-							{% for droit in galeries %}
-								
-								<li><a href="{{ path('InterneGlobal_galerie_groupe', {'id' : droit.id}) }}">Galerie - {{ droit.groupe.nom }}</a></li>
-							
-							{% endfor %}
-						</ul>
-					</li>
+
+
 				</ul>
-				
+
 			</div> <!-- /#navBar -->

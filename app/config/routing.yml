@@ -19,11 +19,6 @@ externe_home:
     resource: "@ExternePublicBundle/Resources/config/routing.yml"
     prefix:   /
 
-externe_galerie:
-    resource: "@ExterneGalerieBundle/Resources/config/routing.yml"
-    prefix:   /galerie
-
-
 
 #routes de l'intranet
 #zone sécurisée

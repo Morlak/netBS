@@ -18,7 +18,6 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
 
-            new Externe\GalerieBundle\ExterneGalerieBundle(),
             new Externe\PublicBundle\ExternePublicBundle(),
 
             new Interne\GlobalBundle\InterneGlobalBundle(),
@@ -27,7 +26,8 @@ class AppKernel extends Kernel
             new Interne\SearchBundle\InterneSearchBundle(),
             new Interne\SecurityBundle\InterneSecurityBundle(),
             new Interne\StammBundle\InterneStammBundle(),
-            new Interne\StructureBundle\InterneStructureBundle()
+            new Interne\StructureBundle\InterneStructureBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
