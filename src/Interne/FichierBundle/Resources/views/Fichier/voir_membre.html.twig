@@ -1,26 +1,42 @@
 {% extends "InterneHomeBundle::layout.html.twig" %}
 
-{% form_theme membreForm 'InterneFichierBundle:Form:form_template.html.twig' %}
-{% form_theme membreContactForm 'InterneFichierBundle:Form:form_template.html.twig' %}
-{% form_theme membreFamilleForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+{% if membre.id != null %}
 
-{% form_theme familleForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+    {% form_theme membreForm 'InterneFichierBundle:Form:form_viewer_template.html.twig' %}
+    {% form_theme membreContactForm 'InterneFichierBundle:Form:form_viewer_template.html.twig' %}
+    {% form_theme membreFamilleForm 'InterneFichierBundle:Form:form_viewer_template.html.twig' %}
+    {% form_theme familleForm 'InterneFichierBundle:Form:form_viewer_template.html.twig' %}
 
-{% block title %}{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }} | Fiche de membre{% endblock %}
+{% else %}
+
+    {% form_theme membreForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+    {% form_theme membreContactForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+    {% form_theme membreFamilleForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+    {% form_theme familleForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+
+{% endif %}
+
+{% block title %}
+    {%  if membre.id == null %}Nouveau membre{% else %}{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}{% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('static/css/bootstrap-editable.css') }}" type="text/css">
+{% endblock %}
 
 
 {% block body %}
 
     <div class="row">
         <div class="col-lg-11 col-lg-offset-1">
-            <h3>{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}</h3>
+            <h3>{% if membre.id == null %}Informations de base{% else %}{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}{% endif %}</h3>
         </div>
     </div>
 
     <div class="row">
 
         <div class="col-lg-6">
-            <form class="form-horizontal ajaxedit" role="form" method="post" {{ form_enctype(membreForm) }}>
+
                 <div class="widget">
 
                     <div class="widget-title">
@@ -28,15 +44,17 @@
                     </div>
 
                     <div class="widget-content">
-                        {{ form_widget(membreForm) }}
+
+                        <form class="form-horizontal ajaxedit" role="form" method="post" {{ form_enctype(membreForm) }}>
+                            {{ form_widget(membreForm) }}
+                        </form>
+
                     </div>
                 </div>
-            </form>
         </div>
 
 
         <div class="col-lg-6">
-            <form class="form-horizontal ajaxedit" role="form" method="post" {{ form_enctype(membreFamilleForm) }}>
                 <div class="widget">
 
                     <div class="widget-title">
@@ -44,11 +62,14 @@
                     </div>
 
                     <div class="widget-content">
-                        {{ form_widget(membreFamilleForm) }}
-                        {{ form_widget(familleForm) }}
+                        <form class="form-horizontal ajaxedit" role="form" method="post" {{ form_enctype(membreFamilleForm) }}>
+
+                            {{ form_widget(membreFamilleForm) }}
+                            {{ form_widget(familleForm) }}
+
+                        </form>
                     </div>
                 </div>
-            </form>
         </div>
 
 
@@ -685,6 +706,7 @@
 {% block javascript %}
 
     <script src="{{ asset('static/js/modifikator.js') }}"></script>
+    <script src="{{  asset('static/js/bootstrap-editable.min.js') }}"></script>
     <script src="{{ asset('static/js/membres.js') }}"></script>
 
 {% endblock %}

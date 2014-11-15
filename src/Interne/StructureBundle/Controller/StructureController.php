@@ -155,8 +155,6 @@ class StructureController extends Controller
     	$attrs		= $aRepo->findAll();
     	//$attrs		= $aRepo->findCurrentAttributionsForThisGroupe($groupe);
 
-        var_dump($attrs);
-    	
     	return $this->render('InterneStructureBundle:Structure:voir_groupe.html.twig', array(
     		
     		'groupe'		=> $groupe,

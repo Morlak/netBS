@@ -25,86 +25,27 @@ class FichierController extends Controller
 {
 	
 	/**
-	 * Génère la page qui permet d'ajouter une fiche membre
-	 * Affichage du formulaire d'ajout d'un membre
-	 * 
-	 * Le paramètre id est facultatif, si présent, il indique la famille à laquelle
-	 * ajouter le membre
+	 * La méthode créer membre se contente d'afficher la page d'un membre, mais où tous les champs sont vides,
+     * et stylisés pour être facilement modifiables
 	 */
-    public function creerMembreAction(Request $request)
+    public function creerMembreAction()
     {
-    	
-    	//Récupération des entities
-    	$membre	 = new Membre;
-    	$famille = new Famille;
+        $membre                 = new Membre();
+        $famille                = new Famille();
 
-    	$membreForm  = $this->createForm(new MembreType, $membre);
-    	$familleForm = $this->createForm(new FamilleType, $famille);
-    	
-    	
-    	//On vérifie si on a ajouté un nouveau membre à la famille aight
-    	if ($request->isMethod('POST')) {
-			
-			$membreForm->submit($request);
-			
-			if ($membreForm->isValid()) {
-				
-				$em = $this->getDoctrine()->getManager();
-    			
-				
-				//Le formulaire est valide, on vérifie si la famille était
-				//déjà enregistrée, ou si on en a créé une nouvelle pour l'occasion
-				if($membreForm->getData()->getFamille() == null) {
-					
-					//On persiste d'abord le formulaire de famille
-					$familleForm->bind($this->getRequest());
-					if($familleForm->isValid() ) {
-						
-						
-					   	//L'entité famille est prête, on y ajoute le membre
-					   	$famille->addMembre($membre);
-					   	
-					   	//on ajoute le sexe des parents
-					   	$famille->getMere()->setSexe('f');
-					   	$famille->getPere()->setSexe('m');
-					   	
-					   	//On insère la famille dans le membre
-					   	$membre->setFamille($famille);
-					   	$em->persist($famille);
-					}
-					
-				}
-				
-				//On génère une attribution de membre pour le nouveau avec le groupe
-				//passé
-				$attribution = new Attribution;
-				
-				//on lui file son groupe lié
-				$grpid  = $this->getRequest()->request->all()['interne_fichierbundle_membretype']['groupe'];
-				$groupe = $em->getRepository('InterneStructureBundle:Groupe');
-				$attribution->setGroupe($groupe->find($grpid));
-				$attribution->setDateDebut("now");
+        $membreForm             = $this->createForm(new MembreType, $membre);
+        $membreContactForm      = $this->createForm(new MembreContactType, $membre);
+        $membreFamilleForm      = $this->createForm(new MembreFamilleType, $membre);
+        $familleForm            = $this->createForm(new FamilleType, $famille);
 
-				//La fonction de membre de base -> abreviartion M
-				$fonction = $em->getRepository('InterneStructureBundle:Fonction')->findByAbreviation('M');
-				$attribution->setFonction($fonction[0]);
-				
-				
-				//On ajoute l'abreviation au membre
-				$membre->addAttribution($attribution);
-				
-				$em->persist($membre);
-				$em->flush();
-				
-			}
-		}
-		
-    	
-        return $this->render('InterneFichierBundle:Fichier:creer_fiche.html.twig', array(
-        	
-        		'membreForm'		=> $membreForm->createView(),
-        		'familleForm'		=> $familleForm->createView()
-        	));
+        return $this->render('InterneFichierBundle:Fichier:voir_membre.html.twig', array(
+
+            'membre'            => $membre,
+            'membreForm'        => $membreForm->createView(),
+            'membreContactForm' => $membreContactForm->createView(),
+            'membreFamilleForm' => $membreFamilleForm->createView(),
+            'familleForm'       => $familleForm->createView(),
+        ));
     }
     
     

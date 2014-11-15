@@ -68,38 +68,38 @@ class Persistor
 
         //else {
 
-        //On chope le nom de la classe
-        $class      = explode('\\', get_class($entity));
+            //On chope le nom de la classe
+            $class      = explode('\\', get_class($entity));
 
-        $serializer = $this->serializer;
-        $serialized = $serializer->serialize($entity, 'json');
+            $serializer = $this->serializer;
+            $serialized = $serializer->serialize($entity, 'json');
 
-        $user       = $this->context->getToken()->getUser();
+            $user       = $this->context->getToken()->getUser();
 
-        $validation = new Validation();
-        $validation->setDate(new \Datetime("now"));
-        $validation->setUser($user);
+            $validation = new Validation();
+            $validation->setDate(new \Datetime("now"));
+            $validation->setUser($user);
 
-        /*
-         * le statut peut prendre 3 états différents,
-         * - CREATION qui indique la création d'une entité
-         * - MODIFICATION si modification
-         * - SUPPRESSION si on supprimme l'entité
-         */
-        $statut = ($state == null) ? (($entity->getId() == null) ? 'CREATION' : 'MODIFICATION')
-            : ($state);
-        $validation->setClassIdentifier(get_class($entity));
-        $validation->setClassName($class[3]);
-        $validation->setStatut( $statut );
-        $validation->setEntity($serialized);
+            /*
+             * le statut peut prendre 3 états différents,
+             * - CREATION qui indique la création d'une entité
+             * - MODIFICATION si modification
+             * - SUPPRESSION si on supprimme l'entité
+             */
+            $statut = ($state == null) ? (($entity->getId() == null) ? 'CREATION' : 'MODIFICATION')
+                                       : ($state);
+            $validation->setClassIdentifier(get_class($entity));
+            $validation->setClassName($class[3]);
+            $validation->setStatut( $statut );
+            $validation->setEntity($serialized);
 
-        /*
-         * Si c'est une modification, on doit pas oublier de détacher l'entité de l'EM, pour éviter qu'elle
-         * soit persistée aussi
-         */
-        if($this->em->contains($entity)) $this->em->detach($entity);
+            /*
+             * Si c'est une modification, on doit pas oublier de détacher l'entité de l'EM, pour éviter qu'elle
+             * soit persistée aussi
+             */
+            if($this->em->contains($entity)) $this->em->detach($entity);
 
-        $this->em->persist($validation);
+            $this->em->persist($validation);
 
 
         //}

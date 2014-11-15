@@ -78,11 +78,15 @@
 
                 <div class="col-lg-12">
 
-                    {{ include('InterneStructureBundle:Structure:listeMembresGeneric.html.twig', {'membersList' : groupe.members, 'title': groupe.type.nom ~ ' ' ~ groupe.nom}) }}
+                    {{ include('InterneStructureBundle:Structure:listeMembresGeneric.html.twig', {'membersList' : groupe.members, 'title': 'Effectifs - ' ~ groupe.nom}) }}
+
+                    {% if groupe.type.nom|lower == 'troupe' %}
 
                     {% for enfant in groupe.enfants %}
-                        {{ include('InterneStructureBundle:Structure:listeMembresGeneric.html.twig', {'membersList' : enfant.members, 'title': enfant.type.nom ~ ' ' ~ enfant.nom}) }}
+                        {{ include('InterneStructureBundle:Structure:listeMembresGeneric.html.twig', {'membersList' : enfant.members, 'title': 'Effectifs - ' ~ enfant.nom}) }}
                     {% endfor %}
+
+                    {% endif %}
 
                 </div>
 

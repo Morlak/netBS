@@ -5,6 +5,8 @@ namespace Interne\FichierBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Interne\FichierBundle\Entity\Adresse;
+
 /**
  * Membre
  *
@@ -109,6 +111,18 @@ class Membre extends Personne
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Membre
+     */
+    public function setId($id) {
+
+        $this->id = $id;
+        return $this;
     }
 
     /**
@@ -367,7 +381,7 @@ class Membre extends Personne
      */
     public function getAdresse()
     {
-        return $this->adresse;
+        return ($this->adresse == null) ? new Adresse() : $this->adresse;
     }
 
     /**
