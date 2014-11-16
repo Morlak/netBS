@@ -4,6 +4,8 @@ namespace Interne\StructureBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Interne\StructureBundle\Entity\Type;
+
 /**
  * Groupe
  *
@@ -51,8 +53,7 @@ class Groupe
     /**
      * @var Type $type
      * 
-     * @ORM\ManyToOne(targetEntity="Type", inversedBy="groupes")
-     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Type", inversedBy="groupes", cascade={"persist"})
      */
     private $type;
 
@@ -208,7 +209,7 @@ class Groupe
     public function setType(\Interne\StructureBundle\Entity\Type $type = null)
     {
         $this->type = $type;
-	$type->addGroupe($this);
+	    $type->addGroupe($this);
         return $this;
     }
 
@@ -219,7 +220,8 @@ class Groupe
      */
     public function getType()
     {
-        return $this->type;
+        if($this->type == null) return new Type();
+        else return $this->type;
     }
 
     public function getMembers()

@@ -39,6 +39,11 @@ class HomeController extends Controller
      */
     public function rechercherAction() {
 
+        $persistor = $this->get('global.persistor');
+        $persistor->persistation('InterneFichierBundle.Membre.Famille.Nom', 'zboub', 1);
+        $this->getDoctrine()->getManager()->flush();
+
+        $modif = $this->getDoctrine()->getManager()->getRepository('InterneGlobalBundle:Validation')->find(1);
         return $this->render('InterneSearchBundle:Search:search.html.twig');
     }
 }

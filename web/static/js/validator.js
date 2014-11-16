@@ -8,8 +8,29 @@ $(document).ready(function() {
     } );
 });
 
+function alphanumeric(inputtxt)
+{
+    var letterNumber = /\d|\s/;
+    if(inputtxt.match(letterNumber))
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
-function extendedView(id) {
+
+alert(alphanumeric('Chemin des bsails 42'));
+
+/**
+ * ExtendedView permet d'expand la ligne de donnée, pour afficher les modifications dans la fenetre à coté
+ * @param btn le bouton cliqué
+ * @param id l'id de la validation
+ */
+function extendedView(btn, id) {
+
 
     $.ajax({
 
@@ -17,23 +38,28 @@ function extendedView(id) {
         type: 'GET',
         success: function(data) {
 
-            data = JSON.parse(data);
-            var text = '';
+            var l    = Object.keys(data[0]).length,
+                text = '<table class="table table-bordered table-boutoned"><thead><tr><td><b>Champ</b></td>';
 
-            if(Object.prototype.toString.call(data) === '[object Array]') {
+            if(l == 6) text += '<td><b>Ancienne valeur</b></td>';
 
-                for(var i = 0; i < data.length; i++) {
+            text += '<td><b>Nouvelle valeur</b></td><td><b>Modifié par</b></td><td><b>Date</b></td><td><b>Options</b></td></tr></thead><tbody>';
 
-                    text += recursiveTableau(data[i]);
-                }
+            for(var i = 0; i < data.length; i++) {
+
+                text += '<tr><td>' + data[i].champ + '</td>';
+
+                if(l == 6) text += '<td style="background-color:cornsilk;">'+ valParser(data[i].ancien) +'</td>';
+
+                text += '<td style="background-color:palegoldenrod;">' + valParser(data[i].neuf) + '</td><td>' + data[i].user + '</td><td>' + data[i].date +
+                        '</td><td><a style="margin-right:5px" onclick="requestModification(' + data[i].id + ', \'remove\')" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></a>' +
+                        '<a onclick="requestModification(' + data[i].id + ', \'persist\')" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-ok"></span></a></td>';
             }
 
-            else
-                text += recursiveTableau(data);
+            text += '</tbody></table>';
+            $('#validator-detail-view').html(text);
 
 
-            $('#validatorExtendedData-content').html(text);
-            $('#validatorExtendedData-modal').modal('show');
         },
         error: function(xhr) {
 
@@ -42,14 +68,12 @@ function extendedView(id) {
             $("#error-dialog #error-content").contents().find('html').html(xhr.responseText);
         }
     });
+
+
 }
 
 
 
-/**
- * la méthode removeValidations prend en paramètre soit un nombre, soit un array de nombres.
- * Elle envoie une requête au serveur pour supprimer les validations
- */
 function requestValidation(id, action) {
 
 
@@ -124,41 +148,27 @@ function getChecked() {
     return ids.slice(0, - 1);
 }
 
+function valParser(valoo) {
 
+    var val = '';
 
-function recursiveTableau(data) {
+    if(isNaN(valoo)) //N'est pas un nombre
+    {
+        if (!isNaN(Date.parse(valoo))) { //Est une date
 
-    var text = '<table class="table table-bordered"><thead><td><b>Champ</b></td><td><b>Donnée</b></td></thead><tbody>', data = data, val = '';
-
-    for(var key in data)  {
-
-        if(isNaN(data[key])) //N'est pas un nombre
-        {
-            if (!isNaN(Date.parse(data[key]))) { //Est une date
-
-                var date = new Date(data[key]);
-                val = date.getDay() + "." + date.getMonth() + "." + date.getFullYear();
-            }
-
-            else {//Sinon c'est une chaine de caractère basique
-                val = data[key];
-            }
+            var date = new Date(valoo);
+            val = date.getDate() + "." + date.getMonth() + "." + date.getFullYear();
         }
 
-        else if(typeof data[key] === 'object') {
-
-            val = recursiveTableau(data[key]);
+        else {//Sinon c'est une chaine de caractère basique
+            val = valoo;
         }
-
-        else {  //Est un nombre
-            val = data[key];
-        }
-
-        text += '<tr><td>' + key + '</td><td>' + val + '</td></tr>';
-
     }
 
-    text += '</tbody></table>';
+    else {  //Est un nombre
+        val = valoo;
+    }
 
-    return text;
+    return val;
+
 }

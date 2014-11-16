@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Modification
  *
- * @ORM\Table(name="global_modifications")
+ * @ORM\Table()
  * @ORM\Entity(repositoryClass="Interne\GlobalBundle\Entity\ModificationRepository")
  */
 class Modification
@@ -185,28 +185,5 @@ class Modification
     public function getValidation()
     {
         return $this->validation;
-    }
-
-    /**
-     * Set user
-     *
-     * @param \Interne\SecurityBundle\Entity\User $user
-     * @return Modification
-     */
-    public function setUser(\Interne\SecurityBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Interne\SecurityBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 }

@@ -18,10 +18,6 @@ use Interne\StammBundle\Form\DownloadType;
 class StammController extends Controller
 {
     
-    
-    
-
-    
     /**
      * Permet de renvoyer le fichier à télécharger, renvoyant ainsi les bon
      * headers
@@ -97,8 +93,6 @@ class StammController extends Controller
     	if($entity != 'News' && $entity != 'Evenement' && $entity != 'Download') 
     		throw $this->createNotFoundException('Accès impossible, données transmises incompatibles');
 
-        $persistor = $this->get('global.persistor');
-
         //On instancie l'entité
     	$nspc = 'Interne\StammBundle\Entity' . '\\' . $entity;
     	$type = 'Interne\StammBundle\Form' . '\\' . $entity . 'Type';
@@ -113,8 +107,7 @@ class StammController extends Controller
 				//On persiste l'objet
 			    $em = $this->getDoctrine()->getManager();
 
-                if($entity == 'Download') $em->persist($obj);
-				else $persistor->safePersist($obj);
+                $em->persist($obj);
 				$em->flush();
 			}
 		}

@@ -70,3 +70,7 @@ InterneGlobal_adder_test:
     defaults: { _controller: InterneGlobalBundle:Adder:test, obtention: null }
     options:
         expose: true
+
+InterneGlobal_debbug:
+    pattern: /test
+    defaults: { _controller: InterneGlobalBundle:Validator:test}

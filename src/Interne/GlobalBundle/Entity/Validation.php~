@@ -24,25 +24,6 @@ class Validation
     /**
      * @var string
      *
-     * @ORM\Column(name="entity", type="text")
-     */
-    private $entity;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetime")
-     */
-    private $date;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Interne\SecurityBundle\Entity\User")
-     */
-    private $user;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="statut", type="string")
      */
     private $statut;
@@ -52,14 +33,40 @@ class Validation
      *
      * @ORM\Column(name="classIdentifier", type="string")
      */
-    private $classIdentifier;
+    private $identifier;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="entityId", type="integer")
+     */
+    private $entityId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="className", type="string")
+     * @ORM\Column(name="repo", type="string")
      */
-    private $className;
+    private $repo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="entityName", type="string")
+     */
+    private $entityName;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Interne\GlobalBundle\Entity\Modification", mappedBy="validation", cascade={"persist", "remove"})
+     */
+    private $modifications;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fullClass", type="string")
+     */
+    private $fullClass;
 
 
     /**
@@ -72,50 +79,13 @@ class Validation
         return $this->id;
     }
 
-    /**
-     * Set entity
-     *
-     * @param string $entity
-     * @return Validation
-     */
-    public function setEntity($entity)
-    {
-        $this->entity = $entity;
-
-        return $this;
-    }
 
     /**
-     * Get entity
-     *
-     * @return string 
+     * Constructor
      */
-    public function getEntity()
+    public function __construct()
     {
-        return $this->entity;
-    }
-
-    /**
-     * Set date
-     *
-     * @param \DateTime $date
-     * @return Validation
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime 
-     */
-    public function getDate()
-    {
-        return $this->date;
+        $this->modifications = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -142,49 +112,128 @@ class Validation
     }
 
     /**
-     * Set user
+     * Set identifier
      *
-     * @param \Interne\SecurityBundle\Entity\User $user
+     * @param string $identifier
      * @return Validation
      */
-    public function setUser(\Interne\SecurityBundle\Entity\User $user = null)
+    public function setIdentifier($identifier)
     {
-        $this->user = $user;
+        $this->identifier = $identifier;
 
         return $this;
     }
 
     /**
-     * Get user
-     *
-     * @return \Interne\SecurityBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-
-    /**
-     * Set classIdentifier
-     *
-     * @param string $classIdentifier
-     * @return Validation
-     */
-    public function setClassIdentifier($classIdentifier)
-    {
-        $this->classIdentifier = $classIdentifier;
-
-        return $this;
-    }
-
-    /**
-     * Get classIdentifier
+     * Get identifier
      *
      * @return string 
      */
-    public function getClassIdentifier()
+    public function getIdentifier()
     {
-        return $this->classIdentifier;
+        return $this->identifier;
+    }
+
+    /**
+     * Set repo
+     *
+     * @param string $repo
+     * @return Validation
+     */
+    public function setRepo($repo)
+    {
+        $this->repo = $repo;
+
+        return $this;
+    }
+
+    /**
+     * Get repo
+     *
+     * @return string 
+     */
+    public function getRepo()
+    {
+        return $this->repo;
+    }
+
+    /**
+     * Add modifications
+     *
+     * @param \Interne\GlobalBundle\Entity\Modification $modification
+     * @return Validation
+     */
+    public function addModification(\Interne\GlobalBundle\Entity\Modification $modification)
+    {
+        $this->modifications[] = $modification;
+        $modification->setValidation($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove modifications
+     *
+     * @param \Interne\GlobalBundle\Entity\Modification $modifications
+     */
+    public function removeModification(\Interne\GlobalBundle\Entity\Modification $modifications)
+    {
+        $this->modifications->removeElement($modifications);
+    }
+
+    /**
+     * Get modifications
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getModifications()
+    {
+        return $this->modifications;
+    }
+
+    /**
+     * Set entityId
+     *
+     * @param integer $entityId
+     * @return Validation
+     */
+    public function setEntityId($entityId)
+    {
+        $this->entityId = $entityId;
+
+        return $this;
+    }
+
+    /**
+     * Get entityId
+     *
+     * @return integer 
+     */
+    public function getEntityId()
+    {
+        return $this->entityId;
+    }
+
+    /**
+     * Set entityName
+     *
+     * @param string $entityName
+     * @return Validation
+     */
+    public function setEntityName($entityName)
+    {
+        $this->entityName = $entityName;
+
+        return $this;
+    }
+
+    /**
+     * Get entityName
+     *
+     * @return string 
+     */
+    public function getEntityName()
+    {
+        return $this->entityName;
     }
 }

@@ -31,7 +31,7 @@ class Type
     /**
      * @var ArrayCollection 
      * 
-     * @ORM\OneToMany(targetEntity="Groupe", mappedBy="type", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Groupe", mappedBy="type")
      */
     private $groupes;
 

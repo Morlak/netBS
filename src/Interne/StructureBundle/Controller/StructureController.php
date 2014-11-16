@@ -25,8 +25,6 @@ class StructureController extends Controller
     {
     	$groupe  = new Groupe();
         $form 	 = $this->createForm(new GroupeType, $groupe);
-        $em      = $this->getDoctrine()->getManager();
-        $session = new Session();
 
         //On récupère aussi le formulaire de type
         $type = new Type();

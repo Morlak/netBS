@@ -3,7 +3,6 @@
 namespace Interne\FichierBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 //Entity
 use Interne\FichierBundle\Entity\Membre;
@@ -154,7 +153,6 @@ class FichierController extends Controller
 		
 		//Ainsi que la liste des groupes
 		$groupes   = $em->getRepository('InterneStructureBundle:Groupe')->findAll();
-		
     	
     	
     	return $this->render('InterneFichierBundle:Fichier:voir_membre.html.twig', array(

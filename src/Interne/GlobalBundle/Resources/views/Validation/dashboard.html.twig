@@ -9,7 +9,7 @@
 
     <div class="row">
 
-        <div class="col-lg-12">
+        <div class="col-lg-5">
 
             <div class="widget">
                 <div class="widget-title">
@@ -22,33 +22,33 @@
 
                         <thead>
                             <th class="col-cb"></th>
-                            <th>Nom de l'entité</th>
+                            <th>Entité mère</th>
                             <th>Statut</th>
-                            <th>Modifé par</th>
-                            <th>Date</th>
-                            <th>Options</th>
+                            <th>Modifications</th>
+                            <th style="width:20%;">Options</th>
                         </thead>
 
                         <tbody>
 
                         {% for validation in validations %}
 
-                            <tr>
+                            <tr class="validator-main-data">
                                 <td><input type="checkbox" class="validation-cb" id="valid{{ validation.id }}" /></td>
-                                <td>{{ validation.className }}</td>
+                                <td>{{ validation.entityName }}</td>
                                 <td>
                                     {% if validation.statut == "CREATION" %}Ajout de données
                                     {% elseif validation.statut == "SUPPRESSION" %}Suppression de données
                                     {% else %}Modification de données{% endif %}
                                 </td>
-                                <td>{{ validation.user.membre.prenom|capitalize }} {{ validation.user.membre.nom|capitalize }}</td>
-                                <td>{{ validation.date|date("d.m.Y") }}</td>
+                                <td>{{ validation.modifications|length }}</td>
                                 <td>
-                                    <a class="btn btn-sm btn-default" onclick="extendedView({{ validation.id }})" title="Details"><span class="glyphicon glyphicon-eye-open"></span></a>
-                                    <a class="btn btn-sm btn-danger" onclick="requestValidation({{ validation.id }}, 'remove');" title="Annuler la modification"><span class="glyphicon glyphicon-remove"></span></a>
-                                    <a class="btn btn-sm btn-success" onclick="requestValidation({{ validation.id }}, 'persist');"  title="Valider la modification"><span class="glyphicon glyphicon-ok"></span></a>
+                                    {% if validation.statut == "SUPPRESSION" %}<a class="btn btn-sm btn-default validator-viewer-btn" disabled="disabled"><span class="glyphicon glyphicon-eye-open"></span></a>
+                                    {% else %}<a class="btn btn-xs btn-default validator-viewer-btn" onclick="extendedView(this, {{ validation.id }})" title="Details"><span class="glyphicon glyphicon-eye-open"></span></a>{% endif %}
+                                    <a class="btn btn-xs btn-danger" onclick="requestValidation({{ validation.id }}, 'remove');" title="Annuler la modification"><span class="glyphicon glyphicon-remove"></span></a>
+                                    <a class="btn btn-xs btn-success" onclick="requestValidation({{ validation.id }}, 'persist');"  title="Valider la modification"><span class="glyphicon glyphicon-ok"></span></a>
                                 </td>
                             </tr>
+
                         {% endfor %}
 
                         </tbody>
@@ -61,6 +61,26 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="col-lg-7">
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Informations détaillées</span>
+                </div>
+
+                <div class="widget-content" id="validator-detail-view">
+                    <p>
+                        <b>Fonctionnement du système de validation</b><br/>
+                        Dans le panneau de gauche, la liste des Entités (membre, attribution...) en attente de modification sont affichées. Chaque entrée est composée
+                        de plusieurs modifications, par exemple on passe du chemin des avions 2 à la route des clercs 42 pour un membre. En cliquant sur l'oeil, la liste
+                        de ces sous-modifications va apparaître.
+                        <br/><br/>
+                        Les boutons sont associés aux entrées. Si vous validez une entité, toutes les modifications qui y sont liées seront validées. Si vous cliquez sur
+                        l'oeil, puis validez une sous-entrée, elle-seule sera validée.
+                    </p>
+                </div>
+            </div>
         </div>
 
     </div>

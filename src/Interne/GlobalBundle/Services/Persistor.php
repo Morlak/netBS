@@ -3,10 +3,8 @@
 namespace Interne\GlobalBundle\Services;
 
 use Interne\GlobalBundle\Entity\Validation;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Interne\GlobalBundle\Entity\Modification;
+
 
 class Persistor
 {
@@ -27,103 +25,133 @@ class Persistor
         $this->em           = $em;
     }
 
-    /**
-     * Cette méthode renvoie un boolean pour savoir si l'utilisateur courrant à les roles nécessaires pour valider
-     * automatiquement ou PAS.
-     */
-    public function hasValidatorRoles() {
-
-        if( $this->context->isGranted('ROLE_ADMIN') ||
-            $this->context->isGranted('ROLE_SECRETARIAT') ||
-            $this->context->isGranted('ROLE_VALIDATOR')) {
-
-            return true;
-        }
-        else return false;
-    }
 
     /**
-     * la méthode safePersist permet de persister une entité en fonction des roles de l'utilisateur. Ainsi, les données
-     * modifiées devront ou non passer par le validator, et être validées par un utilisateur supérieur
-     *
-     * @param $entity l'entité sur laquelle travailler
+     * @param $entity l'entité
+     * @param $value la valeur
+     * @param null $id l'id de l'entité. Peut prendre un paramètre hash md5 pour le cas d'une création, garder le lien
+     *              avec l'entité
+     * @param null $statut le statut
      */
+    public function persistation($entity, $value, $id = null, $statut = null) {
 
-    public function safePersist($entity, $state = null) {
-
-        /*
-        if( $this->context->isGranted('ROLE_ADMIN') ||
-            $this->context->isGranted('ROLE_SECRETARIAT') ||
-            $this->context->isGranted('ROLE_VALIDATOR')) {
-
-            $this->em->persist($entity); //On persiste dans l'em
-        }
-
-        */
-
-        /*
-         * l'utilisateur n'a pas les accès nécessaires, on va serializer l'entité, puis l'ajouter au validator, en
-         * ajoutant une directive empêchant l'entité d'être à nouveau modifiée jusqu'à validation
-         */
-
-        //else {
-
-        //On chope le nom de la classe
-        $class      = explode('\\', get_class($entity));
-
-        $serializer = $this->serializer;
-        $serialized = $serializer->serialize($entity, 'json');
-
+        $data       = explode('.', $entity);
+        $repo       = $data[0];
+        $entity     = $data[1];
         $user       = $this->context->getToken()->getUser();
+        $champ      = $data[count($data) - 1];
 
-        $validation = new Validation();
-        $validation->setDate(new \Datetime("now"));
-        $validation->setUser($user);
+        //On formate la valeur, par exemple si c'est une datetime
+        if ($value instanceof \DateTime) $value = $value->format('Y-m-d H:i:s');
 
-        /*
-         * le statut peut prendre 3 états différents,
-         * - CREATION qui indique la création d'une entité
-         * - MODIFICATION si modification
-         * - SUPPRESSION si on supprimme l'entité
-         */
-        $statut = ($state == null) ? (($entity->getId() == null) ? 'CREATION' : 'MODIFICATION')
-            : ($state);
-        $validation->setClassIdentifier(get_class($entity));
-        $validation->setClassName($class[3]);
-        $validation->setStatut( $statut );
-        $validation->setEntity($serialized);
 
-        /*
-         * Si c'est une modification, on doit pas oublier de détacher l'entité de l'EM, pour éviter qu'elle
-         * soit persistée aussi
-         */
-        if($this->em->contains($entity)) $this->em->detach($entity);
+        //On analyse si c'est un ajout, une modification ou une suppression
+        if($id == null || !is_numeric($id)) { $statut = 'CREATION'; $id = ($id == null) ? time() : $id; } //l'id prend un hash aléatoire si rien n'est précisé
+        else if($statut != null) $statut = 'SUPPRESSION';
+        else $statut = 'MODIFICATION';
 
+
+        //On traite les données pour générer un path propre
+        $path = '';
+        for($i = 2; $i < (count($data) - 1); $i++) {
+
+            $path .= ($i == (count($data) - 2)) ? $data[$i] : $data[$i] . '.';
+        }
+
+        $fullClassPieces    = preg_split('/(?=[A-Z])/',$repo);
+        //NOM DE BUNDLE EN TROIS MOTS : InterneYoloBundle, INTERDIT : InterneYoloSwagBundle
+        $fullClass          = $fullClassPieces[1] . '\\' . $fullClassPieces[2] . $fullClassPieces[3] . '\\Entity' . '\\' . $entity;
+
+        //On va chercher si une validation sur l'objet existe déjà pour travailler dessus
+        $identifier = md5($repo . $id);
+        $validation = null;
+
+        if($this->em->getRepository('InterneGlobalBundle:Validation')->findByIdentifier($identifier) == null) {
+
+            $validation = new Validation();
+            $validation->setRepo($repo . ':' . $entity);
+            $validation->setIdentifier($identifier);
+            $validation->setEntityId($id);
+            $validation->setStatut($statut);
+            $validation->setEntityId($id);
+            $validation->setEntityName($entity);
+            $validation->setFullClass($fullClass);
+
+            $validation->addModification($this->generateModification($path, $champ, $value, $user));
+
+        }
+
+        else {
+
+            /*
+             * Si une modification pour ce champ existe déjà, 2 cas de figure :
+             * - soit c'est le même utilisateur qui a modifié par dessus, on ecrase l'ancienne modification
+             * - soit c'est quelqu'un d'autre, on crée une nouvelle Modification
+             */
+            $validation = $this->em->getRepository('InterneGlobalBundle:Validation')->findByIdentifier($identifier)[0];
+            $modifs     = $validation->getModifications();
+            $exist      = false;
+            $id         = null;
+
+            foreach($modifs as $k => $modif) {
+
+                if($modif->getUser() == $user && $modif->getChamp() == $champ && $modif->getPath() == $path) {
+                    $exist = true;
+                    $id    = $k;
+                }
+            }
+
+            if($exist)
+                $validation->getModifications()[$id]->setValeur($value); //On modifie juste la valeur à modifier
+            else
+                $validation->addModification($this->generateModification($path, $champ, $value, $user));
+        }
+
+
+        //Et finalement on persiste la validation
         $this->em->persist($validation);
+    }
 
+    public function modifOneField($entity, $id, $value) {
 
-        //}
+        $data       = explode('.', $entity);
+        $repo       = $data[0];
+        $entity     = $data[1];
+
+        $entity     = $this->em->getRepository($repo . ':' . ucfirst(strtolower($entity)))->find($id);
+        $cursor     = $entity;
+
+        for($i = 2; $i < (count($data) - 1); $i++) {
+
+            $fn     = 'get' . ucfirst(strtolower($data[$i]));
+            $cursor = $cursor->$fn();
+        }
+
+        $setter     = 'set' . ucfirst(strtolower($data[count($data) - 1]));
+        $cursor->$setter($value);
+
+        var_dump($cursor);
+
     }
 
     /**
-     * La méthode modifyMembre traite de la modification des membres. Cette méthode va génerer des objets
-     * validation sur le membre modifié, et améliorer
+     * Génère un objet modification avec les données passées
+     * @param string $path
+     * @param string $champ
+     * @param mixed $value
+     * @param User $user
+     * @return Modification
      */
+    private function generateModification($path, $champ, $value, $user) {
 
-    /**
-     * Permet de supprimer une entité en fonction des roles
-     * @param $entity l'entité à supprimer
-     */
-    public function safeRemove($entity) {
+        //On génère une nouvelle modification
+        $modification   = new Modification();
+        $modification->setDate(new \Datetime());
+        $modification->setPath($path);
+        $modification->setChamp($champ);
+        $modification->setValeur($value);
+        $modification->setUser($user);
 
-        $this->safePersist($entity, 'REMOVE');
-    }
-
-    /**
-     * safeFlush va flusher l'entity manager utilisé par le service pour éviter des conflits
-     */
-    public function safeFlush() {
-
-        $this->em->flush();
+        return $modification;
     }
 }
