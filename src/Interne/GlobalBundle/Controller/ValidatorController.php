@@ -4,9 +4,10 @@ namespace Interne\GlobalBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-
+use Interne\StammBundle\Entity\News;
 
 
 
@@ -48,7 +49,11 @@ class ValidatorController extends Controller
         $em         = $this->getDoctrine()->getManager();
         $vRepo      = $em->getRepository('InterneGlobalBundle:Validation');
         $validation = $vRepo->find($id);
-        $returned   = array();
+        $returned   = array(
+
+            'statut'    => $validation->getStatut(),
+            'donnees'   => array()
+        );
 
         if($validation->getStatut() == "MODIFICATION") {
 
@@ -78,7 +83,7 @@ class ValidatorController extends Controller
                 if($modif->getPath() == '') $champ = $validation->getEntityName() . ' - <b>' . $modif->getChamp() . '</b>';
                 else $champ = $validation->getEntityName() . ' - ' . str_replace('.', ' - ', $modif->getPath()) . ' - <b>' . $modif->getChamp() . '</b>';
 
-                $returned[$k] = array(
+                $returned['donnees'][$k] = array(
                     'champ'     => $champ,
                     'ancien'    => $this->parseValue($cursor->$getter(), true),
                     'neuf'      => $this->parseValue($modif->getValeur(), true),
@@ -100,7 +105,7 @@ class ValidatorController extends Controller
                 if($modif->getPath() == '') $champ = $validation->getEntityName() . ' - <b>' . $modif->getChamp() . '</b>';
                 else $champ = $validation->getEntityName() . ' - ' . str_replace('.', ' - ', $modif->getPath()) . ' - <b>' . $modif->getChamp() . '</b>';
 
-                $returned[$k] = array(
+                $returned['donnees'][$k] = array(
                     'champ'     => $champ,
                     'neuf'      => $this->parseValue($modif->getValeur(), true),
                     'id'        => $modif->getId(),
@@ -148,6 +153,7 @@ class ValidatorController extends Controller
             $validation = $vRepo->find($ids[$i]);
             $repo       = $em->getRepository($validation->getRepo());
 
+
             //En fonction du statut, on fait quelque chose de différent
             /*
              * Espace SUPPRESSION
@@ -161,69 +167,91 @@ class ValidatorController extends Controller
 
 
             /*
-             * CREATION
+             * CREATION - MODIFICATION
              * On va instancier un nouvel objet vide que l'on va hydrater, puis persister
              */
-            else if($validation->getStatut() == "CREATION") {
+            else {
 
-                //On va génerer un nouvel objet
-                $objName    = $validation->getFullClass();
-                $new        = new $objName();
+                /*
+                 * On va d'abord récupérer l'entité que l'on souhaite modifier, soit un objet vide, soit un existant
+                 * que l'on récupère
+                 */
+                $objet = null;
+                if($validation->getStatut() == "CREATION") {
 
-                //Pour l'ensemble des modifications disponibles, on hydrate l'objet
+                    //On va génerer un nouvel objet
+                    $objName    = $validation->getFullClass();
+                    $objet      = new $objName();
+                }
+
+                else {
+
+                    //Modification, on récupère l'objet existant
+                    $objet = $em->getRepository($validation->getRepo())->find($validation->getEntityId());
+                }
+
+                /*
+                 * A cette étape, on a un objet valide sur lequel travailler. On va donc itérer sur chaque modification
+                 * liées à la validation, formater les valeurs, et les appliquer sur cet objet, que l'on pourra ensuite
+                 * persister.
+                 */
                 foreach($validation->getModifications() as $modif) {
 
-                    //On génère le setter
-                    $fnData = explode('.', $modif->getPath());
-                    $cursor = $new;
 
-                    for($i = 0; $i < count($fnData); $i++) {
+                    //On génère les getters
+                    $fnData = explode('.', $modif->getPath());
+                    $cursor = $objet;
+
+
+                    for ($i = 0; $i < count($fnData); $i++) {
 
                         if ($fnData[$i] != '') {
+
                             $fn = 'get' . $fnData[$i];
                             $cursor = $cursor->$fn();
                         }
                     }
 
+
                     $setter = 'set' . $modif->getChamp();
                     $cursor->$setter($this->parseValue($modif->getValeur())); //Magique
+
                 }
 
-                $em->persist($new);
-                $xxxx = new \ReflectionObject($new);
-                foreach($xxxx->getMethods() as $m) {
-                    var_dump($m);
-                }
+
+                $em->persist($objet);
 
                 //On supprimme la validation
                 //$em->remove($validation);
 
             }
-
-            //$em->flush();
-            return new Response('{}');
-
         }
 
-        //$em->flush();
-
-        //return new JsonResponse($ids);
+        $em->flush();
+        return new JsonResponse($ids);
     }
 
     public function testAction() {
 
+/*
         $persistor = $this->get('global.persistor');
 
-        $persistor->persistation('InterneStructureBundle.Membre.Naissance', new \Datetime("2000-07-03"), 'anus');
+
+        $persistor->persistation('InterneFichierBundle.Membre.Adresse.Rue', 'Avenue des hommes qui pèsent 42', 8);
+
 
         $this->getDoctrine()->getManager()->flush();
-        return new JsonResponse('{}');
+
+*/
+        $this->getExtendedDataAction(5);
+        return new Response('<body></body>');
 
     }
 
     /**
      * Cette méthode permet de parser les informations contenues dans la valeur d'une modif, dans le cas d'une relation
-     * Elle va retourner soit l'objet lié, soit une représentation textuelle de l'objet pour affichage
+     * Elle va retourner soit l'objet lié, soit une représentation textuelle de l'objet pour affichage. Sinon elle va tenter
+     * de transformer la valeur, comme pour une date.
      * @param $val la valeur a parser
      * @return mixed
      */
@@ -231,8 +259,13 @@ class ValidatorController extends Controller
 
         $data = explode('__', $val);
 
-        if($data[0] == 'ENTITY') { //On a bien affaire à une relation
+        if($data[0] == 'ENTITY') {
 
+            /*
+             * Relation
+             * --------
+             * On va récupérer l'objet à lier et le renvoyer si il en existe bel et bien un
+             */
             $entity = $this->getDoctrine()->getManager()->getRepository($data[1])->find($data[2]);
             if($entity == null) return $val; //Test de sortie immediate
 
@@ -255,7 +288,23 @@ class ValidatorController extends Controller
             }
         }
 
-        else
-            return $val; //Sinon on renvoie simplement la valeur d'entrée
+        /*
+         * On a pas affaire à une relation, on va donc travailler sur la valeur.
+         */
+        else {
+
+            //On regarde si la valeur est une date
+            if (\DateTime::createFromFormat('Y-m-d G:i:s', $val) !== FALSE) {
+
+                if($toString == false) return new \Datetime($val);
+                else return $val;
+            }
+
+
+            else
+                return $val; //Sinon on renvoie simplement la valeur non modifiée
+
+
+        }
     }
 }

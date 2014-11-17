@@ -382,7 +382,12 @@ class Membre extends Personne
      */
     public function getAdresse()
     {
-        return ($this->adresse == null) ? new Adresse() : $this->adresse;
+        if($this->adresse == null) {
+
+            $this->adresse = new Adresse();
+        }
+
+        return $this->adresse;
     }
 
     /**

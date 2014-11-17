@@ -8,22 +8,6 @@ $(document).ready(function() {
     } );
 });
 
-function alphanumeric(inputtxt)
-{
-    var letterNumber = /\d|\s/;
-    if(inputtxt.match(letterNumber))
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-
-alert(alphanumeric('Chemin des bsails 42'));
-
 /**
  * ExtendedView permet d'expand la ligne de donnée, pour afficher les modifications dans la fenetre à coté
  * @param btn le bouton cliqué
@@ -36,12 +20,12 @@ function extendedView(btn, id) {
 
         url: Routing.generate('InterneGlobal_validator_get_extended_data', {id : id}),
         type: 'GET',
-        success: function(data) {
+        success: function(xhr) {
 
-            var l    = Object.keys(data[0]).length,
-                text = '<table class="table table-bordered table-boutoned"><thead><tr><td><b>Champ</b></td>';
+            var text = '<table class="table table-bordered table-boutoned"><thead><tr><td><b>Champ</b></td>',
+                data = xhr.donnees;
 
-            if(l == 6) text += '<td><b>Ancienne valeur</b></td>';
+            if(xhr.statut == 'MODIFICATION') text += '<td><b>Ancienne valeur</b></td>';
 
             text += '<td><b>Nouvelle valeur</b></td><td><b>Modifié par</b></td><td><b>Date</b></td><td><b>Options</b></td></tr></thead><tbody>';
 
@@ -49,10 +33,13 @@ function extendedView(btn, id) {
 
                 text += '<tr><td>' + data[i].champ + '</td>';
 
-                if(l == 6) text += '<td style="background-color:cornsilk;">'+ valParser(data[i].ancien) +'</td>';
+                if(xhr.statut == "MODIFICATION") text += '<td style="background-color:cornsilk;">'+ valParser(data[i].ancien) +'</td>';
+                var colBG = "MediumSpringGreen";
+                if(xhr.statut == "SUPPRESSION") colBG = "DarkSalmon";
 
-                text += '<td style="background-color:palegoldenrod;">' + valParser(data[i].neuf) + '</td><td>' + data[i].user + '</td><td>' + data[i].date +
-                        '</td><td><a style="margin-right:5px" onclick="requestModification(' + data[i].id + ', \'remove\')" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></a>' +
+                text += '<td style="background-color:' + colBG + ';">' + valParser(data[i].neuf) + '</td><td>' + data[i].user + '</td><td>' + data[i].date +
+                        '</td><td><a style="margin-right:5px" onclick="requestModification(' + data[i].id + ', \'remove\')" class="btn btn-xs btn-danger">' +
+                        '<span class="glyphicon glyphicon-remove"></span></a>' +
                         '<a onclick="requestModification(' + data[i].id + ', \'persist\')" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-ok"></span></a></td>';
             }
 
@@ -94,6 +81,7 @@ function requestValidation(id, action) {
 
                 $('#valid' + data[i]).parent().parent().remove();
             }
+
 
         },
         error:function(xhr) {
@@ -154,7 +142,13 @@ function valParser(valoo) {
 
     if(isNaN(valoo)) //N'est pas un nombre
     {
-        if (!isNaN(Date.parse(valoo))) { //Est une date
+        if (/[a-zA-Z]/.test(valoo)) {
+
+            //Des lettres sont trouvées, c'est-à-dire que c'est une string. on l'affiche
+            return valoo;
+        }
+
+        else if (!isNaN(Date.parse(valoo))) { //Est une date
 
             var date = new Date(valoo);
             val = date.getDate() + "." + date.getMonth() + "." + date.getFullYear();
@@ -170,5 +164,6 @@ function valParser(valoo) {
     }
 
     return val;
+    return valoo;
 
 }

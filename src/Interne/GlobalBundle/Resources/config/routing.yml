@@ -28,7 +28,7 @@ InterneGlobal_validator_remove:
 
 InterneGlobal_validator_persist:
     pattern:  /validator/persist/{ids}
-    defaults: { _controller: InterneGlobalBundle:Validator:persist }
+    defaults: { _controller: InterneGlobalBundle:Validator:persistValidation }
     options:
         expose: true
     requirements:
