@@ -2,6 +2,3 @@ InterneHome_accueil:
     pattern:  /
     defaults: { _controller: InterneHomeBundle:Home:index }
 
-InterneHome_rechercher:
-    pattern:  /rechercher
-    defaults: { _controller: InterneHomeBundle:Home:rechercher }

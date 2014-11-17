@@ -10,37 +10,55 @@
         <div class="col-lg-12">
             <label>
                 Rechercher :
-                <input name="search" type="text"/>
+                <input id="searchForm" type="text"/>
             </label>
         </div>
 
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            <h4>Membres</h4>
-            <table id="membersTable" class="datatable  datatable-membre">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Prénom</th>
-                    <th>Nom</th>
-                </tr>
-                </thead>
-                <tr>
-                    <td></td>
-                    <td>Test</td>
-                    <td>Test</td>
-                </tr>
-            </table>
+        <div id="searchResult">
+            {## ici s'inserent les résultats de la recherche en ajax ##}
         </div>
-
-
     </div>
+
 {% endblock %}
 
 {% block javascript %}
 
     <script type="text/javascript" src="{{ asset('static/js/search.js') }}"></script>
 
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+        {## la fonction delay permet de ne pas faire une recherche à chaque
+        frappe de l'utilisateur dans la barre de recherche. il y a un délai
+        en ms à choisir.##}
+        var delay = (function(){
+            var timer = 0;
+            return function(callback, ms){
+                clearTimeout (timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+
+        {## cette partie du script permet d'envoyer la chaine de cartactere
+        entrée dans la bare de recherche au controlleur ##}
+        $("#searchForm").keyup(function() {
+            delay(function() {
+                var form = $('#searchForm');
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('InterneSearch_search_ajax') }}",
+                    data: 'searchString=' + $("#searchForm").val(),
+                    error: function(jqXHR, textStatus, errorThrown) {  },
+                    success: function(htmlResponse) {
+                        $('#searchResult').replaceWith(htmlResponse);
+                    }
+                });
+            },500);{## délai en ms ##}
+        });
+
+
+
+
+    </script>
 {% endblock %}

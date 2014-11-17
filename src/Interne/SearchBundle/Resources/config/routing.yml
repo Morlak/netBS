@@ -1,7 +1,11 @@
 InterneSearch_search:
     pattern:  /
-    defaults: { _controller: InterneSearchBundle:Search:search }
+    defaults: { _controller: InterneSearchBundle:Search:showSearchBar }
 
 InterneSearch_search_members:
     pattern:  /ajax/search/members
     defaults: { _controller: InterneSearchBundle:Search:searchMembers }
+
+InterneSearch_search_ajax:
+    pattern:  /ajax
+    defaults: { _controller: InterneSearchBundle:Search:search }

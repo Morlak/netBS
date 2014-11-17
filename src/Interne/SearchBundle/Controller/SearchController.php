@@ -7,7 +7,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SearchController extends Controller
 {
-    
+
+    /**
+     * fonction provisoir qui a pour but d'afficher la bare de recherche.
+     * cette fonction sera supprimée lorsqu'on mettra la barre de recherche
+     * dans le template standard.
+     */
+    public function showSearchBarAction()
+    {
+        return $this->render('InterneSearchBundle:Search:search.html.twig');
+    }
+
     /**
      * Méthode permettant d'effectuer des recherches croisées
      * en analysant les éléments de recherche
@@ -19,29 +29,26 @@ class SearchController extends Controller
      */
     public function searchAction()
     {
-        $str 	= "guillaume montfort";
-        
-        //On initialise les variables de base
-        $em	= $this->getDoctrine()->getManager();
-        
-        
-        //On récupère chaque morceau d'information
-        $elements = explode(' ', $str);
-        
-        foreach($elements as $element) {
-        	
-            /**
-	     * pour chaque information, on va exécuter différents tests.
-	     * Cependant, la recherche va rapidement s'orienter vers une suite
-	     * logique. Par exemple, si le premier élément est une information
-	     * de membre, on va voir si le reste des informations désigne un membre
-	     * particulier
-	     * Finalement, on ne souhaitera obtenir qu'une liste de membres
-	     */
-	    
+        $request = $this->container->get('request');
+
+        if($request->isXmlHttpRequest())
+        {
+            $str = $request->request->get('searchString');
+            $elements = explode(' ', $str);
+            foreach($elements as $element) {
+
+
+            }
+
+
         }
-        
-        return new Response("<body></body>");
+
+
+        return $this->render('InterneSearchBundle:Search:searchResults.html.twig',array('string' => $str, 'searchElements'=>$elements));
+
+
+
+
     }
     
     /**
@@ -80,4 +87,6 @@ class SearchController extends Controller
 
         return new JsonResponse($infos);
     }
+
+
 }
