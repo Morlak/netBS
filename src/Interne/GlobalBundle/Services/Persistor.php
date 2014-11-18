@@ -11,6 +11,7 @@ class Persistor
 
     private $em;
     private $context;
+    private $reader;
     private $serializer;
 
     /**
@@ -18,11 +19,12 @@ class Persistor
      * qu'il réalise, soit les envoyer dans le validator, avant d'être persistées par un utilisateur
      * avec un rang plus élevé.
      */
-    public function __construct($context, $em, $serializer)
+    public function __construct($context, $em, $serializer, $annotationReader)
     {
         $this->context      = $context;
         $this->serializer   = $serializer;
         $this->em           = $em;
+        $this->reader       = $annotationReader;
     }
 
 
@@ -112,27 +114,7 @@ class Persistor
         $this->em->persist($validation);
     }
 
-    public function modifOneField($entity, $id, $value) {
 
-        $data       = explode('.', $entity);
-        $repo       = $data[0];
-        $entity     = $data[1];
-
-        $entity     = $this->em->getRepository($repo . ':' . ucfirst(strtolower($entity)))->find($id);
-        $cursor     = $entity;
-
-        for($i = 2; $i < (count($data) - 1); $i++) {
-
-            $fn     = 'get' . ucfirst(strtolower($data[$i]));
-            $cursor = $cursor->$fn();
-        }
-
-        $setter     = 'set' . ucfirst(strtolower($data[count($data) - 1]));
-        $cursor->$setter($value);
-
-        var_dump($cursor);
-
-    }
 
     /**
      * Génère un objet modification avec les données passées
@@ -154,4 +136,131 @@ class Persistor
 
         return $modification;
     }
+
+    /*
+    public function fullEntityPersistation($object) {
+
+        $reader             = $this->reader;
+        $user               = $this->context->getToken()->getUser();
+        $emptyObjectName    = \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($object));
+        $emptyObject        = new $emptyObjectName();
+        $metaData = $this->em->getClassMetadata($emptyObjectName);
+
+
+        /*
+         * En premier lieu, on va checker si l'entité est nouvellement créée, ou si c'est une modification
+         * de la dite entité. On va également génerer l'objet validation
+         *
+        $statut             = ($object->getId() === null) ? 'CREATION': 'MODIFICATION';
+        $classData          = explode('\\', $emptyObjectName);
+        $repo               = $classData[0] . $classData[1] . ':' . $classData[3];
+        $id                 = ($statut == 'CREATION') ? 0 : $object->getId();
+        $identifier         = md5($repo . $id);
+
+        $validation         = new Validation();
+        $validation->setStatut($statut);
+        $validation->setEntityId($id);
+        $validation->setFullClass($emptyObjectName);
+        $validation->setIdentifier($identifier);
+        $validation->setEntityName($classData[3]);
+
+        /*
+         * On s'interesse à deux entrées de la classe metaData :
+         * - fieldMappings qui contient les attributs directs, sans relations quelconque
+         * - associationMappings qui contient les attributs par relation
+         *
+         * Dans le cas d'une création, on va iterer sur chaque proprieté, et pour chacune, créer un objet
+         * Modification équivalent.
+         * Dans le cas d'une modification, on itère sur chaque élément, et si la valeur est différente, on
+         * crée une modification
+         *
+        $entity = null;
+        if($statut == "MODIFICATION")
+            $entity = $this->em->getRepository($repo)->find($id);
+
+        /*
+         * On commence par iterer sur les proprietés simples
+         *
+        foreach($metaData->fieldMappings as $field) {
+
+            $getter = 'get' . ucfirst($field['fieldName']);
+            $value  = $object->$getter();
+
+            /*
+             * On va iterer sur chaque élément si c'est une modification. On récupère donc l'entité actuelle, comparer
+             * chaque valeur, et créer une Modification là ou ca diffère. Si c'est une creation, on crée des modifications
+             * partout où c'est pas NULL
+             *
+            $modifChangePas = true;
+
+            if($statut == "MODIFICATION")
+                $modifChangePas = !($entity->$getter() === $value); //On utilise le === valable sur tout type de champ
+
+            //On génère une Modification si nécessaire
+            if(($statut == "CREATION" && $object->$getter() !== null ) || !$modifChangePas) {
+
+                /*
+                 * Comme on est dans des attributs direct, $path est vide, on a donc aucun traitement particulier
+                 * à réaliser
+                 *
+                $validation->addModification(
+                    $this->generateModification('', ucfirst($field['fieldName']), $value, $user)
+                );
+            }
+        }
+
+        /*
+         * A ce stade, on a géneré toutes les modifications pour les attributs directs, on va passer aux attributs
+         * par relation. On va donc iterer sur chaque élément
+         *
+        foreach($metaData->associationMappings as $association) {
+
+            $getter = 'get' . ucfirst($association['fieldName']);
+
+            /*
+             * En premier lieu on génère les informations de base, genre le path et le nom
+             * du champ
+             *
+            $path = ucfirst($association['fieldName']);
+
+            $cursor = $object->$getter();
+
+            /*
+             * En premier lieu, on vérifie que l'entité liée ne soit pas nulle, sinon ca sert à rien
+             *
+            if($cursor != null && !$this->isEntityNull($cursor)) {
+
+                $this->recursiveScanEntity($cursor);
+            }
+        }
+    }
+
+    /**
+     * Cette petite méthode va tester si l'entité passée est nulle, c'est-à-dire si l'ID est nulle
+     * et si l'une des fonction suivante existe et renvoie nulle
+     *
+    private function isEntityNull($entity) {
+
+        if($entity->getId() != null) return false;
+
+        if(method_exists($entity, 'getNom')) //Famille, Type, Groupe...
+            return ($entity->getNom() == null);
+        else if(method_exists($entity, 'getPrenom')) //membre
+            return ($entity->getPrenom() == null);
+        else if(method_exists($entity, 'getRue')) //Adresse
+            return ($entity->getRue() == null);
+
+        else return false;
+    }
+
+
+    /**
+     * La méthode recursiveScanEntity va iterer sur chaque valeur de l'entité passée
+     * en paramètre, scanner chaque valeur, génerer le path correspondant, et les Modifications nécessaires
+     *
+    private function recursiveScanEntity($entity) {
+
+        //On va iterer sur chaque méthode de l'objet passé, vérifier la nature des éléments,
+    }
+    */
 }

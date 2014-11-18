@@ -8,3 +8,4 @@ services:
             - @security.context
             - @doctrine.orm.entity_manager
             - @jms_serializer
+            - @annotation_reader

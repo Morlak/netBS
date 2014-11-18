@@ -228,10 +228,11 @@ class Groupe
     {
 
         $members = array();
+        $today   = new \Datetime();
 
-        foreach ($this->getAttributions()->toArray() as $attribution) {
-            if ($attribution->getDateFin() == NULL) // FIXME: or date fin > today
-                $members[] = $attribution->getMembre();
+        foreach ($this->getAttributions() as $attribution) {
+            if ($attribution->getDateFin() == null || $attribution->getDateFin() > $today)
+                array_push($members, $attribution->getMembre());
 
         }
 

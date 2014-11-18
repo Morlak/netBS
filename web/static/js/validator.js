@@ -27,7 +27,13 @@ function extendedView(btn, id) {
 
             if(xhr.statut == 'MODIFICATION') text += '<td><b>Ancienne valeur</b></td>';
 
-            text += '<td><b>Nouvelle valeur</b></td><td><b>Modifié par</b></td><td><b>Date</b></td><td><b>Options</b></td></tr></thead><tbody>';
+            text += '<td><b>Nouvelle valeur</b></td><td><b>Modifié par</b></td><td><b>Date</b></td>';
+            if(xhr.statut == "MODIFICATION")
+                text += '<td><b>Options</b></td>';
+
+            text += '</tr></thead><tbody>';
+
+
 
             for(var i = 0; i < data.length; i++) {
 
@@ -37,10 +43,14 @@ function extendedView(btn, id) {
                 var colBG = "MediumSpringGreen";
                 if(xhr.statut == "SUPPRESSION") colBG = "DarkSalmon";
 
-                text += '<td style="background-color:' + colBG + ';">' + valParser(data[i].neuf) + '</td><td>' + data[i].user + '</td><td>' + data[i].date +
-                        '</td><td><a style="margin-right:5px" onclick="requestModification(' + data[i].id + ', \'remove\')" class="btn btn-xs btn-danger">' +
-                        '<span class="glyphicon glyphicon-remove"></span></a>' +
-                        '<a onclick="requestModification(' + data[i].id + ', \'persist\')" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-ok"></span></a></td>';
+                text += '<td style="background-color:' + colBG + ';">' + valParser(data[i].neuf) + '</td><td>' + data[i].user + '</td><td>' + data[i].date + '</td>';
+
+                if(xhr.statut == "MODIFICATION") {
+
+                    text += '<td><a style="margin-right:5px" onclick="requestModification(' + data[i].id + ', \'remove\')" class="btn btn-xs btn-danger">' +
+                    '<span class="glyphicon glyphicon-remove"></span></a>' +
+                    '<a onclick="requestModification(' + data[i].id + ', \'persist\')" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-ok"></span></a></td>'
+                }
             }
 
             text += '</tbody></table>';

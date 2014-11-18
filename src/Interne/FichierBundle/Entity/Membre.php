@@ -145,8 +145,8 @@ class Membre extends Personne
      */
     public function getFamille()
     {
-        if($this->famille == null) return new Famille();
-        else return $this->famille;
+        if($this->famille == null) $this->famille = new Famille();
+        return $this->famille;
     }
 
     /**

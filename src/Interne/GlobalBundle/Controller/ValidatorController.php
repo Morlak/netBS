@@ -231,22 +231,6 @@ class ValidatorController extends Controller
         return new JsonResponse($ids);
     }
 
-    public function testAction() {
-
-/*
-        $persistor = $this->get('global.persistor');
-
-
-        $persistor->persistation('InterneFichierBundle.Membre.Adresse.Rue', 'Avenue des hommes qui pèsent 42', 8);
-
-
-        $this->getDoctrine()->getManager()->flush();
-
-*/
-        $this->getExtendedDataAction(5);
-        return new Response('<body></body>');
-
-    }
 
     /**
      * Cette méthode permet de parser les informations contenues dans la valeur d'une modif, dans le cas d'une relation
@@ -306,5 +290,39 @@ class ValidatorController extends Controller
 
 
         }
+    }
+
+
+    public function testAction() {
+
+/*
+        $persistor = $this->get('global.persistor');
+        //$persistor->persistation('InterneFichierBundle.Membre.Adresse.Rue', 'Avenue des hommes qui pèsent 42', 8);
+
+        //$this->getDoctrine()->getManager()->flush();
+
+        $member = new \Interne\FichierBundle\Entity\Membre();
+        $member->setPrenom('guillaume');
+        $member->getFamille()->getPere()->setPrenom('Bertrand');
+        $member->getFamille()->setNom('Hochet');
+
+        $persistor->fullEntityPersistation($member);
+
+        //$persistor->fullEntityPersistation($this->getDoctrine()->getManager()->getRepository('InterneFichierBundle:Membre')->find(1));
+*/
+
+        /*
+        $attribution = new \Interne\StructureBundle\Entity\Attribution();
+        $attribution->setDateDebut(new \Datetime('2009-02-01'));
+        $attribution->setDateFin(new \Datetime('2014-12-14'));
+        $attribution->setFonction($this->getDoctrine()->getManager()->getRepository('InterneStructureBundle:Fonction')->find(1));
+        $attribution->setGroupe($this->getDoctrine()->getManager()->getRepository('InterneStructureBundle:Groupe')->find(2));
+        $attribution->setMembre($this->getDoctrine()->getManager()->getRepository('InterneFichierBundle:Membre')->find(1));
+        $this->getDoctrine()->getManager()->persist($attribution);
+        $this->getDoctrine()->getManager()->flush();
+        */
+
+        return new Response('<body></body>');
+
     }
 }
