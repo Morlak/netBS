@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client: localhost
--- Généré le: Sam 15 Novembre 2014 à 09:34
+-- Généré le: Mar 18 Novembre 2014 à 17:28
 -- Version du serveur: 5.5.40-0ubuntu0.14.04.1
 -- Version de PHP: 5.5.9-1ubuntu4.5
 
@@ -34,15 +34,15 @@ CREATE TABLE IF NOT EXISTS `fichier_adresses` (
   `facturable` tinyint(1) NOT NULL,
   `remarques` longtext COLLATE utf8_unicode_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
 
 --
 -- Contenu de la table `fichier_adresses`
 --
 
 INSERT INTO `fichier_adresses` (`id`, `rue`, `npa`, `localite`, `facturable`, `remarques`) VALUES
-(1, 'chemin des planches', 1073, 'Savigny', 1, NULL),
-(3, 'chemin des zboub', 1021, 'forelion', 0, NULL);
+(3, 'chemin des zboub', 1021, 'forelion', 0, NULL),
+(8, 'Chemin des baaa 2', 10392, 'oloCity', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -118,16 +118,51 @@ CREATE TABLE IF NOT EXISTS `fichier_membres` (
   `adressePrincipale_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UNIQ_82D91FAB4DE7DC5C` (`adresse_id`),
-  KEY `IDX_82D91FAB97A77B84` (`famille_id`),
-  KEY `IDX_82D91FABCA8EA25` (`adressePrincipale_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+  UNIQUE KEY `UNIQ_82D91FABCA8EA25` (`adressePrincipale_id`),
+  KEY `IDX_82D91FAB97A77B84` (`famille_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
 
 --
 -- Contenu de la table `fichier_membres`
 --
 
 INSERT INTO `fichier_membres` (`id`, `famille_id`, `adresse_id`, `telephones`, `emails`, `naissance`, `numero_bs`, `numero_avs`, `statut`, `inscription`, `remarques`, `prenom`, `sexe`, `adressePrincipale_id`) VALUES
-(1, 1, NULL, 'a:1:{i:0;s:0:"";}''', 'a:1:{i:0;s:0:"";}''', '2014-11-12', 5675, '583958398', NULL, '2014-11-06', NULL, 'Guillaume', 'M', NULL);
+(1, 1, NULL, 'a:1:{i:0;s:0:"";}''', 'a:1:{i:0;s:0:"";}''', '2014-11-12', 5675, '583958398', NULL, '2014-11-06', NULL, 'Guillaume', 'M', NULL),
+(7, 1, 8, 'N;', 'N;', '2000-07-03', NULL, NULL, NULL, '2014-11-17', NULL, 'jonas', 'homme', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `global_modifications`
+--
+
+CREATE TABLE IF NOT EXISTS `global_modifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `validation_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `champ` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `valeur` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `path` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `IDX_61883D87A2274850` (`validation_id`),
+  KEY `IDX_61883D87A76ED395` (`user_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=13 ;
+
+--
+-- Contenu de la table `global_modifications`
+--
+
+INSERT INTO `global_modifications` (`id`, `validation_id`, `user_id`, `champ`, `valeur`, `path`, `date`) VALUES
+(1, 1, 1, 'Naissance', '2000-07-03 00:00:00', '', '2014-11-17 08:09:11'),
+(2, 1, 1, 'Prenom', 'jonas', '', '2014-11-17 09:07:57'),
+(3, 1, 1, 'Famille', 'ENTITY__InterneFichierBundle:Famille__1', '', '2014-11-17 09:07:57'),
+(4, 1, 1, 'Rue', 'Chemin des baaa 2', 'Adresse', '2014-11-17 09:09:48'),
+(5, 1, 1, 'Npa', '10392', 'Adresse', '2014-11-17 09:09:48'),
+(6, 1, 1, 'Localite', 'oloCity', 'Adresse', '2014-11-17 09:09:48'),
+(9, 1, 1, 'Sexe', 'homme', '', '2014-11-17 10:46:15'),
+(10, 1, 1, 'Facturable', '0', 'Adresse', '2014-11-17 14:30:46'),
+(12, 5, 1, 'Rue', 'Avenue des hommes qui pèsent 42', 'Adresse', '2014-11-17 14:54:15');
 
 -- --------------------------------------------------------
 
@@ -137,15 +172,22 @@ INSERT INTO `fichier_membres` (`id`, `famille_id`, `adresse_id`, `telephones`, `
 
 CREATE TABLE IF NOT EXISTS `global_validation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL,
-  `entity` longtext COLLATE utf8_unicode_ci NOT NULL,
-  `date` datetime NOT NULL,
   `statut` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `classIdentifier` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `className` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `IDX_9FA371E5A76ED395` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `repo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `entityId` int(11) NOT NULL,
+  `entityName` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `fullClass` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=6 ;
+
+--
+-- Contenu de la table `global_validation`
+--
+
+INSERT INTO `global_validation` (`id`, `statut`, `classIdentifier`, `repo`, `entityId`, `entityName`, `fullClass`) VALUES
+(1, 'CREATION', '393370392a99c8e0648cce246b71964e', 'InterneFichierBundle:Membre', 0, 'Membre', 'Interne\\FichierBundle\\Entity\\Membre'),
+(5, 'MODIFICATION', 'bab24574dec5c0b94f331a253b1b1e6a', 'InterneFichierBundle:Membre', 7, 'Membre', 'Interne\\FichierBundle\\Entity\\Membre');
 
 -- --------------------------------------------------------
 
@@ -243,7 +285,7 @@ CREATE TABLE IF NOT EXISTS `stamm_news` (
   `contenu` longtext COLLATE utf8_unicode_ci NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
 
 --
 -- Contenu de la table `stamm_news`
@@ -251,7 +293,8 @@ CREATE TABLE IF NOT EXISTS `stamm_news` (
 
 INSERT INTO `stamm_news` (`id`, `titre`, `contenu`, `date`) VALUES
 (1, 'labite', '4444444444444444', '2014-11-12 11:14:43'),
-(2, 'test', 'premier zhgfc', '2014-11-12 16:49:18');
+(2, 'test', 'premier zhgfc', '2014-11-12 16:49:18'),
+(3, 'Martial...', 'T''as échoué', '2014-11-17 13:51:23');
 
 -- --------------------------------------------------------
 
@@ -270,14 +313,15 @@ CREATE TABLE IF NOT EXISTS `structure_attributions` (
   KEY `IDX_5B87C3A27A45358C` (`groupe_id`),
   KEY `IDX_5B87C3A26A99F74A` (`membre_id`),
   KEY `IDX_5B87C3A257889920` (`fonction_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Contenu de la table `structure_attributions`
 --
 
 INSERT INTO `structure_attributions` (`id`, `groupe_id`, `membre_id`, `fonction_id`, `dateDebut`, `dateFin`) VALUES
-(1, 1, 1, 1, '2000-11-05', '2020-12-24');
+(1, 1, 1, 1, '2000-11-05', '2020-12-24'),
+(2, 2, 1, 1, '2009-02-01', '2014-12-14');
 
 -- --------------------------------------------------------
 
@@ -446,10 +490,11 @@ ALTER TABLE `fichier_membres`
   ADD CONSTRAINT `FK_82D91FABCA8EA25` FOREIGN KEY (`adressePrincipale_id`) REFERENCES `fichier_adresses` (`id`);
 
 --
--- Contraintes pour la table `global_validation`
+-- Contraintes pour la table `global_modifications`
 --
-ALTER TABLE `global_validation`
-  ADD CONSTRAINT `FK_9FA371E5A76ED395` FOREIGN KEY (`user_id`) REFERENCES `security_users` (`id`);
+ALTER TABLE `global_modifications`
+  ADD CONSTRAINT `FK_61883D87A76ED395` FOREIGN KEY (`user_id`) REFERENCES `security_users` (`id`),
+  ADD CONSTRAINT `FK_61883D87A2274850` FOREIGN KEY (`validation_id`) REFERENCES `global_validation` (`id`);
 
 --
 -- Contraintes pour la table `security_users`
