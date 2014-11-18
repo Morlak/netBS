@@ -76,7 +76,8 @@ class FichierController extends Controller
     
     /**
      * Permet de visualiser la fiche d'un membre
-     * @param id l'id du membre dans la base de données
+     * @param $id l'id du membre dans la base de données
+     * @return la vue
      */
     public function voirMembreAction($id) {
 	

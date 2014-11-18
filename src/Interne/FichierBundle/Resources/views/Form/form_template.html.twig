@@ -56,7 +56,11 @@
         <div class="form-group form-group-sm">
             {{- form_label(form) -}}
             <div class="col-sm-8">
+            {% if root.vars.value == null %}
+                {{- form_widget(form, { 'attr': {'entity-id': app.security.getToken().getUser().getUsername() }, 'root': root }) -}}
+            {% else %}
                 {{- form_widget(form, { 'attr': {'entity-id': root.vars.value.getId()}, 'root': root }) -}} {# Recursive call #}
+            {% endif %}
             </div>
             {{- form_errors(form) -}}
         </div>

@@ -98,7 +98,7 @@ class Membre extends Personne
     /**
      * @var Adresse
      *
-     * @ORM\OneToOne(targetEntity="Adresse", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="\Interne\FichierBundle\Entity\Adresse", cascade={"persist", "remove"})
      */
     protected $adressePrincipale;
 
@@ -145,7 +145,7 @@ class Membre extends Personne
      */
     public function getFamille()
     {
-        if($this->famille == null) $this->famille = new Famille();
+        //if($this->famille == null) $this->famille = new Famille();
         return $this->famille;
     }
 
@@ -382,11 +382,6 @@ class Membre extends Personne
      */
     public function getAdresse()
     {
-        if($this->adresse == null) {
-
-            $this->adresse = new Adresse();
-        }
-
         return $this->adresse;
     }
 

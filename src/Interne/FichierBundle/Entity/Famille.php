@@ -102,7 +102,6 @@ class Famille
      */
     public function getPere()
     {
-        if($this->pere == null) $this->pere = new Geniteur();
         return $this->pere;
     }
 
@@ -126,7 +125,6 @@ class Famille
      */
     public function getMere()
     {
-        if($this->mere == null) $this->mere = new Geniteur();
         return $this->mere;
     }
 

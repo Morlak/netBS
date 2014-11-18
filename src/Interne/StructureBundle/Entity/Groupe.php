@@ -58,6 +58,14 @@ class Groupe
     private $type;
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->enfants = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Get id
      *
      * @return integer 
@@ -137,14 +145,6 @@ class Groupe
     }
     
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->enfants = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
      * Add enfants
      *
      * @param \Interne\StructureBundle\Entity\Groupe $enfants
@@ -220,8 +220,7 @@ class Groupe
      */
     public function getType()
     {
-        if($this->type == null) return new Type();
-        else return $this->type;
+        return $this->type;
     }
 
     public function getMembers()
@@ -246,7 +245,7 @@ class Groupe
         $members = $this->getMembers();
 
         foreach ($this->getEnfants() as $childGroup) {
-            array_merge($members, $childGroup->getMembersRecursive());
+            $members = array_merge($members, $childGroup->getMembersRecursive());
         }
 
         return $members;

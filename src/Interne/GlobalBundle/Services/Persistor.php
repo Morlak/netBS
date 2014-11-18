@@ -37,7 +37,7 @@ class Persistor
      */
     public function persistation($entity, $value, $id = null, $statut = null) {
 
-        $data       = explode('.', $entity);
+        $data       = explode('_', $entity);
         $repo       = $data[0];
         $entity     = $data[1];
         $user       = $this->context->getToken()->getUser();

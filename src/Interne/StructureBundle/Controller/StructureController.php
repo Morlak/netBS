@@ -23,11 +23,15 @@ class StructureController extends Controller
 	
     public function hierarchieAction()
     {
+        $em = $this->getDoctrine()->getManager();
+
     	$groupe  = new Groupe();
+        $em->persist($groupe);
         $form 	 = $this->createForm(new GroupeType, $groupe);
 
         //On récupère aussi le formulaire de type
         $type = new Type();
+        $em->persist($type);
         $typeForm = $this->createForm(new TypeType, $type);
 
         return $this->render('InterneStructureBundle:Structure:hierarchie.html.twig', array(
@@ -93,8 +97,7 @@ class StructureController extends Controller
 		
 		if($typeForm->isValid() ) {
 
-            $persistor = $this->get('global.persistor');
-		    $persistor->safePersist($type);
+		    $em->persist($type);
 		    $em->flush();
 		    $session->getFlashBag()->add('notice', 'Type ajouté avec succès');
 		}

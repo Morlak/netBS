@@ -139,7 +139,7 @@ class ValidatorController extends Controller
     }
 
     /**
-     * Permet de persister une masse de validation d'un coup. Pour chaque
+     * Permet de persister une masse de validation d'un coup
      */
     public function persistValidationAction($ids) {
 
@@ -202,20 +202,25 @@ class ValidatorController extends Controller
                     $fnData = explode('.', $modif->getPath());
                     $cursor = $objet;
 
+                    /*
+                     * On a affaire à une relation. On va donc, pour chaque élément du path, tenter d'accéder à l'objet
+                     * lié. Si on arrive pas, on en instancie un avec targetDummie puis on l'utilise pour aller plus loin
+                     */
+                    if($modif->getPath() != '') {
 
-                    for ($i = 0; $i < count($fnData); $i++) {
+                        for($i = 0; $i < count($fnData); $i++) {
 
-                        if ($fnData[$i] != '') {
-
-                            $fn = 'get' . $fnData[$i];
-                            $cursor = $cursor->$fn();
+                            $getter = 'get' . $fnData[$i];
+                            $setter = 'set' . $fnData[$i];
+                            if($cursor->$getter() == null)
+                                $cursor->$setter($this->targetDummie(strtolower($fnData[$i]), $cursor));
                         }
-                    }
 
+                        $cursor = $cursor->$getter();
+                    }
 
                     $setter = 'set' . $modif->getChamp();
                     $cursor->$setter($this->parseValue($modif->getValeur())); //Magique
-
                 }
 
 
@@ -229,6 +234,21 @@ class ValidatorController extends Controller
 
         $em->flush();
         return new JsonResponse($ids);
+    }
+
+    /**
+     * Renvoie l'entité liée par relation, en scannant les annotations de la classe
+     * Cette méthode c'est le saint-graal, c'est abusé
+     * @param $item le nom de l'attribut
+     * @param $cursor l'objet qui contient l'attribut
+     */
+    private function targetDummie($item, $cursor) {
+
+        $emptyObjectName    = \Doctrine\Common\Util\ClassUtils::getRealClass(get_class($cursor));
+        $metaData           = $this->getDoctrine()->getManager()->getClassMetadata($emptyObjectName);
+        $target             = $metaData->associationMappings[$item]['targetEntity'];
+
+        return new $target();
     }
 
 
@@ -321,6 +341,8 @@ class ValidatorController extends Controller
         $this->getDoctrine()->getManager()->persist($attribution);
         $this->getDoctrine()->getManager()->flush();
         */
+
+        $this->persistValidationAction(5);
 
         return new Response('<body></body>');
 

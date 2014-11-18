@@ -91,7 +91,7 @@
             <ul class="list-group">
                 <li class="list-group-item">
                     <span class="badge">{{ groupe.membersRecursive|length }}</span>
-                    Toute la {{ groupe.type.nom }}
+                    {{ groupe.nom }}
                 </li>
 
                 {% for groupeEnfant in groupe.enfants %}
