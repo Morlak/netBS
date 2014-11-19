@@ -78,11 +78,7 @@
 
                 <div class="col-lg-12">
 
-                    {{ include('InterneStructureBundle:Structure:listeMembresGeneric.html.twig', {'membersList' : groupe.members, 'title': groupe.type.nom ~ ' ' ~ groupe.nom}) }}
-
-                    {% for enfant in groupe.enfants %}
-                        {{ include('InterneStructureBundle:Structure:listeMembresGeneric.html.twig', {'membersList' : enfant.members, 'title': enfant.type.nom ~ ' ' ~ enfant.nom}) }}
-                    {% endfor %}
+                    {{ include('InterneStructureBundle:Structure:listeMembresGeneric.html.twig', {'attributions' : attrs, 'nomGroupe': groupe.nom}) }}
 
                 </div>
 
@@ -95,7 +91,7 @@
             <ul class="list-group">
                 <li class="list-group-item">
                     <span class="badge">{{ groupe.membersRecursive|length }}</span>
-                    Toute la {{ groupe.type.nom }}
+                    {{ groupe.nom }}
                 </li>
 
                 {% for groupeEnfant in groupe.enfants %}

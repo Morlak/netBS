@@ -21,7 +21,7 @@
 
 {% block form_widget_simple -%}
     {%- set type = type|default('text') -%}
-    <input class="form-control" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    <span class="ajax-editable" data-type="{{ type }}">{{ value }}</span>
 {%- endblock form_widget_simple %}
 
 
@@ -56,11 +56,7 @@
         <div class="form-group form-group-sm">
             {{- form_label(form) -}}
             <div class="col-sm-8">
-            {% if root.vars.value == null %}
-                {{- form_widget(form, { 'attr': {'entity-id': app.security.getToken().getUser().getUsername() }, 'root': root }) -}}
-            {% else %}
                 {{- form_widget(form, { 'attr': {'entity-id': root.vars.value.getId()}, 'root': root }) -}} {# Recursive call #}
-            {% endif %}
             </div>
             {{- form_errors(form) -}}
         </div>
@@ -110,7 +106,6 @@
     {% if required and empty_value is none and not empty_value_in_choices and not multiple %}
         {% set required = false %}
     {% endif %}
-    <select class="chosen" {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
         {% if empty_value is not none -%}
             <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ empty_value|trans({}, translation_domain) }}</option>
         {%- endif %}

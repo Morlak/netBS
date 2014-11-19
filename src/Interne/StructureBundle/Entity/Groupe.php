@@ -4,6 +4,8 @@ namespace Interne\StructureBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Interne\StructureBundle\Entity\Type;
+
 /**
  * Groupe
  *
@@ -52,9 +54,16 @@ class Groupe
      * @var Type $type
      * 
      * @ORM\ManyToOne(targetEntity="Type", inversedBy="groupes", cascade={"persist"})
-     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
      */
     private $type;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->enfants = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -136,14 +145,6 @@ class Groupe
     }
     
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->enfants = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
      * Add enfants
      *
      * @param \Interne\StructureBundle\Entity\Groupe $enfants
@@ -208,7 +209,7 @@ class Groupe
     public function setType(\Interne\StructureBundle\Entity\Type $type = null)
     {
         $this->type = $type;
-	$type->addGroupe($this);
+	    $type->addGroupe($this);
         return $this;
     }
 
@@ -226,10 +227,11 @@ class Groupe
     {
 
         $members = array();
+        $today   = new \Datetime();
 
-        foreach ($this->getAttributions()->toArray() as $attribution) {
-            if ($attribution->getDateFin() == NULL) // FIXME: or date fin > today
-                $members[] = $attribution->getMembre();
+        foreach ($this->getAttributions() as $attribution) {
+            if ($attribution->getDateFin() == null || $attribution->getDateFin() > $today)
+                array_push($members, $attribution->getMembre());
 
         }
 
@@ -243,7 +245,7 @@ class Groupe
         $members = $this->getMembers();
 
         foreach ($this->getEnfants() as $childGroup) {
-            array_merge($members, $childGroup->getMembersRecursive());
+            $members = array_merge($members, $childGroup->getMembersRecursive());
         }
 
         return $members;

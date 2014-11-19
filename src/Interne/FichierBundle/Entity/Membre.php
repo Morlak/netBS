@@ -5,6 +5,8 @@ namespace Interne\FichierBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Interne\FichierBundle\Entity\Famille;
+
 /**
  * Membre
  *
@@ -96,7 +98,7 @@ class Membre extends Personne
     /**
      * @var Adresse
      *
-     * @ORM\ManyToOne(targetEntity="Adresse")
+     * @ORM\OneToOne(targetEntity="\Interne\FichierBundle\Entity\Adresse", cascade={"persist", "remove"})
      */
     protected $adressePrincipale;
 
@@ -109,6 +111,18 @@ class Membre extends Personne
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return Membre
+     */
+    public function setId($id) {
+
+        $this->id = $id;
+        return $this;
     }
 
     /**
@@ -131,6 +145,7 @@ class Membre extends Personne
      */
     public function getFamille()
     {
+        //if($this->famille == null) $this->famille = new Famille();
         return $this->famille;
     }
 
@@ -263,7 +278,7 @@ class Membre extends Personne
      */
     public function setNaissance($naissance)
     {
-        $this->naissance = new \Datetime($naissance);
+        $this->naissance = $naissance;
 
         return $this;
     }

@@ -4,6 +4,8 @@ namespace Interne\FichierBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Interne\FichierBundle\Entity\Adresse;
+
 /** 
  * @ORM\MappedSuperclass 
  */
@@ -37,14 +39,14 @@ abstract class Personne
      *
      * @ORM\Column(name="telephones", type="array")
      */
-    private $telephones = 'a:1:{i:0;s:0:"";}';
+    private $telephones;
 
     /**
      * @var array
      *
      * @ORM\Column(name="emails", type="array")
      */
-    private $emails = 'a:1:{i:0;s:0:"";}';
+    private $emails;
 
 
 
@@ -114,7 +116,8 @@ abstract class Personne
      */
     public function getAdresse()
     {
-        return $this->adresse;
+        if($this->adresse == null) return new Adresse();
+        else return $this->adresse;
     }
 
 
@@ -144,7 +147,7 @@ abstract class Personne
      */
     public function getTelephones()
     {
-        return $this->telephones;
+        return ( $this->telephones == null ) ? array() : $this->telephones;
     }
 
     /**
@@ -173,7 +176,7 @@ abstract class Personne
      */
     public function getEmails()
     {
-        return $this->emails;
+        return ( $this->emails == null ) ? array() : $this->emails;
     }
 
 }

@@ -18,10 +18,6 @@ use Interne\StammBundle\Form\DownloadType;
 class StammController extends Controller
 {
     
-    
-    
-
-    
     /**
      * Permet de renvoyer le fichier à télécharger, renvoyant ainsi les bon
      * headers
@@ -58,8 +54,8 @@ class StammController extends Controller
      * - gérer l'agenda
      */
     public function dashboardShowAction() {
-    	
-    	// On instancie les entities
+
+        // On instancie les entities
     	$news 	= new News();
     	$event 	= new Evenement();
     	$ddl 	= new Download();
@@ -96,9 +92,8 @@ class StammController extends Controller
     	
     	if($entity != 'News' && $entity != 'Evenement' && $entity != 'Download') 
     		throw $this->createNotFoundException('Accès impossible, données transmises incompatibles');
-    	
-    	
-    	//On instancie l'entité
+
+        //On instancie l'entité
     	$nspc = 'Interne\StammBundle\Entity' . '\\' . $entity;
     	$type = 'Interne\StammBundle\Form' . '\\' . $entity . 'Type';
     	$obj  = new $nspc();
@@ -111,13 +106,15 @@ class StammController extends Controller
 				
 				//On persiste l'objet
 			    $em = $this->getDoctrine()->getManager();
-				$em->persist($obj);
+
+                $em->persist($obj);
 				$em->flush();
 			}
 		}
 		
 		// On retourne de toute facon vers le dashboard
 		return $this->redirect($this->generateUrl('InterneStamm_dashboard'));
+
     }
     
     /**

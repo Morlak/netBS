@@ -27,7 +27,6 @@ class GlobalController extends Controller
 
         $content = $request->get('value');
 
-        //Premi�re chose, on r�cup�re les informations sur l'entit�
         $entity = urldecode($entity);
         $data = explode('.', $entity);
         $bundle = $data[0];
@@ -35,21 +34,9 @@ class GlobalController extends Controller
         $field = $data[2];
         $link = array();
 
-        //On formate le content en tant que boolean ou date si n�cessaire
-/*
-        if ($content == 'true') $content = true;
-        else if ($content == 'false') $content = false;
-        else if ($content == 'NULL_CONTENT') $content = null;
-        else if (preg_match("/^(0[1-9]|[1-2][0-9]|3[0-1]).(0[1-9]|1[0-2]).[0-9]{4}$/", $content)) {
-            $c = explode('.', $content);
-            $content = new \Datetime($c[2] . '-' . $c[1] . '-' . $c[0]);
-        } else {
-            $content = urldecode($content);
-        }
-*/
 
         for ($i = 0; $i < count($data) - 2; $i++) {
-            $link[$i] = $data[$i + 2]; //On stocke le chemin dans l'entit�
+            $link[$i] = $data[$i + 2];
         }
 
         //On r�cup�re l'entit� avec l'em

@@ -29,6 +29,8 @@ class AppKernel extends Kernel
             new Interne\StammBundle\InterneStammBundle(),
             new Interne\StructureBundle\InterneStructureBundle(),
             new Interne\FactureBundle\InterneFactureBundle(),
+            new Interne\StructureBundle\InterneStructureBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

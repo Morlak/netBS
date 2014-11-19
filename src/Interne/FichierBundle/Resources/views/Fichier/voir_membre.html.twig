@@ -1,26 +1,42 @@
 {% extends "InterneHomeBundle::layout.html.twig" %}
 
-{% form_theme membreForm 'InterneFichierBundle:Form:form_template.html.twig' %}
-{% form_theme membreContactForm 'InterneFichierBundle:Form:form_template.html.twig' %}
-{% form_theme membreFamilleForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+{% if membre.id != null %}
 
-{% form_theme familleForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+    {% form_theme membreForm 'InterneFichierBundle:Form:form_viewer_template.html.twig' %}
+    {% form_theme membreContactForm 'InterneFichierBundle:Form:form_viewer_template.html.twig' %}
+    {% form_theme membreFamilleForm 'InterneFichierBundle:Form:form_viewer_template.html.twig' %}
+    {% form_theme familleForm 'InterneFichierBundle:Form:form_viewer_template.html.twig' %}
 
-{% block title %}{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }} | Fiche de membre{% endblock %}
+{% else %}
+
+    {% form_theme membreForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+    {% form_theme membreContactForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+    {% form_theme membreFamilleForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+    {% form_theme familleForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+
+{% endif %}
+
+{% block title %}
+    {%  if membre.id == null %}Nouveau membre{% else %}{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}{% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('static/css/bootstrap-editable.css') }}" type="text/css">
+{% endblock %}
 
 
 {% block body %}
 
     <div class="row">
         <div class="col-lg-11 col-lg-offset-1">
-            <h3>{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}</h3>
+            <h3>{% if membre.id == null %}Ajouter un membre{% else %}{{ membre.prenom|capitalize }} {{ membre.famille.nom|capitalize }}{% endif %}</h3>
         </div>
     </div>
 
     <div class="row">
 
         <div class="col-lg-6">
-            <form class="form-horizontal ajaxedit" role="form" method="post" {{ form_enctype(membreForm) }}>
+
                 <div class="widget">
 
                     <div class="widget-title">
@@ -28,15 +44,17 @@
                     </div>
 
                     <div class="widget-content">
-                        {{ form_widget(membreForm) }}
+
+                        <form class="form-horizontal ajaxedit" role="form" method="post" {{ form_enctype(membreForm) }}>
+                            {{ form_widget(membreForm) }}
+                        </form>
+
                     </div>
                 </div>
-            </form>
         </div>
 
 
         <div class="col-lg-6">
-            <form class="form-horizontal ajaxedit" role="form" method="post" {{ form_enctype(membreFamilleForm) }}>
                 <div class="widget">
 
                     <div class="widget-title">
@@ -44,11 +62,14 @@
                     </div>
 
                     <div class="widget-content">
-                        {{ form_widget(membreFamilleForm) }}
-                        {{ form_widget(familleForm) }}
+                        <form class="form-horizontal ajaxedit" role="form" method="post" {{ form_enctype(membreFamilleForm) }}>
+
+                            {{ form_widget(membreFamilleForm) }}
+                            {{ form_widget(familleForm) }}
+
+                        </form>
                     </div>
                 </div>
-            </form>
         </div>
 
 
@@ -74,8 +95,7 @@
 
     </div>
 
-
-
+    {%  if membre.id is not null %}
 
     <div class="row">
 
@@ -209,225 +229,6 @@
                         </tbody>
 
                     </table>
-
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="row">
-
-        <div class="col-lg-7">
-
-            <div class="widget">
-                <div class="widget-title">
-                    <span>Informations sur le membre</span>
-                </div>
-
-                <div class="widget-content">
-
-                    <div class="row">
-
-
-                        <div class="col-md-6">
-
-                            <ul class="data-liste">
-                                <li><strong>Prénom</strong><span class="editable"
-                                                                 name="InterneFichierBundle.membre.{{ membre.id }}.prenom">{{ membre.prenom|capitalize }}</span>
-                                </li>
-                                <li><strong>Date de naissance</strong><span>{{ membre.naissance|date("d.m.Y") }}</span>
-                                </li>
-                                {#<li><strong>Téléphone</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.telephones">{{ membre.telephones }}</span></li>#}
-                                {#<li><strong>E-Mail</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.emails">{{ membre.emails }}</span></li>#}
-
-                            </ul>
-
-                        </div>
-
-                        <div class="col-md-6">
-
-                            <ul class="data-liste">
-                                <li><strong>Numéro BS</strong><span>{{ membre.numeroBs }}</span></li>
-                                <li><strong>Inscrit le</strong><span
-                                            name="InterneFichierBundle.membre.{{ membre.id }}.inscription"
-                                            class="date-editable">{{ membre.inscription|date("d.m.Y") }}</span><input
-                                            type="hidden" class="datepicker date-editable-input"/></li>
-                                <li><strong>Statut</strong><span>{{ membre.statut }}</span></li>
-                            </ul>
-
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-lg-5">
-            <div class="widget">
-                <div class="widget-title">
-                    <span>Informations sur la famille</span>
-                </div>
-
-                <div class="widget-content">
-
-                    <ul class="data-liste">
-                        <li><strong>Nom de famille</strong><span><a
-                                        href="{{ path('InterneFichier_voir_famille', {'id' : membre.famille.id}) }}">{{ membre.famille.nom|capitalize }}</a></span>
-                        </li>
-                        <li><strong>Parents</strong><span>{{ membre.famille.pere.prenom|capitalize }}
-                                et {{ membre.famille.mere.prenom|capitalize }}</span></li>
-                        {#<li><strong>Téléphone familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.telephone">{{ membre.famille.contact.telephone }}</span></li>#}
-                        {#<li><strong>E-Mail familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.contact.email">{{ membre.famille.contact.email }}</span></li>#}
-                    </ul>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="row">
-
-        <div class="col-lg-5">
-
-            <div class="widget">
-                <div class="widget-title">
-                    <span>Adresse principale</span>
-                </div>
-                <div class="widget-content">
-
-                    {#    				{% if adressePrincipale == 'famille' %}
-
-                                            <ul class="data-liste">
-                                                <li><h4>Adresse familiale</h4></li>
-                                                <li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.rue">{{ membre.famille.adresse.rue }}</span></li>
-                                                <li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.npa">{{ membre.famille.adresse.npa }}</span></li>
-                                                <li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.localite">{{ membre.famille.adresse.localite }}</span></li>
-                                                <li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.facturable" {% if membre.famille.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
-                                                <li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.remarques">{{ membre.famille.adresse.remarques }}</span></li>
-                                            </ul>
-
-                                        {% elseif adressePrincipale == 'membre' %}
-
-                                            <ul class="data-liste">
-                                                <li><h4>Adresse du membre</h4></li>
-                                                <li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.rue">{{ membre.adresse.rue }}</span></li>
-                                                <li><strong>NPA</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.npa">{{ membre.adresse.npa }}</span></li>
-                                                <li><strong>Localité</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.localite">{{ membre.adresse.localite }}</span></li>
-                                                <li><strong>Facturable</strong><input type="checkbox" class="toggle-editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.facturable" {% if membre.adresse.facturable == 1 %}checked{% else %}{% endif %}></li>
-                                                <li><strong>Remarques</strong><span class="editable" name="InterneFichierBundle.membre.{{ membre.id }}.adresse.remarques">{{ membre.adresse.remarques }}</span></li>
-                                            </ul>
-
-                                        {% endif %}#}
-
-                </div>
-            </div>
-
-        </div>
-
-        <div class="col-lg-7">
-
-            <div class="widget">
-                <div class="widget-title">
-                    <span>Adresses disponibles</span>
-                </div>
-
-                <div class="widget-content">
-
-                    <div class="panel-group accordeon" id="adresses-accordeon">
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Adresse du
-                                        membre</a>
-                                </h4>
-                            </div>
-
-                            <div id="collapseOne" class="panel-collapse collapse">
-                                <div class="panel-body">
-
-                                    <ul class="data-liste">
-                                        <li><strong>Rue</strong><span class="editable"
-                                                                      name="InterneFichierBundle.membre.{{ membre.id }}.adresse.rue">{{ membre.adresse.rue }}</span>
-                                        </li>
-                                        <li><strong>NPA</strong><span class="editable"
-                                                                      name="InterneFichierBundle.membre.{{ membre.id }}.adresse.npa">{{ membre.adresse.npa }}</span>
-                                        </li>
-                                        <li><strong>Localité</strong><span class="editable"
-                                                                           name="InterneFichierBundle.membre.{{ membre.id }}.adresse.localite">{{ membre.adresse.localite }}</span>
-                                        </li>
-                                        <li><strong>Facturable</strong><input type="checkbox" class="toggle-editable"
-                                                                              name="InterneFichierBundle.membre.{{ membre.id }}.adresse.facturable"
-                                                                              {% if membre.adresse.facturable == 1 %}checked{% else %}{% endif %}>
-                                        </li>
-                                        <li><strong>Remarques</strong><span class="editable"
-                                                                            name="InterneFichierBundle.membre.{{ membre.id }}.adresse.remarques">{{ membre.adresse.remarques }}</span>
-                                        </li>
-                                    </ul>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Adresse
-                                        familiale</a>
-                                </h4>
-                            </div>
-
-                            <div id="collapseTwo" class="panel-collapse collapse">
-                                <div class="panel-body">
-
-                                    <ul class="data-liste">
-                                        <li><strong>Rue</strong><span class="editable"
-                                                                      name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.rue">{{ membre.famille.adresse.rue }}</span>
-                                        </li>
-                                        <li><strong>NPA</strong><span class="editable"
-                                                                      name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.npa">{{ membre.famille.adresse.npa }}</span>
-                                        </li>
-                                        <li><strong>Localité</strong><span class="editable"
-                                                                           name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.localite">{{ membre.famille.adresse.localite }}</span>
-                                        </li>
-                                        <li><strong>Facturable</strong><input type="checkbox" class="toggle-editable"
-                                                                              name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.facturable"
-                                                                              {% if membre.famille.adresse.facturable == 1 %}checked{% else %}{% endif %}>
-                                        </li>
-                                        <li><strong>Remarques</strong><span class="editable"
-                                                                            name="InterneFichierBundle.famille.{{ membre.famille.id }}.adresse.remarques">{{ membre.famille.adresse.remarques }}</span>
-                                        </li>
-                                    </ul>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
 
                 </div>
             </div>
@@ -677,6 +478,8 @@
         </div>
     </div>
 
+    {% endif %}
+
     <!-- on stocke l'id du membre pour pouvoir la récupérer -->
     <input type="hidden" value="{{ membre.id }}" id="membre-id"/>
 
@@ -685,6 +488,7 @@
 {% block javascript %}
 
     <script src="{{ asset('static/js/modifikator.js') }}"></script>
+    <script src="{{  asset('static/js/bootstrap-editable.min.js') }}"></script>
     <script src="{{ asset('static/js/membres.js') }}"></script>
 
 {% endblock %}

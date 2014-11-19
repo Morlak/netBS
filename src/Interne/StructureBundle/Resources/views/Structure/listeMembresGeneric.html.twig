@@ -1,7 +1,7 @@
 <div class="widget">
 
     <div class="widget-title">
-        <span>{{ title }}</span>
+        <span>Effectifs - {{ nomGroupe }}</span>
 
         <div class="widget-toolbar">
 
@@ -36,49 +36,35 @@
             <thead>
             <tr>
                 <th></th>
-                <th></th>
-                <th></th>
                 <th>Prénom</th>
                 <th>Nom</th>
-
-                {#
-                                <th>Date de naissance</th>
-
-                                <th>Adresse</th>
-                                <th>NPA</th>
-                                <th>Localité</th>
-
-                                <th>fonction</th>
-                                <th>groupe</th>
-
-                                <th style="width:150px">debut</th>
-                                <th style="width:150px">fin</th>
-                #}
+                <th>Date de naissance</th>
+                <th>Fonction</th>
+                <th>A {{ nomGroupe }} depuis</th>
+                <th>Options</th>
 
             </tr>
             </thead>
 
             <tbody>
 
-            {% for member in membersList %}
+            {% for attribution in attrs %}
 
                 <tr>
-                    <td><input type="checkbox" id="membre_{{ member.id }}"/></td>
-                    <td><span class="glyphicon glyphicon-list"></span></td>
-                    <td><span class="glyphicon glyphicon-remove"></span></td>
-                    <td><a href="{{ path('InterneFichier_voir_membre', {'id' : member.id}) }}">{{ member.prenom }}</a>
+                    <td><input type="checkbox" id="membre_{{ attribution.membre.id }}"/></td>
+
+                    <td><a href="{{ path('InterneFichier_voir_membre', {'id' : attribution.membre.id}) }}">{{ attribution.membre.prenom }}</a>
+                    <td>{{ attribution.membre.famille.nom }}</td>
+                    <td>{{ attribution. membre.naissance|date('d.m.Y') }}</td>
+                    <td>{{ attribution.fonction.nom }}</td>
+                    <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
+
+
+                    <td>
+                        <a class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-list"></span></a>
+                        <a class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
                     </td>
-                    <td>{{ member.famille.nom }}</td>
-                    {#
-                                        <tr>{{ member.naissance|date('d.m.Y') }}</tr>
-                                        <tr>{{ member.adresse.rue }} Rue</tr>
-                                        <tr>{{ member.adresse.npa }} NPA</tr>
-                                        <tr>{{ member.adresse.localite }} Loc</tr>
-                                        <td>{{ attribution.fonction.nom }}</td>
-                                        <td><a href="{{ path('InterneStructure_voir_groupe', {'id' : attribution.groupe.id}) }}">{{ attribution.groupe.nom }}</a></td>
-                                        <td>{{ attribution.dateDebut|date("d.m.Y") }}</td>
-                                        <td>{% if attribution.dateFin is not null %}{{ attribution.dateFin|date("d.m.Y") }} {% endif %}</td>
-                    #}
+
                 </tr>
 
             {% endfor %}

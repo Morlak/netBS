@@ -33,5 +33,12 @@ class HomeController extends Controller
         	));
     }
     
+    /**
+     * Page de recherche, fournit le formulaire complet pour effectuer
+     * une recherche avancée, traitement des données par ajax
+     */
+    public function rechercherAction() {
 
+        return $this->render('InterneSearchBundle:Search:search.html.twig');
+    }
 }
