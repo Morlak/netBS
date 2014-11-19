@@ -64,7 +64,7 @@ class FactureType extends AbstractType
                 'collection',
                 array(
                     'type'          => new RappelType,
-                    'allow_add'     => false,
+                    'allow_add'     => true,
                     'allow_delete'  => true,
                     'prototype'     => true,
                     'by_reference'  => false,

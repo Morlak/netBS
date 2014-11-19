@@ -27,7 +27,6 @@ class AppKernel extends Kernel
             new Interne\SearchBundle\InterneSearchBundle(),
             new Interne\SecurityBundle\InterneSecurityBundle(),
             new Interne\StammBundle\InterneStammBundle(),
-            new Interne\StructureBundle\InterneStructureBundle(),
             new Interne\FactureBundle\InterneFactureBundle(),
             new Interne\StructureBundle\InterneStructureBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
