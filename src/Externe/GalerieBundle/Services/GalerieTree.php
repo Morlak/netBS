@@ -11,7 +11,7 @@ class GalerieTree
         $this->em = $em;
     }
     
-    /**
+    /*
      * retourne la hierarchie bioen construite pour jstree supply en
      * json data
      */
@@ -23,7 +23,7 @@ class GalerieTree
         $dossiers = $dossierRepo->findByDroit($droit);
         $tree     = array();
         
-        //On récupère les albums du groupe racine
+        //On rï¿½cupï¿½re les albums du groupe racine
         $albums = $albumRepo->findAlbumsForThisDroitAndDossier($droit, null);
         $ac     = 0;
         

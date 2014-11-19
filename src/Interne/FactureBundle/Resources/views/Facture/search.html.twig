@@ -1,0 +1,44 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% form_theme factureForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+
+
+{% block title %}Rechercher une facture{% endblock %}
+
+{% block body %}
+
+
+<div class="row">
+
+    <div class="col-lg-6">
+        <form class="form-horizontal" role="form" method="post" {{ form_enctype(factureForm) }}>
+            <div class="widget">
+
+                <div class="widget-title">
+                    <span>Rechercher une facture</span>
+                </div>
+
+                <div class="widget-content">
+                    {{ form_widget(factureForm) }}
+
+
+                    <input type="submit" class="btn btn-primary"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    il faudra encore ajouter des fonctions de recherche spécifique comme: entre deux montant, nombre de rappel, date de rappel, montantRecu supeérieur a emis et inverse, etc.
+</div>
+
+
+
+    {% endblock %}
+
+    {% block javascript %}
+
+    <script type="text/javascript">
+
+
+    </script>
+
+{% endblock %}

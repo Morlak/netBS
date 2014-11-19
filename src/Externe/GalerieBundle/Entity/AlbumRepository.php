@@ -3,6 +3,7 @@
 namespace Externe\GalerieBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Validator\Constraints\Null;
 
 /**
  * AlbumRepository
@@ -13,7 +14,7 @@ use Doctrine\ORM\EntityRepository;
 class AlbumRepository extends EntityRepository
 {
     /**
-     * renvoie une liste d'images aléatoires
+     * renvoie une liste d'images alï¿½atoires
      */
     public function findRandom($nb) {
         
@@ -28,16 +29,16 @@ class AlbumRepository extends EntityRepository
             
             if($exit == 15) exit;
             
-            //On vérifie aussi que l'album ne soit pas vide
+            //On vï¿½rifie aussi que l'album ne soit pas vide
             
             $id     = rand(1, $albums);
             $album  = $this->find($id);
-            
-            if(!empty($album->getPhotos())) {
+            $photos = $album->getPhotos();
+            if($photos != NULL) {
             
                 $pics   = $album->getPhotos();
                 $chose  = array();
-                //On récupère 6 photos par album au maximum
+                //On rï¿½cupï¿½re 6 photos par album au maximum
                 for($i = 0; $i < 6; $i++) {
                     
                     $pic = rand(0, count($pics) - 1);
@@ -56,7 +57,7 @@ class AlbumRepository extends EntityRepository
     }
     
     /**
-     * la méthode findPictures retourne la liste des photos pour affichage
+     * la mï¿½thode findPictures retourne la liste des photos pour affichage
      * en fonction de l'id de l'album
      */
     public function findPictures($id) {
@@ -77,9 +78,9 @@ class AlbumRepository extends EntityRepository
     }
     
     /**
-     * Cette méthode va retourner l'ensemble des albums pour un dossier
-     * et un droit donné. Si on prennait seulement le dossier, il pourrait y
-     * avoir des problèmes avec les dossiers racine
+     * Cette mï¿½thode va retourner l'ensemble des albums pour un dossier
+     * et un droit donnï¿½. Si on prennait seulement le dossier, il pourrait y
+     * avoir des problï¿½mes avec les dossiers racine
      */
     public function findAlbumsForThisDroitAndDossier($droit, $dossier) {
         
@@ -113,7 +114,7 @@ class AlbumRepository extends EntityRepository
     }
     
     /**
-     * retourne les X derniers albums ajoutés à la galerie
+     * retourne les X derniers albums ajoutï¿½s ï¿½ la galerie
      */
     public function findLastAdded($amount) {
         

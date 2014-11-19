@@ -1,3 +1,7 @@
+interne_facture:
+    resource: "@InterneFactureBundle/Resources/config/routing.yml"
+    prefix:   /
+
 #FOSJSRouting
 fos_js_routing:
     resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
@@ -46,6 +50,10 @@ interne_structure:
 interne_search:
     resource: "@InterneSearchBundle/Resources/config/routing.yml"
     prefix:   /interne/search
+
+interne_facture:
+    resource: "@InterneFactureBundle/Resources/config/routing.yml"
+    prefix:   /interne/facture
 
 # routes concernant la sécurité du netBS
 # sécurisées par role

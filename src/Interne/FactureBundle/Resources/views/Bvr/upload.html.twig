@@ -1,0 +1,41 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+
+{% block title %}Télécharger BVR{% endblock %}
+
+{% block body %}
+
+
+<div class="row">
+
+    <div class="col-lg-6">
+        <form class="form-horizontal" role="form" method="post" {{ form_enctype(bvrFileForm) }}>
+            <div class="widget">
+
+                <div class="widget-title">
+                    <span>Télécharger BVR</span>
+                </div>
+
+                <div class="widget-content">
+
+
+                    {{ form_widget(bvrFileForm) }}
+
+                    <input type="submit" class="btn btn-primary"/>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
+    {% endblock %}
+
+    {% block javascript %}
+
+    <script type="text/javascript">
+
+
+    </script>
+
+{% endblock %}

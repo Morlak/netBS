@@ -4,6 +4,7 @@ namespace Interne\SearchBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Interne\FichierBundle\Entity\Membre;
 
 class SearchController extends Controller
 {
@@ -34,17 +35,28 @@ class SearchController extends Controller
         if($request->isXmlHttpRequest())
         {
             $str = $request->request->get('searchString');
-            $elements = explode(' ', $str);
+            $searchElements = explode(' ', $str);
+
+            $em = $this->getDoctrine()->getManager();
+            $membres = $em->getRepository('InterneFichierBundle:Membre')->findAll();
+
+            /*
+            $membresResults = array();
+
             foreach($elements as $element) {
 
+                //on commence par les membres seulement
+                $membres = $this->getDoctrine()->getRepository('FichierBundle:Personne')->findBy(array('prenom'=>$element));
+                $membresResults = array_merge($membresResults, $membres);
 
-            }
+            }*/
 
 
         }
 
 
-        return $this->render('InterneSearchBundle:Search:searchResults.html.twig',array('string' => $str, 'searchElements'=>$elements));
+        return $this->render('InterneSearchBundle:Search:searchResults.html.twig',
+            array('searchElements'=>$searchElements, 'membres'=>$membres));
 
 
 

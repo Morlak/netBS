@@ -8,16 +8,20 @@
     <div class="row">
 
         <div class="col-lg-12">
-            <label>
-                Rechercher :
-                <input id="searchForm" type="text"/>
-            </label>
-        </div>
+            <form class="navbar-search pull-left">
+                <input id="searchForm" type="text" class="search-query" placeholder="Search">
+            </form>
 
-        <div id="searchResult">
-            {## ici s'inserent les résultats de la recherche en ajax ##}
         </div>
     </div>
+
+        <div class="row">
+    <div id="searchResult">
+         {## ici s'inserent les résultats de la recherche en ajax ##}
+    </div>
+    </div>
+
+
 
 {% endblock %}
 

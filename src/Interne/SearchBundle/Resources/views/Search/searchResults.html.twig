@@ -1,15 +1,29 @@
 <div id="searchResult">
-string:
-
-{{ string }} <br>
-
-Critères de recherche: <br>
-
-{% for element in searchElements %}
-
-    {{ element }}<br>
-
-{% endfor %}
-
+        <div class="col-lg-4">
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Critères de recherche:</span>
+                </div>
+                <div class="widget-content">
+                    {% for element in searchElements %}
+                        <div class="widget-data">
+                            {{ element }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Membres</span>
+                </div>
+                <div class="widget-content">
+                    {% for membre in membres %}
+                        <div class="widget-data">
+                            {{ membre.prenom }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
 </div>
