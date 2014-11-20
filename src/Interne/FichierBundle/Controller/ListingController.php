@@ -98,10 +98,9 @@ class ListingController extends Controller
     public function exportPDFAction($membres) {
         
         //On récupère FPDF
-        $pdf = new \Interne\FichierBundle\Ext\PDFTemplate();
+        $pdf = new \fpdf\FPDF();
         
         //On construit le document
-        $pdf->FPDF();
         $pdf->AliasNbPages();
         $pdf->AddPage();
         $pdf->SetFont('Arial','B',10);
