@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 
+
 class FactureType extends AbstractType
 {
 
@@ -57,13 +58,14 @@ class FactureType extends AbstractType
                 'date',
                 array(
                     'label' => 'Date de création',
+                    'data' => new \DateTime()
                     )
             )
             ->add(
                'rappels',
                 'collection',
                 array(
-                    'type'          => new RappelType,
+                    'type'          => new RappelType(),
                     'allow_add'     => true,
                     'allow_delete'  => true,
                     'prototype'     => true,

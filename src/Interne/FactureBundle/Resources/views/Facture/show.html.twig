@@ -27,6 +27,16 @@
                         Montant Reçu: {{ facture.montantRecu }}<br>
 
                         Statut: {{ facture.statut }}<br>
+
+                        RAPPEL: <br>
+
+
+                        {% for rappel in facture.rappels %}
+
+                            {{ rappel.date|date("m/d/Y") }}
+                            {{ rappel.frais }}<br>
+
+                        {% endfor %}
                     </div>
 
 

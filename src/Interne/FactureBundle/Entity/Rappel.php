@@ -30,13 +30,6 @@ class Rappel
     private $facture;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="numero", type="integer")
-     */
-    private $numero;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="date")
@@ -59,29 +52,6 @@ class Rappel
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set numero
-     *
-     * @param integer $numero
-     * @return Rappel
-     */
-    public function setNumero($numero)
-    {
-        $this->numero = $numero;
-
-        return $this;
-    }
-
-    /**
-     * Get numero
-     *
-     * @return integer 
-     */
-    public function getNumero()
-    {
-        return $this->numero;
     }
 
     /**

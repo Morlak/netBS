@@ -13,27 +13,92 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class FactureController extends Controller
 {
+    public function testAction()
+    {
+
+
+        $str = 'Test';
+        $facture = new Facture();
+        $facture->setTitre($str);
+        $facture->setRemarque($str);
+        $facture->setMontantEmis(0);
+        $facture->setMontantRecu(0);
+        $facture->setDateCreation(new \DateTime());
+        $facture->setStatut('ouvert');
+
+        $rappel1 = new Rappel();
+        $rappel1->setDate(new \DateTime());
+        $rappel1->setFrais(77);
+
+        $facture->addRappel($rappel1);
+
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($facture);
+        $em->flush();
+
+
+        return $this->render('InterneFactureBundle:Default:index.html.twig');
+
+
+    }
+
     public function createAction(Request $request)
     {
+
+        $str = 'Test';
         $facture = new Facture();
-        $facture->addRappel(new Rappel());
-        $facture->addRappel(new Rappel());
+        $facture->setTitre($str);
+        $facture->setRemarque($str);
+        $facture->setMontantEmis(999);
+        $facture->setMontantRecu(0);
+        $facture->setDateCreation(new \DateTime());
+        $facture->setStatut('ouvert');
+
+        $rappel1 = new Rappel();
+        $rappel1->setDate(new \DateTime());
+        $rappel1->setFrais(77);
+
+
+
 
         $factureForm  = $this->createForm(new FactureType, $facture);
 
+
+        //$request = $this->getRequest();
+        //$factureForm->handleRequest($request);
+        //$factureForm->bindRequest($request);
+
+
         if ($request->isMethod('POST'))
         {
-            $factureForm->submit($request);
+            $factureForm->handleRequest($request);
 
             if ($factureForm->isValid()) {
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($facture);
-                $em->flush();
+                //$facture->addRappel($rappel1);
 
-                return $this->render('InterneFactureBundle:Default:index.html.twig');
+
+
+                //$facture = $factureForm->getData();
+
+
+
+
+
+                return $this->render('InterneFactureBundle:Facture:show.html.twig',
+                    array('facture' => $facture));
+            }
+            else
+            {
+                /*
+                 * affiche les erreurs du formulaire.
+                 */
+                echo($factureForm->getErrorsAsString());
             }
         }
+
+
 
         return $this->render('InterneFactureBundle:Facture:create.html.twig', array(
             'factureForm' => $factureForm->createView()
@@ -51,7 +116,9 @@ class FactureController extends Controller
             return $this->render('InterneFactureBundle:Default:index.html.twig');
         }
 
-        return $this->render('InterneFactureBundle:Facture:show.html.twig', array('facture' => $facture));
+
+        return $this->render('InterneFactureBundle:Facture:show.html.twig',
+            array('facture' => $facture));
 
     }
 

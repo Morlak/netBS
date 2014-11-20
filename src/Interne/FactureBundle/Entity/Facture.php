@@ -226,6 +226,22 @@ class Facture
     }
 
     /**
+     * Remove rappel
+     *
+     * @param Rappel $rappel
+     * @return Facture
+     */
+    public function removeRappel($rappel)
+    {
+        $this->rappels->remove($rappel);
+        $rappel->setFacture(null);
+
+
+
+        return $this;
+    }
+
+    /**
      * Set rappels
      *
      * @param ArrayCollection $rappels
@@ -261,7 +277,7 @@ class Facture
     /**
      * Set dateCreation
      *
-     * @param \DateTime $date
+     * @param \DateTime $dateCreation
      * @return Facture
      */
     public function setDateCreation($dateCreation)
