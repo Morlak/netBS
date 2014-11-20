@@ -14,16 +14,13 @@
 				<ul>
 					<li><a href="{{ path('InterneHome_accueil')}}"><span class="glyphicon glyphicon-home"></span> accueil</a></li>
 					<li><a href="{{ path('InterneSearch_search')}}"><span class="glyphicon glyphicon-search"></span> rechercher</a></li>
-					<li><a href="{{ path('InterneStamm_dashboard')}}"><span class="glyphicon glyphicon-tasks"></span> administration</a></li>
+					<li><a href="{{ path('InterneStamm_dashboard')}}"><span class="glyphicon glyphicon-tasks"></span> administration</a>
 
                         <ul>
                             <li><a href="{{ path('InterneStamm_dashboard') }}">Stamm</a></li>
                             <li><a href="{{ path('InterneGlobal_validator_dashboard') }}">Validation</a></li>
                         </ul>
                     </li>
-
-                    <li><a><span class="glyphicon glyphicon-th-large"></span>
-                            Groupe{% if user.attributions|length > 1 %}s{% endif %}</a>
 
                     {%  if user.attributions is not null %}
 
