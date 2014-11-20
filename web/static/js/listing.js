@@ -187,19 +187,26 @@ function addToList(btn) {
  * Mais avant, elle vérifie que ces Ids ne soient pas déjà stockés, pour éviter les doublons
  */
 function persistList(ids) {
-    
+
+    alert(ids);
+    if( Object.prototype.toString.call( ids ) !== '[object Array]' ) {
+        ids[0] = ids;
+    }
+    alert(ids);
     /**
      * tout d'abord, on supprimme les doublons parmis les ids transmis, si il y
      * en a
      */
+
     var tempids = [];
-    
-    $.each(ids, function(i, el){
-        if($.inArray(el, tempids) === -1) tempids.push(el);
+
+    $.each(ids, function (i, el) {
+        if ($.inArray(el, tempids) === -1) tempids.push(el);
     });
-    
+
     ids = tempids; //On reremplace
-    
+
+
     //On récupère la liste existante
     var liste = sessionStorage.getItem('listing');
     
