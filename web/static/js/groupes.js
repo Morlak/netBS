@@ -7,7 +7,8 @@
  */
 function retrieveAttributions(id, btn) {
 
-    $(btn).css('background', 'yellow');
+    $(btn).removeClass('btn-primary');
+    $(btn).addClass('btn-warning');
 
     //Première chose, récupérer les deux dates transmises
     var date1 = ($('#date1').val() === "") ? "empty" : $('#date1').val();
@@ -31,10 +32,8 @@ function retrieveAttributions(id, btn) {
         dataType: 'json',
         success: function (data) {
 
-            $(btn).css('background', 'lightgreen');
-            setTimeout(function () {
-                $(btn).css('background', 'initial');
-            }, 600);
+            $(btn).removeClass('btn-warning');
+            $(btn).addClass('btn-primary');
 
 
             table = $("#attributionsTable").DataTable();

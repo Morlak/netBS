@@ -20,9 +20,8 @@
         "sensio/generator-bundle": "2.3.*",
         "incenteev/composer-parameter-handler": "~2.0",
         "phpoffice/phpexcel": "dev-master",
-	"friendsofsymfony/jsrouting-bundle": "2.0.*@dev",
-	"jms/serializer-bundle": "0.13.0",
-	"itbz/fpdf": "dev-master"
+		"friendsofsymfony/jsrouting-bundle": "2.0.*@dev",
+		"jms/serializer-bundle": "0.13.0"
     },
     "scripts": {
         "post-install-cmd": [
