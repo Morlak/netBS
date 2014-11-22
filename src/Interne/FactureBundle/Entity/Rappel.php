@@ -70,7 +70,7 @@ class Rappel
     /**
      * Get frais
      *
-     * @return integer
+     * @return float
      */
     public function getFrais()
     {

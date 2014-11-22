@@ -296,4 +296,22 @@ class Facture
     {
         return $this->dateCreation;
     }
+
+    /**
+     * Get montantTotal
+     *
+     * @return float
+     */
+    public function getMontantTotal()
+    {
+        $fraisRappel = 0;
+        foreach($this->rappels as $rappel)
+        {
+            $fraisRappel = $fraisRappel + $rappel->getFrais();
+        }
+        return $this->montantEmis + $fraisRappel;
+    }
+
+
+
 }

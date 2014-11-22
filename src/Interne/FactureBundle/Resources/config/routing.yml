@@ -56,10 +56,17 @@ interne_facture_model_delete:
 
 
 
-interne_facture_bvr_upload:
-    path:     /bvr/upload
-    defaults: { _controller: InterneFactureBundle:bvr:upload }
+interne_facture_validation:
+    path:     /validation
+    defaults: { _controller: InterneFactureBundle:validation:index }
 
+interne_facture_validation_ajax:
+    path:     /validation/ajax
+    defaults: { _controller: InterneFactureBundle:validation:validationAjax }
+
+interne_facture_validation_add_manualy_ajax:
+    path:     /validation/add_manualy_ajax
+    defaults: { _controller: InterneFactureBundle:validation:addManualyAjax }
 
 
 

@@ -1,0 +1,273 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+
+{% block title %}Validation du fichier BVR{% endblock %}
+
+{% block body %}
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="widget">
+
+
+            <div class="widget-title">
+                <span>Validation des factures</span>
+            </div>
+            <div class="widget-content">
+                <form >
+                    <input id="form_num_ref" type="text" class="" placeholder="Num. de référance">
+                    <input id="form_montant_recu" type="text" class="" placeholder="Montant reçu">
+                    <button class="btn btn-info btn-xs" id="addManualy">
+                        valider
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="validation_liste_widget" hidden>
+
+    <div class="col-lg-6">
+        <div class="widget">
+
+            <div class="widget-title">
+                <span>Validation des factures</span>
+            </div>
+            <div class="widget-content">
+                <table class="table table-bordered" id="validationListe">
+                    <thead>
+                    <tr>
+
+                        <th colspan="2">Payement reçu</th>
+                        <th colspan="3">Dans le systeme (BDD)</th>
+                        <th colspan="2">Validation</th>
+
+                    </tr>
+                    <tr>
+
+                        <th>Num. Réf.</th>
+                        <th>Montant Reçu</th>
+                        <th>Titre</th>
+                        <th>Montant exigé</th>
+                        <th>Statut</th>
+                        <th>Etat</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+
+
+                    </tbody>
+
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" id="validation_report_widget" hidden>
+
+    <div class="col-lg-6">
+        <div class="widget">
+
+            <div class="widget-title">
+                <span>Rapport de validation des factures</span>
+            </div>
+            <div class="widget-content">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+
+                        <th colspan="2">Dans le fichier BVR</th>
+                        <th colspan="3">Dans le systeme (BDD)</th>
+
+
+                    </tr>
+                    <tr>
+
+                        <th>Num. Réf.</th>
+                        <th>Montant Reçu</th>
+                        <th>Titre</th>
+                        <th>Montant émis</th>
+                        <th>Statut</th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody hidden></tbody>
+
+
+                    <tbody id="report_already_payed" hidden>
+                        <tr>
+                            <td colspan="5">Factures déjà payées auparavent</td>
+                        </tr>
+
+
+                    </tbody>
+                    <tbody id="report_not_found"  hidden>
+                    <tr>
+                        <td colspan="5">Factures non trouvée dans le systeme</td>
+                    </tr>
+
+                    </tbody>
+                    <tbody id="found_lower_new_facture"  hidden>
+                    <tr>
+                        <td colspan="5">Facture validée avec montant insuffisant et nouvelle facture</td>
+                    </tr>
+
+                    </tbody>
+                    <tbody id="found_lower_valid"  hidden>
+                    <tr>
+                        <td colspan="5">Facture valide avec montant insuffisant</td>
+                    </tr>
+
+                    </tbody>
+                    <tbody id="found_valid"  hidden>
+                    <tr>
+                        <td colspan="5">Factures valides</td>
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript">
+
+    function validation(element){
+
+        $state = $(element).data("state");
+
+        var $line = $(element).closest('tr');
+        $('td:last',$line).remove();
+        $('td:last',$line).remove();
+
+        if($state == 'not_found')
+        {
+            $line.appendTo('#report_not_found');
+            $('#report_not_found').show();
+        }
+        else if($state == 'found_already_payed')
+        {
+            $line.appendTo('#report_already_payed');
+            $('#report_already_payed').show();
+
+        }
+        else
+        {
+            $idFacture = $(element).data("idfacture");
+            $montantRecuFacture = $(element).data("montantrecu");
+
+            var data = { id: $idFacture, montantRecu: $montantRecuFacture, state: $state};
+
+
+            $.ajax({
+                type: "POST",
+                url: "{{ path('interne_facture_validation_ajax') }}",
+                data: data,
+                dataType: 'json',
+                error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+                success: function(JsonResponse) {
+
+                    if($state == 'found_valid')
+                    {
+                        $line.appendTo('#found_valid');
+                        $('#found_valid').show();
+
+                    }
+                    else if($state == 'found_lower_valid')
+                    {
+                        $line.appendTo('#found_lower_valid');
+                        $('#found_lower_valid').show();
+
+                    }
+                    else if($state == 'found_lower_new_facture')
+                    {
+                        $line.appendTo('#found_lower_new_facture');
+                        $('#found_lower_new_facture').show();
+
+                    }
+
+                }
+            });
+
+
+        }
+
+
+        $('#validation_report_widget').show();
+
+
+    }
+
+    jQuery(document).ready(function() {
+
+        $('#addManualy').on('click', function(e){
+
+            e.preventDefault();
+
+            $idFacture = $('#form_num_ref').val();
+            $montantRecuFacture = $('#form_montant_recu').val();
+
+
+            if(($idFacture != '') && ($montantRecuFacture != ''))
+            {
+                var data = { id: $idFacture, montantRecu: $montantRecuFacture};
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('interne_facture_validation_add_manualy_ajax') }}",
+                    data: data,
+                    error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+                    success: function(htmlResponse) {
+
+                        $('#validationListe > tbody:last').append(htmlResponse);
+
+                    }
+                });
+
+                $('#validation_liste_widget').show();
+
+                //petite partie pour remetre le curseur a la bonne place
+                //afin de rentré une nouvelle facture plus rappidement.
+                $('#form_num_ref').focus();
+                $('#form_num_ref').val('');//clear form
+                $('#form_montant_recu').val('');
+
+            }
+            else
+            {
+                //petite partie pour remetre le curseur a la bonne place
+                //afin de rentré une nouvelle facture plus rappidement.
+                $('#form_num_ref').focus();
+                $('#form_num_ref').val('');//clear form
+                $('#form_montant_recu').val('');
+            }
+
+        });
+
+    });
+
+</script>
+
+{% endblock %}
+
+
+
