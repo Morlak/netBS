@@ -2,6 +2,8 @@ interne_facture_homepage:
     path:     /
     defaults: { _controller: InterneFactureBundle:Default:index }
 
+
+
 interne_facture_create:
     path:     /create
     defaults: { _controller: InterneFactureBundle:Facture:create }
@@ -68,8 +70,28 @@ interne_facture_validation_add_manualy_ajax:
     path:     /validation/add_manualy_ajax
     defaults: { _controller: InterneFactureBundle:validation:addManualyAjax }
 
+interne_facture_validation_upload_file_ajax:
+    path:     /validation/upload_file_ajax
+    defaults: { _controller: InterneFactureBundle:validation:uploadFileAjax }
+
+
+
 
 
 interne_facture_statistics:
     path:     /statistics
     defaults: { _controller: InterneFactureBundle:statistics:index }
+
+
+
+interne_facture_liste_add_rappels:
+    path:     /liste/add_rappels_ajax
+    defaults: { _controller: InterneFactureBundle:Liste:addRappelsAjax }
+
+interne_facture_liste_delete:
+    path:     /liste/delete_ajax
+    defaults: { _controller: InterneFactureBundle:Liste:deleteAjax }
+
+interne_facture_liste_payed:
+    path:     /liste/payed_ajax
+    defaults: { _controller: InterneFactureBundle:Liste:payedAjax }

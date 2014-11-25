@@ -21,7 +21,7 @@ class ModelType extends AbstractType
 
             ->add(
                 'remarque',
-                'text',
+                'textarea',
                 array('label' => 'Remarque')
             )
             ->add(

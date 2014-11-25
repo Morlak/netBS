@@ -37,9 +37,9 @@ class Facture
     private $titre;
 
     /**
-     * @var string
+     * @var text
      *
-     * @ORM\Column(name="remarque", type="string", length=255)
+     * @ORM\Column(name="remarque", type="text")
      */
     private $remarque;
 
@@ -71,6 +71,12 @@ class Facture
      */
     private $dateCreation;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="datePayement", type="date")
+     */
+    private $datePayement;
 
 
     /**
@@ -272,6 +278,9 @@ class Facture
     public function __construct()
     {
         $this->rappels = new ArrayCollection();
+        $this->setDatePayement(new \DateTime('0000-00-00'));
+        $this->setMontantRecu(0);
+        $this->statut = 'ouverte';
     }
 
     /**
@@ -304,13 +313,59 @@ class Facture
      */
     public function getMontantTotal()
     {
+
+        return $this->montantEmis + $this->getFraisRappel();
+    }
+
+    /**
+     * Get fraisRappel
+     *
+     * @return float
+     */
+    public function getFraisRappel()
+    {
         $fraisRappel = 0;
         foreach($this->rappels as $rappel)
         {
             $fraisRappel = $fraisRappel + $rappel->getFrais();
         }
-        return $this->montantEmis + $fraisRappel;
+        return $fraisRappel;
     }
+
+    /**
+     * Set datePayement
+     *
+     * @param \DateTime $datePayement
+     * @return Facture
+     */
+    public function setDatePayement($datePayement)
+    {
+        $this->datePayement = $datePayement;
+
+        return $this;
+    }
+
+    /**
+     * Get datePayement
+     *
+     * @return \DateTime
+     */
+    public function getDatePayement()
+    {
+        return $this->datePayement;
+    }
+
+    /**
+     * Get nombreRappels
+     *
+     * @return integer
+     */
+    public function getNombreRappels()
+    {
+        return $this->rappels->count();
+    }
+
+
 
 
 

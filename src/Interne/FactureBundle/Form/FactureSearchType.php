@@ -13,27 +13,9 @@ class FactureSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add(
-                'id',
-                'number',
-                array('label' => 'Num. de référance',
-                    'required' => false)
-            )
-            ->add(
-                'titre',
-                'text',
-                array('label' => 'Titre',
-                    'required' => false)
-            )
-
-            ->add(
-                'remarque',
-                'text',
-                array(
-                    'label' => 'Remarques',
-                    'required' => false
-                    )
-            )
+            ->add('id','number',array('label' => 'Num. de référance','required' => false))
+            ->add('titre','text',array('label' => 'Titre','required' => false))
+            ->add('remarque','textarea',array('label' => 'Remarques','required' => false))
 
             ->add(
                 'montantEmis',
@@ -47,7 +29,8 @@ class FactureSearchType extends AbstractType
                 'number',
                 array(
                     'label' => 'Montant reçu',
-                    'required' => false
+                    'required' => false,
+                    'data'=> null
                 )
             )
 
@@ -57,58 +40,32 @@ class FactureSearchType extends AbstractType
                 array(
                     'label' => 'Statut',
                     'required' => false,
-                    'choices' => array('ouverte'=>'Ouverte', 'payee'=>'Payée')
+                    'choices' => array('ouverte'=>'Ouverte', 'payee'=>'Payée'),
+                    'data' => null
+
                 )
             )
+            ->add('dateCreation','date',array('label' => 'Date de création','data'=> null,'required' => false))
+            ->add('datePayement','date',array('label' => 'Date de Payement','data'=> null,'required' => false))
             /*
              * l'option "mapped (false)" permet d'ajouter des champs qui n'appartiennent
              * pas à l'entité.
              */
-            ->add(
-                'nombreRappel',
-                'number',
-                array(
-                    'label' => 'Nombre de Rappel',
-                    'required' => false,
-                    'mapped' => false
-                )
-            )
-            ->add(
-                'montantEmisMinimum',
-                'number',
-                array(
-                    'label' => 'Montant émis minimum',
-                    'required' => false,
-                    'mapped' => false
-                )
-            )
-            ->add(
-                'montantEmisMaximum',
-                'number',
-                array(
-                    'label' => 'Montant émis maximum',
-                    'required' => false,
-                    'mapped' => false
-                )
-            )
-            ->add(
-                'montantRecuMinimum',
-                'number',
-                array(
-                    'label' => 'Montant reçu minimum',
-                    'required' => false,
-                    'mapped' => false
-                )
-            )
-            ->add(
-                'montantRecuMaximum',
-                'number',
-                array(
-                    'label' => 'Montant reçu maximum',
-                    'required' => false,
-                    'mapped' => false
-                )
-            );
+            ->add('nombreRappel','number',array('label' => 'Nombre de Rappel','required' => false,'mapped' => false))
+            ->add('montantEmisMinimum','number',array('required' => false,'mapped' => false))
+            ->add('montantEmisMaximum','number', array('required' => false,'mapped' => false))
+            ->add('montantRecuMinimum','number',array('required' => false,'mapped' => false))
+            ->add('montantRecuMaximum','number',array('required' => false,'mapped' => false))
+            ->add('montantFrais','number',array('required' => false,'mapped' => false))
+            ->add('montantFraisMinimum','number',array('required' => false,'mapped' => false))
+            ->add('montantFraisMaximum','number',array('required' => false,'mapped' => false))
+            ->add('montantTotal','number',array('required' => false,'mapped' => false))
+            ->add('montantTotalMinimum','number',array('required' => false,'mapped' => false))
+            ->add('montantTotalMaximum','number',array('required' => false,'mapped' => false))
+
+
+
+        ;//fin de la fonction builder
 
 
 

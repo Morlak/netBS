@@ -1,0 +1,54 @@
+{% form_theme form 'InterneFichierBundle:Form:form_template.html.twig' %}
+
+{{ form_start(form) }}
+
+    {{ form_row(form.id) }}
+    {{ form_row(form.statut) }}
+    {{ form_row(form.nombreRappel) }}
+    {{ form_row(form.titre) }}
+
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Montants:</th>
+                <th>Emis</th>
+                <th>Frais</th>
+                <th>Total</th>
+                <th>Reçu</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Fixé</th>
+                <td>{{ form_widget(form.montantEmis) }}</td>
+                <td>{{ form_widget(form.montantFrais) }}</td>
+                <td>{{ form_widget(form.montantTotal) }}</td>
+                <td>{{ form_widget(form.montantRecu) }}</td>
+
+            </tr>
+            <tr>
+                <th>Maximum</th>
+                <td>{{ form_widget(form.montantEmisMaximum) }}</td>
+                <td>{{ form_widget(form.montantFraisMaximum) }}</td>
+                <td>{{ form_widget(form.montantTotalMaximum) }}</td>
+                <td>{{ form_widget(form.montantRecuMaximum) }}</td>
+
+            </tr>
+            <tr>
+                <th>Minimum</th>
+                <td>{{ form_widget(form.montantEmisMinimum) }}</td>
+                <td>{{ form_widget(form.montantFraisMinimum) }}</td>
+                <td>{{ form_widget(form.montantTotalMinimum) }}</td>
+                <td>{{ form_widget(form.montantRecuMinimum) }}</td>
+            </tr>
+
+        </tbody>
+    </table>
+
+{{ form_row(form.dateCreation) }}
+{{ form_row(form.datePayement) }}
+
+    {{ form_rest(form) }}
+    <input type="submit" value="Chercher"/>
+{{ form_end(form) }}

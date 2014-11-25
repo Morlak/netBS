@@ -1,12 +1,12 @@
 {% for result in results %}
     <tr>
         <td>{{ result.factureInFile.id }}</td>
+        <td>{{ result.factureInFile.datePayement|date("d/m/Y") }}</td>
         <td>{{ result.factureInFile.montantRecu }}</td>
 
+
         {% if result.validationStatut == 'NotFound' %}
-            <td>Facture inexistante</td>
-            <td></td>
-            <td></td>
+            <td colspan="3">Facture inexistante</td>
             <td>
                 <span class="label label-danger">
                     <span class="glyphicon glyphicon-remove"></span>
@@ -21,9 +21,24 @@
                 </button>
             </td>
         {% else %}
-            <td>{{ result.factureFound.titre }}</td>
             <td>{{ result.factureFound.montantTotal }}</td>
-            <td>{{ result.factureFound.statut }}</td>
+            <td>{{ result.factureFound.titre }}</td>
+            {% if result.factureFound.statut == 'ouverte' %}
+                <td>
+                <span class="label label-info">
+                    Ouverte
+                </span>
+                </td>
+            {% elseif result.factureFound.statut == 'payee' %}
+                <td>
+                <span class="label label-success">
+                    Payée
+                </span>
+                </td>
+            {% else %}
+                <td>
+                </td>
+            {% endif %}
 
             {% if result.validationStatut == 'Found:Valid' %}
                 <td>
@@ -35,6 +50,7 @@
                     <button class="btn btn-info  btn-xs">
                         <div data-idfacture="{{ result.factureFound.id }}"
                              data-montantrecu="{{ result.factureInFile.montantRecu }}"
+                             data-datepayement="{{ result.factureInFile.datePayement|date("m/d/Y") }}"
                              data-state="found_valid"
                              onclick="validation(this)">
                             Valider
@@ -51,6 +67,7 @@
                     <button class="btn btn-info btn-xs">
                         <div data-idfacture="{{ result.factureFound.id }}"
                              data-montantrecu="{{ result.factureInFile.montantRecu }}"
+                             data-datepayement="{{ result.factureInFile.datePayement|date("m/d/Y") }}"
                              data-state="found_upper"
                              onclick="validation(this)">
                             Valider
@@ -74,6 +91,7 @@
                                 <a role="menuitem" tabindex="-1" href="#">
                                     <div data-idfacture="{{ result.factureFound.id }}"
                                          data-montantrecu="{{ result.factureInFile.montantRecu }}"
+                                         data-datepayement="{{ result.factureInFile.datePayement|date("m/d/Y") }}"
                                          data-state="found_lower_valid"
                                          onclick="validation(this)">
                                         Valider
@@ -85,6 +103,7 @@
                                 <a role="menuitem" tabindex="-1" href="#">
                                     <div data-idfacture="{{ result.factureFound.id }}"
                                          data-montantrecu="{{ result.factureInFile.montantRecu }}"
+                                         data-datepayement="{{ result.factureInFile.datePayement|date("m/d/Y") }}"
                                          data-state="found_lower_new_facture"
                                          onclick="validation(this)">
                                         Valider et crée <br>une facture de <br>complément
@@ -122,3 +141,4 @@
 
     </tr>
 {% endfor %}
+

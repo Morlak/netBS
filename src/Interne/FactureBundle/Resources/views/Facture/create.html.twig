@@ -22,6 +22,8 @@
 
                 <div class="widget-content">
 
+                    {{ form_start(factureForm) }}
+
 
 
                     {{ form_row(factureForm.titre) }}
@@ -34,6 +36,10 @@
                     {% include "InterneFactureBundle:Rappel:form.html.twig" with {'form': factureForm.rappels} %}
 
                     {{ form_rest(factureForm) }}
+
+                    <input type="submit" class="btn btn-primary"/>
+
+                    {{ form_end(factureForm) }}
 
 
 {#
@@ -78,7 +84,7 @@
                     </div>
 
 #}
-             <input type="submit" class="btn btn-primary"/>
+
                 </div>
             </div>
         </form>

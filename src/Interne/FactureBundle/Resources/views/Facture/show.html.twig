@@ -22,21 +22,74 @@
 
                         Remarque: {{ facture.remarque }}<br>
 
-                        Montant émis: {{ facture.montantEmis }}<br>
-
-                        Montant Reçu: {{ facture.montantRecu }}<br>
-
-                        Statut: {{ facture.statut }}<br>
-
-                        RAPPEL: <br>
 
 
-                        {% for rappel in facture.rappels %}
 
-                            {{ rappel.date|date("m/d/Y") }}
-                            {{ rappel.frais }}<br>
 
-                        {% endfor %}
+                        <h3>
+
+                        {% if facture.statut == 'ouverte' %}
+
+                            <span class="label label-info">
+                                Ouverte
+                            </span>
+
+                        {% elseif facture.statut == 'payee' %}
+
+                            <span class="label label-success">
+                                Payée
+                            </span>
+
+                        {% else %}
+
+                        {% endif %}
+                        </h3>
+
+
+
+
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Résumé de la facture</th>
+                                    <th>Dates</th>
+                                    <th>CHF</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Montant émis</td>
+                                    <td>{{ facture.dateCreation|date("m/d/Y") }} </td>
+                                    <td>{{ facture.montantEmis|number_format(2, '.', ',') }}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Rappels:</td>
+                                    <td></td>
+
+                                </tr>
+
+                                {% for rappel in facture.rappels %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ rappel.date|date("m/d/Y") }} </td>
+                                        <td>{{ rappel.frais|number_format(2, '.', ',') }} </td>
+                                    </tr>
+
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="2">Montant Total</td>
+                                    <td>{{ facture.montantTotal|number_format(2, '.', ',') }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Montant Reçu</td>
+                                    <td>{{ facture.datePayement|date("m/d/Y") }} </td>
+                                    <td>{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
                     </div>
 
 

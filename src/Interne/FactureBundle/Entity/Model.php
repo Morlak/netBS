@@ -29,9 +29,9 @@ class Model
     private $titre;
 
     /**
-     * @var string
+     * @var text
      *
-     * @ORM\Column(name="remarque", type="string", length=255)
+     * @ORM\Column(name="remarque", type="text")
      */
     private $remarque;
 

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Interne\FactureBundle\Entity\Rappel;
 use Interne\FactureBundle\Entity\Facture;
 
-class DefaultController extends Controller
+class ImpressionsController extends Controller
 {
     public function indexAction()
     {

@@ -20,10 +20,12 @@ class FactureRepository extends EntityRepository
     {
         //on crée un nouvelle requete qui sera custom
         $queryBuilder = $this->createQueryBuilder('facture');
+        $queryBuilder->innerJoin('Interne\FactureBundle\Entity\Rappel', 'rappel', 'WITH', 'facture.id = rappel.facture');
 
         /*
          * Elements de recherche contenu dans le formulaire de facture standard
          */
+
         $parameter = $facture->getId();
         if($parameter != null)
         {
@@ -56,14 +58,34 @@ class FactureRepository extends EntityRepository
         }
 
         $parameter = $facture->getStatut();
-        if($parameter != null)
+        if(($parameter != null))
         {
             $queryBuilder->andWhere('facture.statut = :statut')->setParameter('statut', $parameter);
         }
 
+        $parameter = $facture->getDateCreation();
+        if(($parameter != null))
+        {
+            $queryBuilder->andWhere('facture.dateCreation = :dateCreation')
+                ->setParameter('dateCreation', $parameter);
+        }
+
+        $parameter = $facture->getDatePayement();
+        if(($parameter != null))
+        {
+            $queryBuilder->andWhere('facture.datePayement = :datePayement')
+                ->setParameter('datePayement', $parameter);
+        }
+
+
+
+
         /*
+         *
          * Elements de recherche spécifique qui permet d'affiner la recherche.
+         *
          */
+
         $parameter = $searchParameters['montantEmisMinimum'];
         if($parameter != null)
         {
@@ -92,12 +114,62 @@ class FactureRepository extends EntityRepository
                 ->setParameter('montantRecuMaximum', $parameter);
         }
 
+
         $parameter = $searchParameters['nombreRappel'];
-        if($parameter != null)
+        if($parameter == null)
         {
+            $queryBuilder
+                //->andWhere('rappel.frais = :frais')
+                //->setParameter('x',6)
+                //->andHaving('COUNT(facture.rappels) = x')
+
+
+
+                /*
+                 * fonctionelle
+                 */
+                //->innerJoin('Interne\FactureBundle\Entity\Rappel', 'rappel', 'WITH', 'facture.id = rappel.facture')
+                //->andWhere('rappel.frais = :frais')
+                //->setParameter('frais',7)
+                /*
+                 *
+                 */
+
+                    //->where('g.name = :goalName')->andWhere('s.gsiteId = :gsiteId')
+                    //->setParameter('goalName', 'Background Dx')->setParameter('gsiteId', '66361836');
+                //->innerJoin('facture.rappels', 'bidon')
+                    //->andhaving('COUNT(facture.rappels) = 6');
+                //->addSelect('COUNT(rappel) as nProducts')
+                //->addGroupBy('facture.id')
+                //->having('nProducts = 6')
+            ;
+
+                //->setParameter('nbRappel',3)->andWhere('COUNT(facture.rappels) = nbRappel');
+
             /*
              * A FAIRE
              */
+            /*$queryBuilder
+                ->addSelect("COUNT(rappel) number_rappels")
+
+                ->leftJoin('facture.rappels', 'rappel')
+
+                ->groupBy('facture.id');
+
+
+
+                //->innerJoin('facture.rappels','rappel')
+                //->andhaving('COUNT(rappel) = 3');
+
+                //
+
+                //->andHaving('COUNT(facture.rappels) = 1');
+
+            */
+
+
+
+
         }
 
 

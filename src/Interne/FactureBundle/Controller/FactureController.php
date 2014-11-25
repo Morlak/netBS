@@ -15,26 +15,22 @@ class FactureController extends Controller
 {
     public function testAction()
     {
-
-
-        $str = 'Test';
-        $facture = new Facture();
-        $facture->setTitre($str);
-        $facture->setRemarque($str);
-        $facture->setMontantEmis(0);
-        $facture->setMontantRecu(0);
-        $facture->setDateCreation(new \DateTime());
-        $facture->setStatut('ouvert');
-
-        $rappel1 = new Rappel();
-        $rappel1->setDate(new \DateTime());
-        $rappel1->setFrais(77);
-
-        $facture->addRappel($rappel1);
-
-
         $em = $this->getDoctrine()->getManager();
-        $em->persist($facture);
+        for($i = 0; $i < 100; $i++)
+        {
+            $str = 'Test:'.$i;
+            $facture = new Facture();
+            $facture->setTitre($str);
+            $facture->setRemarque($str);
+            $facture->setMontantEmis($i);
+            $facture->setMontantRecu(0);
+            $facture->setDateCreation(new \DateTime());
+            $facture->setStatut('ouverte');
+
+            $em->persist($facture);
+
+        }
+
         $em->flush();
 
 
@@ -133,7 +129,7 @@ class FactureController extends Controller
             return $this->render('InterneFactureBundle:Default:index.html.twig');
         }
 
-        return $this->render('InterneFactureBundle:Facture:liste.html.twig', array('factures' => $factures));
+        return $this->render('InterneFactureBundle:Liste:liste.html.twig', array('factures' => $factures));
 
     }
 
@@ -218,7 +214,7 @@ class FactureController extends Controller
             $em = $this->getDoctrine()->getManager();
             $factures = $em->getRepository('InterneFactureBundle:Facture')->findBySearch($facture,$searchParameters);
 
-            return $this->render('InterneFactureBundle:Facture:liste.html.twig', array('factures' => $factures));
+            return $this->render('InterneFactureBundle:Liste:liste.html.twig', array('factures' => $factures));
 
 
         }

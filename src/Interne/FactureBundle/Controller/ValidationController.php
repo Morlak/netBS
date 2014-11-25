@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\BrowserKit\Request;
 use Interne\FactureBundle\Entity\Facture;
+use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Null;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,48 +18,34 @@ class ValidationController extends Controller
         return $this->render('InterneFactureBundle:Validation:validation.html.twig');
     }
 
-    public function uploadAction()
+    public function uploadFileAjaxAction()
     {
-        $request = $this->get('request');
+        $request = $this->getRequest();
 
-        $bvrFileForm = $this->createFormBuilder()
-            ->add('bvrFile', 'file',array('label'=>'Fichier BVR (*.V11)'))
-            ->getForm();
-        $bvrFileForm->handleRequest($request);
-
-
-        if ($request->isMethod('POST'))
+        if($request->isXmlHttpRequest())
         {
+            $file = $request->files->get('file');
 
-            $bvrFile = $bvrFileForm->get('bvrFile')->getData();
-            /*
-             * ici on pourrait s'amuser a sauver le fichier quelque part dans le serveur.
-             * mais on s'en fou pour l'instant!
-             */
+            $array = $this->extractFacturesInFile($file);
 
-            /*
-             * On crée un tableau de factures a partire des données du fichier
-             */
-            $facturesInFile = $this->extractFacturesInFile($bvrFile);
-
+            $facturesInFile = $array['factures'];
+            $infos = $array['infos'];
 
             /*
              * On va comparer les facture dans le fichier avec ce qui il y a dans la basse de donnée.
              */
             $results = $this->compareWithFactureInBDD($facturesInFile);
 
-            return $this->render('InterneFactureBundle:Bvr:validation.html.twig',
+            return $this->render('InterneFactureBundle:Validation:tableLineInput.html.twig',
                 array(
                     'results' => $results
 
                 ));
 
+
+
+
         }
-
-        return $this->render('InterneFactureBundle:Bvr:upload.html.twig', array(
-            'bvrFileForm' => $bvrFileForm->createView()
-        ));
-
 
 
     }
@@ -73,6 +60,7 @@ class ValidationController extends Controller
             $id = $request->request->get('id');
             $montantRecu = $request->request->get('montantRecu');
 
+
             $id = (int)$id; //cast sur int
 
             $receivedFactures = new ArrayCollection();
@@ -80,6 +68,9 @@ class ValidationController extends Controller
             $facture = new Facture();
             $facture->setId($id);
             $facture->setMontantRecu($montantRecu);
+
+
+            $facture->setDatePayement(new \DateTime());
 
             $receivedFactures[] = $facture;
 
@@ -109,7 +100,9 @@ class ValidationController extends Controller
         {
             $id = $request->request->get('id');
             $montantRecu = $request->request->get('montantRecu');
+            $datePayement = $request->request->get('datePayement');
             $state = $request->request->get('state');
+
 
             $id = (int)$id; //cast sur int
 
@@ -119,6 +112,9 @@ class ValidationController extends Controller
 
             $facture->setMontantRecu($montantRecu);
             $facture->setStatut('payee');
+            $date = new \DateTime();
+            $date->createFromFormat('d/m/Y',$datePayement);
+            $facture->setDatePayement($date);
 
 
 
@@ -128,9 +124,14 @@ class ValidationController extends Controller
                  * dans ce cas de figure, on crée une facture supplémentaire
                  * pour compenser le montant exigé
                  */
+                $remarque = $facture->getRemarque()
+                            .' (Facture crée en complément de la facture numéro: '
+                            .$facture->getId()
+                            .')';
+
                 $newFacture = new Facture();
                 $newFacture->setTitre($facture->getTitre());
-                $newFacture->setRemarque($facture->getRemarque() + '(Texte d explication)');
+                $newFacture->setRemarque($remarque);
                 $newFacture->setDateCreation(new \DateTime());
                 $newFacture->setMontantEmis($facture->getMontantTotal()-$montantRecu);
                 $newFacture->setStatut('ouverte');
@@ -151,45 +152,84 @@ class ValidationController extends Controller
 
     }
 
-    /**
-     *
-     *
-     * @param File $bvrFile
-     * @return ArrayCollection
-     */
-    private function extractFacturesInFile($bvrFile)
+    private function extractFacturesInFile($file)
     {
-        $bvrFileString = file_get_contents($bvrFile);
+        /*
+         * extraction du contenu du fichier.
+         */
+        $fileString = file($file);
+        $nbLine = count($fileString);
 
         /*
-         * extraction a faire ultérieurement
+         * création des conteneurs de résultats de la fonction.
          */
-
         $facturesInFile = new ArrayCollection();
+        $infos = array();
 
-        $facture1 = new Facture();
-        $facture1->setId(19);
+        /*
+         * analyse ligne par ligne du fichier-
+         */
+        for ($i = 0; $i < $nbLine; $i++) {
 
-        $facture1->setMontantRecu(10);
+            $line = $fileString[$i];
+            $infos = array();
+            $infos['rejetsBvr'] = 0;
 
-        $facturesInFile[] = $facture1;
+            if (substr($line, 0, 1) != 9) {
+                //extraction des infos de la ligne
+                $numRef = substr($line, 12, 26);
+                $montantRecu = substr($line, 39, 10);
+                $datePayement = substr($line, 71, 6);
+                $rejetBVR = substr($line, 86, 1);
+
+                /*
+                 * enregistre le nombre de facture qui ont
+                 * été rejetée et rentrée à la main par
+                 * la poste.
+                 */
+                if($rejetBVR)
+                {
+                    $infos['rejetsBvr'] =$infos['rejetsBvr']+1;
+                }
+
+                //reformatage des chaines de caractère
+                $numRef = (integer)ltrim($numRef,0);
+                $montantRecu = (float)(ltrim($montantRecu,0)/100);
+                $date_payement_annee = '20'. substr($datePayement,0,2);
+                $date_payement_mois = substr($datePayement,2,2);
+                $date_payement_jour = substr($datePayement,4,2);
+                $datePayement = new \DateTime();
+                $datePayement->setDate((int)$date_payement_annee,(int)$date_payement_mois,(int)$date_payement_jour);
+
+                /*
+                 * création de la facture extraite de la ligne
+                 */
+                $facture = new Facture();
+                $facture->setId($numRef);
+                $facture->setMontantRecu($montantRecu);
+                $facture->setDatePayement($datePayement);
+
+                $facturesInFile[] = $facture;
+            }
+            else
+            {
+                /*
+                 * Infos sur les factures présente dans ce fichier.
+                 * Elle sont stoquées sur la ligne qui commence
+                 * par un 9.
+                 */
+                $infos['genreTransaction'] = substr($line, 0, 3);
+                $infos['montantTotal'] = ltrim(substr($line, 39, 12),0);
+                $infos['nbTransactions'] = ltrim(substr($line, 51, 12),0);
+                $infos['dateDisquette'] = substr($line, 63, 6);
+                $infos['taxes'] = substr($line, 69, 9);
+
+            }
+        }
 
 
-        $facture2 = new Facture();
-        $facture2->setId(500);
 
-
-        $facturesInFile[] = $facture2;
-
-        $facture3 = new Facture();
-        $facture3->setId(2);
-        $facture3->setMontantRecu(500);
-
-
-        $facturesInFile[] = $facture3;
-
-        return $facturesInFile;
-
+        return array('factures' => $facturesInFile, 'infos' => $infos);
     }
 
     private function compareWithFactureInBDD($facturesInFile)
