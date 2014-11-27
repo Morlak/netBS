@@ -138,6 +138,16 @@ class ValidationController extends Controller
                 $newFacture->setMontantRecu(0);
 
                 $em->persist($newFacture);
+                $em->flush();
+
+                /*
+                 * On ajoute aussi une remarque dans la facture qui vient d'être validée.
+                 */
+                $remarque = $facture->getRemarque()
+                    .' (Une facture de complément à été crée: N°'
+                    .$newFacture->getId()
+                    .')';
+                $facture->setRemarque($remarque);
             }
 
             $em->flush();

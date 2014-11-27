@@ -16,11 +16,10 @@ class FactureRepository extends EntityRepository
      * cette fonction est utilisée par le formulaire de recherche de facture.
      * on crée une requete custom.
      */
-    public function findBySearch($facture,$searchParameters)
+    public function findBySearch($facture,$searchParameters = null)
     {
         //on crée un nouvelle requete qui sera custom
         $queryBuilder = $this->createQueryBuilder('facture');
-        $queryBuilder->innerJoin('Interne\FactureBundle\Entity\Rappel', 'rappel', 'WITH', 'facture.id = rappel.facture');
 
         /*
          * Elements de recherche contenu dans le formulaire de facture standard
@@ -58,26 +57,38 @@ class FactureRepository extends EntityRepository
         }
 
         $parameter = $facture->getStatut();
-        if(($parameter != null))
+        if($parameter != null)
         {
             $queryBuilder->andWhere('facture.statut = :statut')->setParameter('statut', $parameter);
         }
 
         $parameter = $facture->getDateCreation();
-        if(($parameter != null))
+        if($parameter != null)
         {
             $queryBuilder->andWhere('facture.dateCreation = :dateCreation')
                 ->setParameter('dateCreation', $parameter);
         }
 
         $parameter = $facture->getDatePayement();
-        if(($parameter != null))
+        if($parameter != null)
         {
             $queryBuilder->andWhere('facture.datePayement = :datePayement')
                 ->setParameter('datePayement', $parameter);
         }
 
 
+
+        /*
+         * Activer la jointure uniquement si un des parametres de recherche
+         * concerne les rappels. Sinon il y a exculusion direct des factures
+         * sans rappel.
+         */
+        if(
+            ($searchParameters['nombreRappel'] != null)
+        )
+        {
+            $queryBuilder->innerJoin('Interne\FactureBundle\Entity\Rappel', 'rappel', 'WITH', 'facture.id = rappel.facture');
+        }
 
 
         /*
@@ -86,43 +97,39 @@ class FactureRepository extends EntityRepository
          *
          */
 
-        $parameter = $searchParameters['montantEmisMinimum'];
-        if($parameter != null)
-        {
-            $queryBuilder->andWhere('facture.montantEmis >= :montantEmisMinimum')
-                            ->setParameter('montantEmisMinimum', $parameter);
-        }
+        if($searchParameters != null) {
 
-        $parameter = $searchParameters['montantEmisMaximum'];
-        if($parameter != null)
-        {
-            $queryBuilder->andWhere('facture.montantEmis <= :montantEmisMaximum')
-                ->setParameter('montantEmisMaximum', $parameter);
-        }
+            $parameter = $searchParameters['montantEmisMinimum'];
+            if ($parameter != null) {
+                $queryBuilder->andWhere('facture.montantEmis >= :montantEmisMinimum')
+                    ->setParameter('montantEmisMinimum', $parameter);
+            }
 
-        $parameter = $searchParameters['montantRecuMinimum'];
-        if($parameter != null)
-        {
-            $queryBuilder->andWhere('facture.montantRecu >= :montantRecuMinimum')
-                ->setParameter('montantRecuMinimum', $parameter);
-        }
+            $parameter = $searchParameters['montantEmisMaximum'];
+            if ($parameter != null) {
+                $queryBuilder->andWhere('facture.montantEmis <= :montantEmisMaximum')
+                    ->setParameter('montantEmisMaximum', $parameter);
+            }
 
-        $parameter = $searchParameters['montantRecuMaximum'];
-        if($parameter != null)
-        {
-            $queryBuilder->andWhere('facture.montantRecu <= :montantRecuMaximum')
-                ->setParameter('montantRecuMaximum', $parameter);
-        }
+            $parameter = $searchParameters['montantRecuMinimum'];
+            if ($parameter != null) {
+                $queryBuilder->andWhere('facture.montantRecu >= :montantRecuMinimum')
+                    ->setParameter('montantRecuMinimum', $parameter);
+            }
+
+            $parameter = $searchParameters['montantRecuMaximum'];
+            if ($parameter != null) {
+                $queryBuilder->andWhere('facture.montantRecu <= :montantRecuMaximum')
+                    ->setParameter('montantRecuMaximum', $parameter);
+            }
 
 
-        $parameter = $searchParameters['nombreRappel'];
-        if($parameter == null)
-        {
-            $queryBuilder
+            $parameter = $searchParameters['nombreRappel'];
+            if ($parameter == null) {
+                //$queryBuilder
                 //->andWhere('rappel.frais = :frais')
                 //->setParameter('x',6)
                 //->andHaving('COUNT(facture.rappels) = x')
-
 
 
                 /*
@@ -135,41 +142,40 @@ class FactureRepository extends EntityRepository
                  *
                  */
 
-                    //->where('g.name = :goalName')->andWhere('s.gsiteId = :gsiteId')
-                    //->setParameter('goalName', 'Background Dx')->setParameter('gsiteId', '66361836');
+                //->where('g.name = :goalName')->andWhere('s.gsiteId = :gsiteId')
+                //->setParameter('goalName', 'Background Dx')->setParameter('gsiteId', '66361836');
                 //->innerJoin('facture.rappels', 'bidon')
-                    //->andhaving('COUNT(facture.rappels) = 6');
+                //->andhaving('COUNT(facture.rappels) = 6');
                 //->addSelect('COUNT(rappel) as nProducts')
                 //->addGroupBy('facture.id')
                 //->having('nProducts = 6')
-            ;
+                //;
 
                 //->setParameter('nbRappel',3)->andWhere('COUNT(facture.rappels) = nbRappel');
 
-            /*
-             * A FAIRE
-             */
-            /*$queryBuilder
-                ->addSelect("COUNT(rappel) number_rappels")
+                /*
+                 * A FAIRE
+                 */
+                /*$queryBuilder
+                    ->addSelect("COUNT(rappel) number_rappels")
 
-                ->leftJoin('facture.rappels', 'rappel')
+                    ->leftJoin('facture.rappels', 'rappel')
 
-                ->groupBy('facture.id');
-
-
-
-                //->innerJoin('facture.rappels','rappel')
-                //->andhaving('COUNT(rappel) = 3');
-
-                //
-
-                //->andHaving('COUNT(facture.rappels) = 1');
-
-            */
+                    ->groupBy('facture.id');
 
 
 
+                    //->innerJoin('facture.rappels','rappel')
+                    //->andhaving('COUNT(rappel) = 3');
 
+                    //
+
+                    //->andHaving('COUNT(facture.rappels) = 1');
+
+                */
+
+
+            }
         }
 
 

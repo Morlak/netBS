@@ -16,6 +16,8 @@ class FactureController extends Controller
     public function testAction()
     {
         $em = $this->getDoctrine()->getManager();
+
+        /*
         for($i = 0; $i < 100; $i++)
         {
             $str = 'Test:'.$i;
@@ -30,6 +32,47 @@ class FactureController extends Controller
             $em->persist($facture);
 
         }
+
+        */
+
+
+        $str = 'Test Groupe';
+        $facture = new Facture();
+        $facture->setTitre($str);
+        $facture->setRemarque($str);
+        $facture->setMontantEmis(100);
+        $facture->setMontantRecu(0);
+        $facture->setDateCreation(new \DateTime());
+        $facture->setStatut('ouverte');
+
+        $em->persist($facture);
+
+        $str = 'Test enfant 1';
+        $facture1 = new Facture();
+        $facture1->setTitre($str);
+        $facture1->setRemarque($str);
+        $facture1->setMontantEmis(100);
+        $facture1->setMontantRecu(0);
+        $facture1->setDateCreation(new \DateTime());
+        $facture1->setStatut('ouverte');
+
+        $facture1->addFactureParent($facture);
+
+        $em->persist($facture1);
+
+        $str = 'Test enfant 2';
+        $facture2 = new Facture();
+        $facture2->setTitre($str);
+        $facture2->setRemarque($str);
+        $facture2->setMontantEmis(100);
+        $facture2->setMontantRecu(0);
+        $facture2->setDateCreation(new \DateTime());
+        $facture2->setStatut('ouverte');
+
+        $facture->addFactureChild($facture2);
+
+        $em->persist($facture2);
+
 
         $em->flush();
 
@@ -203,9 +246,6 @@ class FactureController extends Controller
                     'montantRecuMinimum' => $montantRecuMinimum,
 
             );
-
-            //crée le tableau qui contiendra les réponses
-            $factures = new ArrayCollection();
 
             /*
              * pour la recherche on utilise la fonction personalisée de

@@ -11,11 +11,14 @@
     <div class="col-lg-6">
         <div class="widget">
 
-            <div class="widget-title">
-                <span>Exemple de graphique</span>
-            </div>
+
 
             <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+        </div>
+
+
+            <div class="widget">
+            <div id="container2" style="height: 400px; min-width: 310px; max-width: 600px; margin: 0 auto"></div>
         </div>
 
 
@@ -33,9 +36,35 @@
 
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script src="http://code.highcharts.com/highcharts-more.js"></script>
+
     <script type="text/javascript">
 
         jQuery(document).ready(function() {
+
+
+
+
+                $('#container2').highcharts({
+
+                    chart: {
+                        type: 'bubble',
+                        zoomType: 'xy'
+                    },
+
+                    title: {
+                        text: 'Highcharts Bubbles'
+                    },
+
+                    series: [{
+                        data: [[97, 36, 79], [94, 74, 60], [68, 76, 58], [64, 87, 56], [68, 27, 73], [74, 99, 42], [7, 93, 87], [51, 69, 40], [38, 23, 33], [57, 86, 31]]
+                    }, {
+                        data: [[25, 10, 87], [2, 75, 59], [11, 54, 8], [86, 55, 93], [5, 3, 58], [90, 63, 44], [91, 33, 17], [97, 3, 56], [15, 67, 48], [54, 25, 81]]
+                    }, {
+                        data: [[47, 47, 21], [20, 12, 4], [6, 76, 91], [38, 30, 60], [57, 98, 64], [61, 17, 80], [83, 60, 13], [67, 78, 75], [64, 12, 10], [30, 77, 82]]
+                    }]
+                });
+
 
 
                 $('#container').highcharts({
@@ -43,37 +72,31 @@
                         type: 'column'
                     },
                     title: {
-                        text: 'Monthly Average Rainfall'
+                        text: 'Evolution des rappels'
                     },
                     subtitle: {
-                        text: 'Source: WorldClimate.com'
+                        text: 'Basé sur les factures ouvertes'
                     },
                     xAxis: {
+                        title: {
+                            text: 'Nombres de Rappels'
+                        },
                         categories: [
-                            'Jan',
-                            'Feb',
-                            'Mar',
-                            'Apr',
-                            'May',
-                            'Jun',
-                            'Jul',
-                            'Aug',
-                            'Sep',
-                            'Oct',
-                            'Nov',
-                            'Dec'
+                            {% for data in graph1Responses %}
+                            {{ loop.index -1 }},
+                            {% endfor %}
                         ]
                     },
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Rainfall (mm)'
+                            text: 'Nombres de factures'
                         }
                     },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                         pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
                         footerFormat: '</table>',
                         shared: true,
                         useHTML: true
@@ -86,23 +109,12 @@
                     },
                     series: [
                         {
-                            name: 'Tokyo',
-                            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
-
-                        },
-                        {
-                            name: 'New York',
-                            data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
-
-                        },
-                        {
-                            name: 'London',
-                            data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
-
-                        },
-                        {
-                            name: 'Berlin',
-                            data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+                            name: 'Donnée',
+                            data: [
+                                {% for data in graph1Responses %}
+                                {{ data }},
+                                {% endfor %}
+                            ]
 
                         }
                     ]

@@ -22,12 +22,44 @@ class Facture
      */
     private $id;
 
+    /*
+     * =========== RELATIONS ===============
+     */
+
     /**
      * @var ArryCollection
      *
      * @ORM\OneToMany(targetEntity="Interne\FactureBundle\Entity\Rappel", mappedBy="facture", cascade={"persist", "remove"})
      */
     private $rappels;
+
+
+    /**
+     * @var ArryCollection
+     * @ORM\ManyToMany(targetEntity="Facture", mappedBy="$factureParents", cascade={"persist"})
+     * @ORM\JoinTable(name="facture_parent_child",
+     *      joinColumns={@ORM\JoinColumn(name="factureParent_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="factureChild_id", referencedColumnName="id")})
+     *
+     *
+     *
+     */
+    private $factureChilds;
+
+    /**
+     * @var ArryCollection
+     * @ORM\ManyToMany(targetEntity="Facture", inversedBy="$factureChilds")
+     * @ORM\JoinTable(name="facture_parent_child",
+     *      joinColumns={@ORM\JoinColumn(name="factureChild_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="factureParent_id", referencedColumnName="id")})
+     *
+     *
+     */
+    private $factureParents;
+
+    /*
+     * ========== VARIABLES =================
+     */
 
     /**
      * @var string
@@ -78,6 +110,22 @@ class Facture
      */
     private $datePayement;
 
+
+    /*
+     * ============= FONCTIONS ============
+     */
+
+    public function __construct()
+    {
+        $this->rappels = new ArrayCollection();
+        $this->setDatePayement(new \DateTime('0000-00-00'));
+        $this->setMontantRecu(0);
+        $this->statut = 'ouverte';
+
+        $this->factureChilds = new ArrayCollection();
+        $this->factureParents = new ArrayCollection();
+
+    }
 
     /**
      * Get id
@@ -275,13 +323,6 @@ class Facture
         return $this->rappels;
     }
 
-    public function __construct()
-    {
-        $this->rappels = new ArrayCollection();
-        $this->setDatePayement(new \DateTime('0000-00-00'));
-        $this->setMontantRecu(0);
-        $this->statut = 'ouverte';
-    }
 
     /**
      * Set dateCreation
@@ -363,6 +404,93 @@ class Facture
     public function getNombreRappels()
     {
         return $this->rappels->count();
+    }
+
+
+
+    /**
+     * Get factureChilds
+     *
+     * @return ArrayCollection
+     */
+    public function getFactureChilds()
+    {
+        return $this->factureChilds;
+    }
+
+    /**
+     * Add factureChild
+     *
+     * @param Facture factureChild
+     * @return Facture
+     */
+    public function addFactureChild($factureChild)
+    {
+        $this->factureChilds[] = $factureChild;
+        $factureChild->addFactureParent($this);
+
+        return $this;
+    }
+
+    /**
+     * Get factureParents
+     *
+     * @return ArrayCollection
+     */
+    public function getFactureParents()
+    {
+        return $this->factureParents;
+    }
+
+    /**
+     * Add factureParent
+     *
+     * @param Facture factureParent
+     * @return Facture
+     */
+    public function addFactureParent($factureParent)
+    {
+        $this->factureParents[] = $factureParent;
+
+        return $this;
+    }
+
+    /**
+     *
+     * Get isParent
+     *
+     * @return Boolean
+     */
+    public function isParent()
+    {
+        if($this->factureChilds->count()>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    /**
+     * Get isChild
+     *
+     *
+     * @return Boolean
+     */
+    public function isChild()
+    {
+        if($this->factureParents->count()>0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
     }
 
 
