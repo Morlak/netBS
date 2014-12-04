@@ -32,23 +32,6 @@ class FactureRepository extends EntityRepository
         }
 
 
-        $parameter = $facture->getTitre();
-        if($parameter != null)
-        {
-            $queryBuilder->andWhere('facture.titre = :titre')->setParameter('titre', $parameter);
-        }
-
-        $parameter = $facture->getRemarque();
-        if($parameter != null)
-        {
-            $queryBuilder->andWhere('facture.remarque = :remarque')->setParameter('remarque', $parameter);
-        }
-
-        $parameter = $facture->getMontantEmis();
-        if($parameter != null)
-        {
-            $queryBuilder->andWhere('facture.montantEmis = :montantEmis')->setParameter('montantEmis', $parameter);
-        }
 
         $parameter = $facture->getMontantRecu();
         if($parameter != null)

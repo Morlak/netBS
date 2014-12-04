@@ -15,16 +15,11 @@
 
                     <div class="widget-toolbar">
 
-
-
-
                         <a href="{{path('interne_facture_update', {'id' : facture.id} ) }}">
                             <span class="glyphicon glyphicon-pencil" infobulle="Editer"></span>
                         </a>
 
-                        <a href="{{path('interne_facture_show', {'id' : facture.id} ) }}">
-                            <span class="glyphicon glyphicon-zoom-in" infobulle="Afficher"></span>
-                        </a>
+
 
                         <a href="{{path('interne_facture_delete', {'id' : facture.id} ) }}">
                             <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
@@ -44,13 +39,6 @@
                             N° de Référance: {{ facture.id }}<br>
 
 
-                        Titre: {{ facture.titre }}<br>
-
-                        Remarque: {{ facture.remarque }}<br>
-
-
-
-
 
 
 
@@ -67,21 +55,6 @@
 
 
 
-                        {% if facture.isChild == true %}
-                            <span class="label label-warning">
-                                Facture groupée
-                            </span>
-                        {% elseif facture.isParent == true %}
-                            <span class="label label-warning">
-                                Groupe de facture
-                            </span>
-                        {% else %}
-                            <span class="label label-info">
-                                Facture sans dépendance
-                            </span>
-                        {% endif %}
-
-
 
 
 
@@ -89,18 +62,32 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Résumé de la facture</th>
-                                    <th>Dates</th>
-                                    <th>CHF</th>
+                                    <th rowspan="2">Résumé de la facture</th>
+                                    <th rowspan="2">Dates</th>
+                                    <th colspan="2">Montants</th>
+
+                                </tr>
+                                <tr>
+
+                                    <th>Emis</th>
+                                    <th>Reçu</th>
 
                                 </tr>
                             </thead>
                             <tbody>
+
+
+
+
+                            {% for creance in facture.creances %}
                                 <tr>
-                                    <td>Montant émis</td>
-                                    <td>{{ facture.dateCreation|date("m/d/Y") }} </td>
-                                    <td>{{ facture.montantEmis|number_format(2, '.', ',') }}</td>
+                                    <td>{{ creance.titre }}</td>
+                                    <td>{{ creance.dateCreation|date("m/d/Y") }} </td>
+                                    <td>{{ creance.montantEmis|number_format(2, '.', ',') }} </td>
+                                    <td>{{ creance.montantRecu|number_format(2, '.', ',') }} </td>
                                 </tr>
+
+                            {% endfor %}
 
 
                                 {% for rappel in facture.rappels %}
@@ -108,20 +95,17 @@
                                         <td>Rappel N°{{ loop.index }}</td>
                                         <td>{{ rappel.date|date("m/d/Y") }} </td>
                                         <td>{{ rappel.frais|number_format(2, '.', ',') }} </td>
+                                        <td></td>
                                     </tr>
 
                                 {% endfor %}
                                 <tr>
-                                    <td colspan="2">Montant Total</td>
+                                    <td>Montant Total</td>
+                                    <td>Payée, le {{ facture.datePayement|date("m/d/Y") }} </td>
                                     <td>{{ facture.montantTotal|number_format(2, '.', ',') }}</td>
+                                    <td>{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
                                 </tr>
-                                {% if facture.montantRecu != 0 %}
-                                    <tr>
-                                        <td>Montant Reçu</td>
-                                        <td>{{ facture.datePayement|date("m/d/Y") }} </td>
-                                        <td>{{ facture.montantRecu|number_format(2, '.', ',') }}</td>
-                                    </tr>
-                                {% endif %}
+
 
 
                             </tbody>

@@ -3,12 +3,21 @@
     <tr>
 
         <td>{{ facture.id }}</td>
-        <td></td>
-        <td></td>
-        <td>{{ facture.titre }}</td>
+
+        {% if facture.membre is not empty %}
+            <td>{{ facture.membre.prenom }} {{ facture.membre.nom }}</td>
+
+        {% elseif facture.famille is not empty %}
+            <td>{{ facture.famille }}</td>
+        {% else %}
+            <td><span class="label label-warning">Sans liens</span></td>
+        {% endif %}
+
+
+
         <td>{{ facture.dateCreation|date("m/d/Y") }}</td>
         <td>{{ facture.datePayement|date("m/d/Y") }}</td>
-        <td>{{ facture.montantEmis }}</td>
+
         <td>{{ facture.fraisRappel }}</td>
         <td>{{ facture.montantTotal}}</td>
         <td>{{ facture.montantRecu }}</td>

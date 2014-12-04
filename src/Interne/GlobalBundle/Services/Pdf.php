@@ -12,6 +12,10 @@ class Pdf extends \fpdf\FPDF
         parent::Cell($w,$h, utf8_decode($txt), $border,$ln,$align,$fill,$link);
     }
 
+    function MultiCell($w,$h=0,$txt='',$border=0,$ln=1,$align='',$fill=0,$link='') {
+        parent::MultiCell($w,$h, utf8_decode($txt), $border,$ln,$align,$fill,$link);
+    }
+
 
 
 }

@@ -4,8 +4,10 @@ namespace Interne\FichierBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use Interne\FichierBundle\Entity\Famille;
+use Interne\FactureBundle\Entity\Creance;
 
 /**
  * Membre
@@ -19,6 +21,9 @@ class Membre extends Personne
     public function __construct()
     {
         $this->inscription = new \Datetime();
+        $this->creances = new ArrayCollection();
+        $this->factures = new ArrayCollection();
+
     }
 
     /**
@@ -38,6 +43,30 @@ class Membre extends Personne
      */
     private $famille;
 
+    /*
+     * ajouter par uffer
+     */
+
+    /*
+     * =========== RELATIONS POUR LES FACTURES===============
+     */
+    /**
+     * @var ArryCollection
+     *
+     * @ORM\OneToMany(targetEntity="Interne\FactureBundle\Entity\Creance",
+     *                mappedBy="membre", cascade={"persist","remove"})
+     */
+    private $creances;
+    /**
+     * @var ArryCollection
+     *
+     * @ORM\OneToMany(targetEntity="Interne\FactureBundle\Entity\Facture",
+     *                mappedBy="membre", cascade={"persist","remove"})
+     */
+    private $factures;
+
+
+
     /**
      * @var array
      *
@@ -51,6 +80,20 @@ class Membre extends Personne
      * @ORM\OneToMany(targetEntity="Interne\StructureBundle\Entity\ObtentionDistinction", mappedBy="membre", cascade={"persist", "remove"})
      */
     private $distinctions;
+
+
+
+    /*
+     * Ajouter par uffer
+     */
+    /**
+     * @var envoiFacture
+     *
+     * @ORM\Column(name="envoi_facture", type="string", columnDefinition="ENUM('Famille', 'Membre')")
+     *
+     */
+    private $envoiFacture;
+
 
     /**
      * @var date
@@ -458,4 +501,149 @@ class Membre extends Personne
     {
         $this->distinctions->removeElement($distinction);
     }
+
+
+    /**
+     * Add creance
+     *
+     * @param Creance $creance
+     * @return Membre
+     */
+    public function addCreance($creance)
+    {
+        $this->creances[] = $creance;
+        $creance->setMembre($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove creance
+     *
+     * @param Creance $creance
+     * @return Membre
+     */
+    public function removeCreance($creance)
+    {
+        $this->creances->remove($creance);
+        $creance->setMembre(null);
+
+        return $this;
+    }
+
+    /**
+     * Set creances
+     *
+     * @param ArrayCollection $creances
+     * @return Membre
+     */
+    public function setCreances(ArrayCollection $creances)
+    {
+        $this->creances = $creances;
+
+        foreach($creances as $creance)
+        {
+            $creance->setMembre($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get creances
+     *
+     * @return ArrayCollection
+     */
+    public function getCreances()
+    {
+        return $this->creances;
+    }
+
+
+    /**
+     * Set facture
+     *
+     * @param ArrayCollection $factures
+     * @return Membre
+     */
+    public function setFacture(ArrayCollection $factures)
+    {
+        $this->factures = $factures;
+
+        foreach($factures as $facture)
+        {
+            $facture->setMembre($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get facture
+     *
+     * @return ArrayCollection
+     */
+    public function getFactures()
+    {
+        return $this->factures;
+    }
+
+    /**
+     * Add facture
+     *
+     * @param Facture $facture
+     * @return Membre
+     */
+    public function addFacture($facture)
+    {
+        $this->factures[] = $facture;
+        $facture->setMembre($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove facture
+     *
+     * @param Facture $facture
+     * @return Membre
+     */
+    public function removeFacture($facture)
+    {
+        $this->factures->remove($facture);
+        $facture->setMembre(null);
+
+        return $this;
+    }
+
+    /**
+     * Set envoiFacture
+     *
+     * @param string $envoiFacture
+     * @return Membre
+     */
+    public function setEnvoiFacture($envoiFacture)
+    {
+        $this->envoiFacture = $envoiFacture;
+
+        return $this;
+    }
+
+    /**
+     * Get envoiFacture
+     *
+     * @return string
+     */
+    public function getEnvoiFacture()
+    {
+        return $this->envoiFacture;
+    }
+
+
+
+
+
+
+
+
 }

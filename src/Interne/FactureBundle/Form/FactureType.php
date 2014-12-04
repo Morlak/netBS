@@ -14,26 +14,7 @@ class FactureType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add(
-                'titre',
-                'text',
-                array('label' => 'Titre')
-            )
 
-            ->add(
-                'remarque',
-                'text',
-                array(
-                    'label' => 'Remarques',
-                    'required' => false,
-                    'empty_data'=>'-')
-            )
-
-            ->add(
-                'montantEmis',
-                'number',
-                array('label' => 'Montant émis')
-            )
 
             ->add(
                 'montantRecu',

@@ -23,6 +23,7 @@ $(function() {
                       '<li><a onclick="adder(this, \'attributions\');" href="#">Attributions</a></li>' +
                       '<li><a onclick="adder(this, \'distinctions\');" href="#">Distinctions</a></li>' +
                       '<li><a onclick="adder(this, \'modifications\');" href="#">Modifications</a></li>' +
+                      '<li><a onclick="adder(this, \'addCreances\');" href="#">Ajout de créances</a></li>' +
                     '</ul>' +
                   '</div>';
                   
@@ -37,6 +38,7 @@ $(function() {
                       '<li><a onclick="adderListing(\'attributions\');" href="#">Attributions</a></li>' +
                       '<li><a onclick="adderListing(\'distinctions\');" href="#">Distinctions</a></li>' +
                       '<li><a onclick="adderListing(\'modifications\');" href="#">Modifications</a></li>' +
+                      '<li><a onclick="adderListing(\'addCreances\');" href="#">Ajout de créances</a></li>' +
                     '</ul>' +
                   '</div>';
     
@@ -89,6 +91,9 @@ function adder(btn, type) {
         
     else if (type == 'distinctions')
         adderDistinctions(ids);
+
+    else if (type == 'addCreances')
+        adderCreances(ids);
 }
 
 /**
@@ -123,6 +128,8 @@ function adderListing(type) {
         
     else if (type == 'distinctions')
         adderDistinctions(ids);
+    else if (type == 'addCreances')
+        adderCreances(ids);
 }
 
 /**
@@ -404,12 +411,52 @@ function adderAddDistinctions() {
         
         success: function(data) {
             
-            alert('Distinctions ajoutées. N\'oubliez pas d\'actualier');
+            alert('Distinctions ajoutées. N\'oubliez pas d\'actualiser');
         },
         error: function(data) {
             
             alert("Erreur lors de l'ajoue des distinctions");
         }
     });
+
+}
+
+/*
+ * la méthode va afficher le formulaire pour l'ajout de créance en masse
+ *
+ */
+function adderCreances(ids) {
+
+    $('#adder-membres-ids').val(ids)
+
+    //On affiche la modal
+    $('#modal-add-creance').modal('show');
+
+}
+/*
+ * Ajoute une créance à tout les membres dans la liste
+ */
+function adderAddCreances() {
+
+    //on récupère la liste
+    var listeIds = $('#adder-membres-ids').val(ids);
+
+    //on récupère les valeur du formulaire
+    var titre = $('#modal_form_creance_titre').val();
+    var remarque = $('#modal_form_creance_remarque').val();
+    var montant = $('#modal_form_creance_montant').val();
+
+    var data = { listeIds: listeIds, titre: titre, remarque: remarque, montant: montant};
+
+    $.ajax({
+        type: "POST",
+        url: Routing.generate('interne_facture_creance_add_to_liste_ajax'),
+        data: data,
+        error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+        success: function(htmlResponse) {
+
+        }
+    });
+
 
 }

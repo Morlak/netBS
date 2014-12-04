@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Interne\FactureBundle\Entity\Rappel;
 use Interne\FactureBundle\Entity\Facture;
 use Interne\GlobalBundle\Services\Pdf;
+use Interne\FactureBundle\Entity\Parametre;
 
 class PrintController extends Controller
 {
@@ -54,30 +55,46 @@ class PrintController extends Controller
 
     private function factureToPdf(Facture $facture)
     {
+        /*
+         * On récupère les parametres nécaissaires
+         * a la création de la facture en PDF
+         */
+        $em = $this->getDoctrine()->getManager();
+        $paramRepo = $em->getRepository('InterneFactureBundle:Parametre');
+
+        $ccpBvr = $paramRepo->findOneBy(array('name'=>'impression_ccp_bvr'))->getValue();
+        $adresse = $paramRepo->findOneBy(array('name'=>'impression_adresse'))->getValue();
+        $modePayement = $paramRepo->findOneBy(array('name'=>'impression_mode_payement'))->getValue();
+        $texteFacture = $paramRepo->findOneBy(array('name'=>'impression_texte_facture'))->getValue();
+
+
+
+        $ccp = $ccpBvr;
+        $numeroReference = (string)$facture->getId();
+
+
+        /*
+         * Creation du PDF
+         */
         $pdf = new Pdf();
 
         $pdf->AddPage();
         $pdf->SetAutoPageBreak(false);
+        $pdf->SetLeftMargin(20);
+        $pdf->SetRightMargin(20);
 
-        $fontFamiliy = 'Arial';
-        $fontStyle  = '';
-        $fontSize = 9;
-        $pdf->SetFont($fontFamiliy,$fontStyle,$fontSize);
+        $pdf->SetFont('Arial','',9);
 
         $cellWidth = 50;//ne sert pas vraiment
         $cellHigh = 4;
-
-
-
-        $adresse = array('Brigade de Sauvabelin','Case Postale 5455','1002 Lausanne');
-
 
         /*
          * Adresse haut de page
          */
         $x =  20;
         $y =  20;
-        $pdf = $this->insertAdresse($pdf,$x,$y,$cellWidth,$cellHigh,$adresse);
+        $pdf->SetXY($x,$y);
+        $pdf->MultiCell($cellWidth,$cellHigh,$adresse);
 
         /*
          * Date
@@ -88,54 +105,107 @@ class PrintController extends Controller
         $pdf->Cell($cellWidth,$cellHigh,'Lausanne, le ');
 
         /*
-         * Adress du membre
+         * Adresse du membre
          */
         $x =  110;
         $y =  50;
-        $adresseMembre = array('Nom Prénom','chemin','Ville');
-        $pdf = $this->insertAdresse($pdf,$x,$y,$cellWidth,$cellHigh,$adresseMembre);
+        $adresseMembre =
+        'Nom Prénom
+        chemin
+        Ville';
+
+        $pdf->SetXY($x,$y);
+        $pdf->MultiCell($cellWidth,$cellHigh,$adresseMembre);
 
 
         /*
          * Titre de la facture
          */
-        $fontFamiliy = 'Arial';
-        $fontStyle  = 'B';
-        $fontSize = 9;
-        $pdf->SetFont($fontFamiliy,$fontStyle,$fontSize);
+        $pdf->SetFont('Arial','B',9);
 
         $x = 20;
         $y =  70;
         $pdf->SetXY($x,$y);
-        $title = 'Facture N°'.$facture->getId().' : '.$facture->getTitre();
-        $pdf->Cell($cellWidth,$cellHigh,$title);
+        $title = 'Facture N°'.$facture->getId();
+        $pdf->Cell(140,$cellHigh,$title);
+
+        //retour à la ligne
+        $pdf->ln();
+        $pdf->ln();
+
+        /*
+        * Texte d'intro
+        */
+        $pdf->SetFont('Arial','',9);
+        $pdf->write($cellHigh,$texteFacture);
+
+
+        //retour à la ligne
+        $pdf->ln();
+        $pdf->ln();
 
 
         /*
-         * Remarque
-         *
-        $fontFamiliy = 'Arial';
-        $fontStyle  = 'B';
-        $fontSize = 9;
-        $pdf->SetFont($fontFamiliy,$fontStyle,$fontSize);
+         * Tableau facture
+         */
 
-        $x = 20;
-        $y =  90;
-        $pdf->SetXY($x,$y);
-        $remarques = 'Remarques:'.$facture->getRemarque();
-        $pdf->Cell(150,30,'',1);
-        $pdf->Cell($cellWidth,$cellHigh,'Remarques:');
-        $pdf->SetXY($x,$y+5);
-        $pdf->Cell($cellWidth,$cellHigh,$remarques);
-
-        */
+        $pdf->SetFont('Arial','B',9);
+        $pdf->Cell(110,$cellHigh,'');
+        $pdf->Cell(30,$cellHigh,'Date');
+        $pdf->Cell(20,$cellHigh,'Montant');
+        $pdf->ln();
+        $pdf->SetFont('Arial','',9);
 
 
-        $ccp = '01-66840-7';
-        $numeroReference = (string)$facture->getId();
+        foreach($facture->getCreances() as $creance)
+        {
+            $pdf->SetFont('Arial','B',9);
+            $pdf->Cell(110,$cellHigh,$creance->getTitre(),'T');
+            $pdf->SetFont('Arial','',9);
+            //$pdf->Cell(30,$cellHigh,$creance->getDateCreation(),1);
+            $pdf->Cell(30,$cellHigh,'date','T');
+            $pdf->Cell(20,$cellHigh,number_format($creance->getMontantEmis(),2),'T');
+
+            $pdf->ln();
+
+            $remarque = $creance->getRemarque();
+            if($remarque != null)
+            {
+                $pdf->Cell(20,$cellHigh,'Remarque:');
+                $pdf->MultiCell(90,$cellHigh,$remarque);
+            }
+        }
+
+        $i=1;
+        foreach($facture->getRappels() as $rappel)
+        {
+            $pdf->Cell(110,$cellHigh,'Rappel '.$i,'T');
+            $pdf->Cell(30,$cellHigh,'date','T');
+
+            $pdf->Cell(20,$cellHigh,number_format($rappel->getFrais(),2),'T');
+            $pdf->ln();
+            $i++;
+        }
+
+        $pdf->Cell(110,$cellHigh,'','T');
+        $pdf->Cell(30,$cellHigh,'Tolal:','T');
+        $pdf->Cell(20,$cellHigh,number_format($facture->getMontantTotal(),2).' CHF',1);
 
 
-        $pdf = $this->insertBvr($pdf,$adresse,$ccp,$numeroReference);
+        if($modePayement == 'BVR')
+        {
+            $pdf = $this->insertBvr($pdf,$adresse,$ccp,$numeroReference);
+        }
+        elseif($modePayement == 'BV')
+        {
+
+        }
+        else
+        {
+
+        }
+
+
 
         $pdf->Output();
         //$pdf->getPdf()->Output('test.pdf','D');
@@ -144,21 +214,7 @@ class PrintController extends Controller
 
     }
 
-    /*
-     * Ajoute une adresse au PDF
-     */
-    private  function insertAdresse($pdf,$xStart,$yStart,$cellWidth,$cellHigh,$arrayTextLine)
-    {
-        $x = $xStart;
-        $y = $yStart;
-        foreach($arrayTextLine as $textLine)
-        {
-            $pdf->SetXY($x,$y);
-            $pdf->Cell($cellWidth,$cellHigh,$textLine);
-            $y = $y + $cellHigh;
-        }
-        return $pdf;
-    }
+
 
     /*
      * Crée les ligne de Codage BVR
@@ -244,7 +300,8 @@ class PrintController extends Controller
          */
         $x = $xStart + 5;
         $y = $yStart + 10;
-        $pdf = $this->insertAdresse($pdf,$x,$y,$cellWidth,$cellHigh,$adresse);
+        $pdf->SetXY($x,$y);
+        $pdf->MultiCell($cellWidth,$cellHigh,$adresse);
 
         /*
          * compte récépissé
@@ -268,7 +325,8 @@ class PrintController extends Controller
          */
         $x = $xStart + 65;
         $y = $yStart + 10;
-        $pdf = $this->insertAdresse($pdf,$x,$y,$cellWidth,$cellHigh,$adresse);
+        $pdf->SetXY($x,$y);
+        $pdf->MultiCell($cellWidth,$cellHigh,$adresse);
 
         /*
          * compte virement

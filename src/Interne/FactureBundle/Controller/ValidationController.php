@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\BrowserKit\Request;
 use Interne\FactureBundle\Entity\Facture;
+use Interne\FactureBundle\Entity\Creance;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Validator\Constraints\Null;
 use Symfony\Component\HttpFoundation\Response;
@@ -117,37 +118,82 @@ class ValidationController extends Controller
             $facture->setDatePayement($date);
 
 
+            $creanceRepartition = [];
+            if(($state == 'found_lower_valid')||($state == 'found_lower_new_facture'))
+            {
+                $creancesIdArray = $request->request->get('creancesIdArray');
+                $creancesMontantArray = $request->request->get('creancesMontantArray');
+
+
+
+                $i = 0;
+                foreach($creancesIdArray as $idCreance)
+                {
+                    $creanceRepartition[$idCreance] = $creancesMontantArray[$i];
+                    $i++;
+                }
+
+            }
+
+            switch($state){
+                case 'found_valid':
+                    foreach($facture->getCreances() as $creance)
+                    {
+                        $creance->setMontantRecu($creance->getMontantEmis);
+                    }
+                    break;
+                case 'found_lower_valid':
+                    foreach($facture->getCreances() as $creance)
+                    {
+                        $creance->setMontantRecu($creanceRepartition[$creance->getId()]);
+                    }
+                    break;
+                case 'found_lower_new_facture':
+                    foreach($facture->getCreances() as $creance)
+                    {
+                        $creance->setMontantRecu($creanceRepartition[$creance->getId()]);
+                    }
+                    break;
+            }
+
 
             if($state == 'found_lower_new_facture')
             {
                 /*
-                 * dans ce cas de figure, on crée une facture supplémentaire
+                 * dans ce cas de figure, on crée des créances supplémentaires
                  * pour compenser le montant exigé
                  */
-                $remarque = $facture->getRemarque()
-                            .' (Facture crée en complément de la facture numéro: '
+
+                foreach($facture->getCreances() as $creance)
+                {
+                    if(!$creance->isPayed())
+                    {
+                        $newCreance = new Creance();
+                        $newCreance->setTitre($creance->getTitre());
+                        $newCreance->setMembre($creance->getMembre());
+                        $newCreance->setFamille($creance->getFamille());
+                        /*
+                         * calcule du montant restant
+                         */
+                        $solde = $creance->getMontantEmis() - $creanceRepartition[$creance->getId()];
+                        $newCreance->setMontantEmis($solde);
+
+                        $remarque = $creance->getRemarque()
+                            .' (Crée en complément de la facture numéro: '
                             .$facture->getId()
                             .')';
+                        $newCreance->setRemarque($remarque);
+                        $em->persist($newCreance);
 
-                $newFacture = new Facture();
-                $newFacture->setTitre($facture->getTitre());
-                $newFacture->setRemarque($remarque);
-                $newFacture->setDateCreation(new \DateTime());
-                $newFacture->setMontantEmis($facture->getMontantTotal()-$montantRecu);
-                $newFacture->setStatut('ouverte');
-                $newFacture->setMontantRecu(0);
+                        /*
+                         * On ajoute aussi une remarque dans la créance qui vient d'être validée.
+                         */
+                        $remarque = $creance->getRemarque()
+                            .' (Une Créance de complément à été crée)';
+                        $creance->setRemarque($remarque);
 
-                $em->persist($newFacture);
-                $em->flush();
-
-                /*
-                 * On ajoute aussi une remarque dans la facture qui vient d'être validée.
-                 */
-                $remarque = $facture->getRemarque()
-                    .' (Une facture de complément à été crée: N°'
-                    .$newFacture->getId()
-                    .')';
-                $facture->setRemarque($remarque);
+                    }
+                }
             }
 
             $em->flush();
@@ -242,7 +288,7 @@ class ValidationController extends Controller
         return array('factures' => $facturesInFile, 'infos' => $infos);
     }
 
-    private function compareWithFactureInBDD($facturesInFile)
+    private function compareWithFactureInBDD($facturesReceived)
     {
         $em = $this->getDoctrine()->getManager();
         $factureRepository = $em->getRepository('InterneFactureBundle:Facture');
@@ -250,18 +296,18 @@ class ValidationController extends Controller
 
         $results = array();
 
-        foreach($facturesInFile as $factureInFile)
+        foreach($facturesReceived as $factureReceived)
         {
 
 
-            $factureFound = $factureRepository->find($factureInFile->getId());
+            $factureFound = $factureRepository->find($factureReceived->getId());
 
             if($factureFound != Null)
             {
                 if($factureFound->getStatut() == 'ouverte')
                 {
                     $montantTotalEmis = $factureFound->getMontantTotal();
-                    $montantRecu = $factureInFile->getMontantRecu();
+                    $montantRecu = $factureReceived->getMontantRecu();
 
                     if($montantTotalEmis == $montantRecu)
                     {
@@ -292,7 +338,7 @@ class ValidationController extends Controller
             }
 
             $results[] = array(
-                'factureInFile' => $factureInFile,
+                'factureReceived' => $factureReceived,
                 'factureFound' => $factureFound,
                 'validationStatut' => $validationStatut
             );

@@ -2,6 +2,7 @@
 
 namespace Interne\FactureBundle\Controller;
 
+use Interne\FactureBundle\Entity\Creance;
 use Interne\FactureBundle\Entity\Facture;
 use Interne\FactureBundle\Entity\Rappel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -35,6 +36,8 @@ class FactureController extends Controller
 
         */
 
+        /*
+
 
         $str = 'Test Groupe';
         $facture = new Facture();
@@ -45,33 +48,18 @@ class FactureController extends Controller
         $facture->setDateCreation(new \DateTime());
         $facture->setStatut('ouverte');
 
-        $em->persist($facture);
+        */
 
-        $str = 'Test enfant 1';
-        $facture1 = new Facture();
-        $facture1->setTitre($str);
-        $facture1->setRemarque($str);
-        $facture1->setMontantEmis(100);
-        $facture1->setMontantRecu(0);
-        $facture1->setDateCreation(new \DateTime());
-        $facture1->setStatut('ouverte');
+        $membre = $em->getRepository('InterneFichierBundle:Membre')->find(1);
+        $creance = new Creance();
+        $creance->setTitre('petite creéance');
+        $creance->setRemarque('non rien');
+        $creance->setDateCreation(new \DateTime());
+        $creance->setMontant(100);
 
-        $facture1->addFactureParent($facture);
+        $membre->addCreance($creance);
 
-        $em->persist($facture1);
-
-        $str = 'Test enfant 2';
-        $facture2 = new Facture();
-        $facture2->setTitre($str);
-        $facture2->setRemarque($str);
-        $facture2->setMontantEmis(100);
-        $facture2->setMontantRecu(0);
-        $facture2->setDateCreation(new \DateTime());
-        $facture2->setStatut('ouverte');
-
-        $facture->addFactureChild($facture2);
-
-        $em->persist($facture2);
+        $em->persist($membre);
 
 
         $em->flush();

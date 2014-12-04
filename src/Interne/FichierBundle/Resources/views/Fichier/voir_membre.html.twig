@@ -417,7 +417,9 @@
 
     </div>
 
-    <div class="modal fade" id="modal-add-attributions-perso" aria-hidden="true">
+
+
+        <div class="modal fade" id="modal-add-attributions-perso" aria-hidden="true">
 
         <div class="modal-dialog">
             <div class="modal-content">
@@ -478,10 +480,25 @@
         </div>
     </div>
 
+
+
+
+        {#
+            Insertion de la partie facture et créance pour le membre
+        #}
+        {% include "InterneFactureBundle:viewForFichierBundle:listeForMembre.html.twig" with {'membre': membre } %}
+
+
+
+
+
+
+
     {% endif %}
 
     <!-- on stocke l'id du membre pour pouvoir la récupérer -->
     <input type="hidden" value="{{ membre.id }}" id="membre-id"/>
+
 
 {% endblock %}
 
@@ -490,5 +507,6 @@
     <script src="{{ asset('static/js/modifikator.js') }}"></script>
     <script src="{{  asset('static/js/bootstrap-editable.min.js') }}"></script>
     <script src="{{ asset('static/js/membres.js') }}"></script>
+
 
 {% endblock %}

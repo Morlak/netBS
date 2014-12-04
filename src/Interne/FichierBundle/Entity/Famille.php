@@ -4,8 +4,10 @@ namespace Interne\FichierBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 use Interne\FichierBundle\Entity\Geniteur;
+use Interne\FactureBundle\Entity\Facture;
 
 /**
  * Famille
@@ -49,6 +51,28 @@ class Famille
      * @ORM\JoinColumn(name="mere_id", referencedColumnName="id")
      */
     private $mere;
+
+    /*
+     * =========== RELATIONS POUR LES FACTURES===============
+     */
+
+    /**
+     * @var ArryCollection
+     *
+     * @ORM\OneToMany(targetEntity="Interne\FactureBundle\Entity\Facture",
+     *                mappedBy="famille", cascade={"persist"})
+     */
+    private $factures;
+
+    /**
+     * @var ArryCollection
+     *
+     * @ORM\OneToMany(targetEntity="Interne\FactureBundle\Entity\Creance",
+     *                mappedBy="famille", cascade={"persist"})
+     */
+    private $creances;
+
+
 
     /**
      * @var string
@@ -207,4 +231,117 @@ class Famille
     public function __toString() {
         return "Les " . $this->getNom() . " de " . $this->getAdresse()->getLocalite(); // . " (" . sizeof($this->getMembres()) . ")";
     }
+
+    /**
+     * Set facture
+     *
+     * @param ArrayCollection $factures
+     * @return Famille
+     */
+    public function setFacture(ArrayCollection $factures)
+    {
+        $this->factures = $factures;
+
+        foreach($factures as $facture)
+        {
+            $facture->setFamille($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get facture
+     *
+     * @return ArrayCollection
+     */
+    public function getFactures()
+    {
+        return $this->factures;
+    }
+
+    /**
+     * Add facture
+     *
+     * @param Facture $facture
+     * @return Famille
+     */
+    public function addFacture($facture)
+    {
+        $this->factures[] = $facture;
+        $facture->setFamille($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove facture
+     *
+     * @param Facture $facture
+     * @return Famille
+     */
+    public function removeFacture($facture)
+    {
+        $this->factures->remove($facture);
+        $facture->setFamille(null);
+
+        return $this;
+    }
+
+    /**
+     * Add creance
+     *
+     * @param Creance $creance
+     * @return Famille
+     */
+    public function addCreance($creance)
+    {
+        $this->creances[] = $creance;
+        $creance->setFamille($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove creance
+     *
+     * @param Creance $creance
+     * @return Famille
+     */
+    public function removeCreance($creance)
+    {
+        $this->creances->remove($creance);
+        $creance->setFamille(null);
+
+        return $this;
+    }
+
+    /**
+     * Set creances
+     *
+     * @param ArrayCollection $creances
+     * @return Famille
+     */
+    public function setCreances(ArrayCollection $creances)
+    {
+        $this->creances = $creances;
+
+        foreach($creances as $creance)
+        {
+            $creance->setFamille($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get creances
+     *
+     * @return ArrayCollection
+     */
+    public function getCreances()
+    {
+        return $this->creances;
+    }
+
 }

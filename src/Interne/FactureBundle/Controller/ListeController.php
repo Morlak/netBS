@@ -14,6 +14,8 @@ class ListeController extends Controller
     {
         $request = $this->getRequest();
 
+
+
         if($request->isXmlHttpRequest()) {
 
             $listeFactureId = $request->request->get('listeFactureId');

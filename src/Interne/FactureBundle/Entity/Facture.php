@@ -5,6 +5,9 @@ namespace Interne\FactureBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Interne\FichierBundle\Entity\Membre;
+use Interne\FichierBundle\Entity\Famille;
+
 /**
  * Facture
  *
@@ -26,61 +29,43 @@ class Facture
      * =========== RELATIONS ===============
      */
 
+
     /**
      * @var ArryCollection
      *
-     * @ORM\OneToMany(targetEntity="Interne\FactureBundle\Entity\Rappel", mappedBy="facture", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Interne\FactureBundle\Entity\Rappel",
+     *                mappedBy="facture", cascade={"persist", "remove"})
      */
     private $rappels;
 
-
     /**
      * @var ArryCollection
-     * @ORM\ManyToMany(targetEntity="Facture", mappedBy="$factureParents", cascade={"persist"})
-     * @ORM\JoinTable(name="facture_parent_child",
-     *      joinColumns={@ORM\JoinColumn(name="factureParent_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="factureChild_id", referencedColumnName="id")})
      *
-     *
-     *
+     * @ORM\OneToMany(targetEntity="Interne\FactureBundle\Entity\Creance",
+     *                mappedBy="facture", cascade={"persist", "remove"})
      */
-    private $factureChilds;
+    private $creances;
 
     /**
-     * @var ArryCollection
-     * @ORM\ManyToMany(targetEntity="Facture", inversedBy="$factureChilds")
-     * @ORM\JoinTable(name="facture_parent_child",
-     *      joinColumns={@ORM\JoinColumn(name="factureChild_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="factureParent_id", referencedColumnName="id")})
+     * @var Membre
      *
-     *
+     * @ORM\ManyToOne(targetEntity="Interne\FichierBundle\Entity\Membre", inversedBy="factures")
+     * @ORM\JoinColumn(name="membre_id", referencedColumnName="id")
      */
-    private $factureParents;
+    private $membre;
+
+    /**
+     * @var Famille
+     *
+     * @ORM\ManyToOne(targetEntity="Interne\FichierBundle\Entity\Famille", inversedBy="factures")
+     * @ORM\JoinColumn(name="famille_id", referencedColumnName="id")
+     */
+    private $famille;
 
     /*
      * ========== VARIABLES =================
      */
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="titre", type="string", length=255)
-     */
-    private $titre;
-
-    /**
-     * @var text
-     *
-     * @ORM\Column(name="remarque", type="text")
-     */
-    private $remarque;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="montantEmis", type="float")
-     */
-    private $montantEmis;
 
     /**
      * @var float
@@ -122,8 +107,8 @@ class Facture
         $this->setMontantRecu(0);
         $this->statut = 'ouverte';
 
-        $this->factureChilds = new ArrayCollection();
-        $this->factureParents = new ArrayCollection();
+        $this->creances = new ArrayCollection();
+
 
     }
 
@@ -150,74 +135,6 @@ class Facture
         return $this;
     }
 
-    /**
-     * Set titre
-     *
-     * @param string $titre
-     * @return Facture
-     */
-    public function setTitre($titre)
-    {
-        $this->titre = $titre;
-
-        return $this;
-    }
-
-    /**
-     * Get titre
-     *
-     * @return string 
-     */
-    public function getTitre()
-    {
-        return $this->titre;
-    }
-
-    /**
-     * Set remarque
-     *
-     * @param string $remarque
-     * @return Facture
-     */
-    public function setRemarque($remarque)
-    {
-        $this->remarque = $remarque;
-
-        return $this;
-    }
-
-    /**
-     * Get remarque
-     *
-     * @return string 
-     */
-    public function getRemarque()
-    {
-        return $this->remarque;
-    }
-
-    /**
-     * Set montantEmis
-     *
-     * @param float $montantEmis
-     * @return Facture
-     */
-    public function setMontantEmis($montantEmis)
-    {
-        $this->montantEmis = $montantEmis;
-
-        return $this;
-    }
-
-    /**
-     * Get montantEmis
-     *
-     * @return float 
-     */
-    public function getMontantEmis()
-    {
-        return $this->montantEmis;
-    }
 
     /**
      * Set montantRecu
@@ -290,8 +207,6 @@ class Facture
         $this->rappels->remove($rappel);
         $rappel->setFacture(null);
 
-
-
         return $this;
     }
 
@@ -355,7 +270,22 @@ class Facture
     public function getMontantTotal()
     {
 
-        return $this->montantEmis + $this->getFraisRappel();
+        return $this->getMontantCreances() + $this->getFraisRappel();
+    }
+
+    /**
+     * Get montantCreances
+     *
+     * @return float
+     */
+    public function getMontantCreances()
+    {
+        $montantCreances = 0;
+        foreach($this->creances as $creance)
+        {
+            $montantCreances = $montantCreances + $creance->getMontantEmis();
+        }
+        return $montantCreances;
     }
 
     /**
@@ -406,24 +336,24 @@ class Facture
         return $this->rappels->count();
     }
 
+/*
 
-
-    /**
+    **
      * Get factureChilds
      *
      * @return ArrayCollection
-     */
+     *
     public function getFactureChilds()
     {
         return $this->factureChilds;
     }
 
-    /**
+    **
      * Add factureChild
      *
      * @param Facture factureChild
      * @return Facture
-     */
+     *
     public function addFactureChild($factureChild)
     {
         $this->factureChilds[] = $factureChild;
@@ -432,22 +362,22 @@ class Facture
         return $this;
     }
 
-    /**
+    **
      * Get factureParents
      *
      * @return ArrayCollection
-     */
+     *
     public function getFactureParents()
     {
         return $this->factureParents;
     }
 
-    /**
+    **
      * Add factureParent
      *
      * @param Facture factureParent
      * @return Facture
-     */
+     *
     public function addFactureParent($factureParent)
     {
         $this->factureParents[] = $factureParent;
@@ -455,12 +385,12 @@ class Facture
         return $this;
     }
 
-    /**
+    **
      *
      * Get isParent
      *
      * @return Boolean
-     */
+     *
     public function isParent()
     {
         if($this->factureChilds->count()>0)
@@ -474,12 +404,12 @@ class Facture
 
     }
 
-    /**
+    **
      * Get isChild
      *
      *
      * @return Boolean
-     */
+     *
     public function isChild()
     {
         if($this->factureParents->count()>0)
@@ -492,6 +422,170 @@ class Facture
         }
 
     }
+
+    **
+     * Set asPayed
+     *
+     *
+     *
+    public function setAsPayed(float $montantRecu,\DateTime $datePayement = null)
+    {
+
+        if($datePayement == null)
+        {
+            $datePayement = new \DateTime();
+            $date = new \DateTime();
+        }
+        $date->createFromFormat('d/m/Y',$datePayement);
+        $this->setDatePayement($date);
+
+        $this->setMontantRecu($montantRecu);
+        $this->setStatut('payee');
+
+        if($this->isParent())
+        {
+            *
+             * On réparti la somme payée dans tout les factures
+             * du groupe en répartisant aussi la diffreance
+             * si il y en a une.
+             *
+
+        }
+
+        *
+        finir ici!!!!
+        *
+
+
+    }
+*/
+
+    /*
+     * Set membre
+     *
+     * @param Membre $membre
+     * @return Rappel
+     *
+    public function setMembre($membre)
+    {
+        $this->membre = $membre;
+
+        return $this;
+    }
+
+    /*
+     * Get membre
+     *
+     * @return Membre
+     *
+    public function getMembre()
+    {
+        return $this->membre;
+    }
+    */
+
+    /**
+     * Add creance
+     *
+     * @param Creance $creance
+     * @return Facture
+     */
+    public function addCreance($creance)
+    {
+        $this->creances[] = $creance;
+        $creance->setFacture($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove creance
+     *
+     * @param Creance $creance
+     * @return Facture
+     */
+    public function removeCreance($creance)
+    {
+        $this->creances->remove($creance);
+        $creance->setFacture(null);
+
+        return $this;
+    }
+
+    /**
+     * Set creances
+     *
+     * @param ArrayCollection $creances
+     * @return Facture
+     */
+    public function setCreances(ArrayCollection $creances)
+    {
+        $this->creances = $creances;
+
+        foreach($creances as $creance)
+        {
+            $creance->setFacture($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get creances
+     *
+     * @return ArrayCollection
+     */
+    public function getCreances()
+    {
+        return $this->creances;
+    }
+
+    /**
+     * Set membre
+     *
+     * @param Membre $membre
+     * @return Facture
+     */
+    public function setMembre($membre)
+    {
+        $this->membre = $membre;
+
+        return $this;
+    }
+
+    /**
+     * Get membre
+     *
+     * @return Membre
+     */
+    public function getMembre()
+    {
+        return $this->membre;
+    }
+
+    /**
+     * Set famille
+     *
+     * @param Famille $famille
+     * @return Facture
+     */
+    public function setFamille($famille)
+    {
+        $this->famille = $famille;
+
+        return $this;
+    }
+
+    /**
+     * Get famille
+     *
+     * @return Famille
+     */
+    public function getFamille()
+    {
+        return $this->famille;
+    }
+
 
 
 

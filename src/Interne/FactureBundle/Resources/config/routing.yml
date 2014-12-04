@@ -1,87 +1,29 @@
 interne_facture_homepage:
-    path:     /
+    path:     /homepage
     defaults: { _controller: InterneFactureBundle:Default:index }
 
 
-
-interne_facture_create:
-    path:     /create
-    defaults: { _controller: InterneFactureBundle:Facture:create }
-
-interne_facture_show:
-    path:     /show/{id}
-    defaults: { _controller: InterneFactureBundle:Facture:show }
-
-interne_facture_update:
-    path:     /update/{id}
-    defaults: { _controller: InterneFactureBundle:Facture:update }
-
-interne_facture_show_all:
-    path:     /showall
-    defaults: { _controller: InterneFactureBundle:Facture:showAll }
-
-interne_facture_delete:
-    path:     /delete/{id}
-    defaults: { _controller: InterneFactureBundle:Facture:delete }
-
-interne_facture_search:
-    path:     /search
-    defaults: { _controller: InterneFactureBundle:Facture:search }
-
-interne_facture_test:
-    path:     /test
-    defaults: { _controller: InterneFactureBundle:Facture:test }
-
-
-
+interne_facture:
+    resource: "routing/facture.yml"
+    prefix:   /
 
 interne_facture_model:
-    path:     /model
-    defaults: { _controller: InterneFactureBundle:model:index }
-
-interne_facture_model_create:
-    path:     /model/create
-    defaults: { _controller: InterneFactureBundle:model:create }
-
-interne_facture_model_update:
-    path:     /model/update/{id}
-    defaults: { _controller: InterneFactureBundle:model:update }
-
-interne_facture_model_show:
-    path:     /model/show/{id}
-    defaults: { _controller: InterneFactureBundle:model:show }
-
-interne_facture_model_delete:
-    path:     /model/delete/{id}
-    defaults: { _controller: InterneFactureBundle:model:delete }
-
-
-
+    resource: "routing/model.yml"
+    prefix:   /model
 
 interne_facture_validation:
-    path:     /validation
-    defaults: { _controller: InterneFactureBundle:validation:index }
-
-interne_facture_validation_ajax:
-    path:     /validation/ajax
-    defaults: { _controller: InterneFactureBundle:validation:validationAjax }
-
-interne_facture_validation_add_manualy_ajax:
-    path:     /validation/add_manualy_ajax
-    defaults: { _controller: InterneFactureBundle:validation:addManualyAjax }
-
-interne_facture_validation_upload_file_ajax:
-    path:     /validation/upload_file_ajax
-    defaults: { _controller: InterneFactureBundle:validation:uploadFileAjax }
-
-
-
+    resource: "routing/validation.yml"
+    prefix:   /validation
 
 
 interne_facture_statistics:
     path:     /statistics
     defaults: { _controller: InterneFactureBundle:statistics:index }
 
+
+interne_facture_creance:
+    resource: "routing/creance.yml"
+    prefix:   /creance
 
 
 
@@ -108,3 +50,17 @@ interne_facture_print_ajax:
 interne_facture_print:
     path:     /print/{id}
     defaults: { _controller: InterneFactureBundle:Print:print }
+
+
+
+
+interne_facture_parametre:
+    path:     /parametre
+    defaults: { _controller: InterneFactureBundle:Parametre:index }
+
+interne_facture_parametre_update_ajax:
+    path:     /parametre/update_ajax
+    defaults: { _controller: InterneFactureBundle:Parametre:updateAjax }
+
+
+
