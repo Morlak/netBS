@@ -1,0 +1,120 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+{% block title %}Créance en attente de facturations{% endblock %}
+
+
+{% block body %}
+
+
+    <div class="row" >
+        <div class="col-lg-8">
+            <div class="widget">
+                <div class="widget-title">
+                    <span>Créances en attente de facturation</span>
+
+                    <div class="widget-toolbar">
+
+                        <button onclick="createFactureWithSelectedCreances('WaitingListe');">Facturer les créances séléctionnées
+                        </button>
+                    </div>
+                </div>
+                <div class="widget-content" >
+
+                    <table class="datatable table-bordered" id="listeCreanceTable">
+
+                        <thead>
+                        <tr>
+                            <th rowspan="2">
+                                <input type="checkbox" onclick="selectAllCreances(this);">
+                            </th>
+                            <th>Cible de facturation</th>
+                            <th rowspan="2">Titre</th>
+                            <th rowspan="2">Remarque</th>
+                            <th colspan="2">Montants</th>
+                            <th colspan="2">Actions</th>
+                        </tr>
+                        <tr>
+
+                            <th></th>
+
+                            <th>Emis</th>
+                            <th>Reçu</th>
+                            <th></th>
+                            <th></th>
+
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% if creances is not empty %}
+
+                            {# On commence par les creances non facturée #}
+                            {% for creance in creances|reverse  %}
+                                {% if creance.facture is empty %}
+                                    <tr>
+                                        <td>
+                                            <input class="selectCreance" type="checkbox" value="{{ creance.id }}">
+                                        </td>
+                                        <td>
+                                            {% if creance.membre.envoiFacture == 'Membre' %}
+                                                {{ creance.membre.prenom }} {{ creance.membre.nom }}
+                                            {% elseif creance.membre.envoiFacture == 'Famille' %}
+                                                {{ creance.membre.famille }}
+                                            {% endif %}
+
+                                        </td>
+                                        <td>{{ creance.titre }}</td>
+                                        <td>{{ creance.remarque }}</td>
+                                        <td>{{ creance.montantEmis }}</td>
+                                        <td>{{ creance.montantRecu }}</td>
+                                        <td>
+                                            <a href="">
+                                                <span class="glyphicon glyphicon-pencil" infobulle="Editer"></span>
+                                            </a>
+                                        </td>
+
+                                        <td>
+                                            <a href="">
+                                                <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+
+                            {% endfor %}
+
+
+
+                        {% else %}
+
+                        {% endif %}
+
+                        </tbody>
+                    </table>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {%block javascripts %}
+
+        {% javascripts '@InterneFactureBundle/Resources/public/js/creanceFacturation.js' %}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+
+
+
+    {%endblock %}
+
+
+
+{% endblock %}
+

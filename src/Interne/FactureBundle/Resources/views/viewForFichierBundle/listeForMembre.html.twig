@@ -1,0 +1,230 @@
+
+<div class="row" id="listeFactureContent">
+    <div class="col-lg-8">
+        <div class="widget">
+            <div class="widget-title">
+                <span>Factures</span>
+
+                <div class="widget-toolbar">
+                    <button data-toggle="modal" data-target="">button
+                    </button>
+                </div>
+            </div>
+            <div class="widget-content">
+                Les facture de ce membre sont envoyée à: {{ membre.envoiFacture }}
+
+                <table class="datatable" id="listeFacturesTable">
+                    <thead>
+                    <tr>
+                        <th rowspan="2">Num. Réf.</th>
+                        <th rowspan="2">Statut</th>
+
+                        <th colspan="4">Montants</th>
+                        <th>Actions</th>
+
+                    </tr>
+                    <tr>
+                        <th>Créances</th>
+                        <th>Frais rappels</th>
+                        <th>Total</th>
+                        <th>Reçu</th>
+                        <th></th>
+
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% if membre.factures is not empty %}
+                        {% for facture in membre.factures %}
+                            <tr>
+                                <td>{{ facture.id }}</td>
+                                {% if facture.statut == 'ouverte' %}
+                                     <td><span class="label label-info">Ouverte</span></td>
+                                {% elseif facture.statut == 'payee' %}
+                                    <td><span class="label label-success">Payée</span></td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                                <td>{{ facture.montantCreances }}</td>
+                                <td>{{ facture.fraisRappel }}</td>
+                                <td>{{ facture.montantTotal }}</td>
+                                <td>{{ facture.montantRecu }}</td>
+                                <td></td>
+
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+
+                    {% endif %}
+                    </tbody>
+                </table>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+        <div class="row" id="listeCreanceContent">
+            <div class="col-lg-8">
+                <div class="widget">
+                    <div class="widget-title">
+                        <span>Créances</span>
+
+                        <div class="widget-toolbar">
+                            <button data-toggle="modal" data-target="#modal-add-creance">Ajouter une créance
+                            </button>
+                            <button onclick="createFactureWithSelectedCreances('Membre');">Facturer les créances séléctionnées
+                            </button>
+                        </div>
+                    </div>
+                    <div class="widget-content" >
+
+                        <table class="datatable" id="listeCreanceTable">
+
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">
+                                        <input type="checkbox" onclick="selectAllCreances(this);">
+                                    </th>
+                                    <th colspan="2">Factures liée</th>
+                                    <th rowspan="2">Titre</th>
+                                    <th rowspan="2">Remarque</th>
+                                    <th colspan="2">Montants</th>
+                                    <th colspan="2">Actions</th>
+                                </tr>
+                                <tr>
+
+                                    <th>N° Réf.</th>
+                                    <th>Statut</th>
+                                    <th>Emis</th>
+                                    <th>Reçu</th>
+                                    <th></th>
+                                    <th></th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% if membre.creances is not empty %}
+
+                                    {# On commence par les creances non facturée #}
+                                    {% for creance in membre.creances|reverse  %}
+                                        {% if creance.facture is empty %}
+                                            <tr>
+                                                <td>
+                                                    <input class="selectCreance" type="checkbox" value="{{ creance.id }}">
+                                                </td>
+                                                <td></td>
+                                                <td>En attente</td>
+                                                <td>{{ creance.titre }}</td>
+                                                <td>{{ creance.remarque }}</td>
+                                                <td>{{ creance.montantEmis }}</td>
+                                                <td>{{ creance.montantRecu }}</td>
+                                                <td>
+                                                    <a href="">
+                                                        <span class="glyphicon glyphicon-pencil" infobulle="Editer"></span>
+                                                    </a>
+                                                </td>
+
+                                                <td>
+                                                    <a href="">
+                                                        <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                    {# Créance avec facture ouverte #}
+                                    {% for creance in membre.creances|reverse  %}
+                                        {% if creance.facture is not empty %}
+                                            {% if creance.facture.statut == 'ouverte' %}
+                                                <tr>
+                                                    <td></td>
+                                                    <td>N°{{ creance.facture.id }}</td>
+                                                    <td><span class="label label-info">Ouverte</span></td>
+                                                    <td>{{ creance.titre }}</td>
+                                                    <td>{{ creance.remarque }}</td>
+                                                    <td>{{ creance.montantEmis }}</td>
+                                                    <td>{{ creance.montantRecu }}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                    {# Créance avec facture payée #}
+                                    {% for creance in membre.creances|reverse  %}
+                                        {% if creance.facture is not empty %}
+                                            {% if creance.facture.statut == 'payee' %}
+                                                <tr>
+                                                    <td></td>
+                                                    <td>N°{{ creance.facture.id }}</td>
+                                                    <td><span class="label label-success">Payée</span></td>
+                                                    <td>{{ creance.titre }}</td>
+                                                    <td>{{ creance.remarque }}</td>
+                                                    <td>{{ creance.montantEmis }}</td>
+                                                    <td>{{ creance.montantRecu }}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                {% else %}
+
+                                {% endif %}
+
+                            </tbody>
+
+                        </table>
+
+
+
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+{# Insertion du fromulaire modal de créance #}
+{% include "InterneFactureBundle:creance:modalForm.html.twig" with {'parametre': 'forMembre'} %}
+
+
+    {% block javascript %}
+
+        {% javascripts  '@InterneFactureBundle/Resources/public/js/creanceFacturation.js'
+                        '@InterneFactureBundle/Resources/public/js/addCreance.js'%}
+            <script src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+
+
+        <script>
+
+
+        </script>
+
+
+
+
+    {% endblock %}
+
+
+

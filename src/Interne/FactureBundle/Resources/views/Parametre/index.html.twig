@@ -1,0 +1,113 @@
+{% extends "InterneHomeBundle::layout.html.twig" %}
+
+
+
+{% block title %}Parametres de gestion des factures{% endblock %}
+
+
+{% block body %}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="widget">
+            <div class="widget-title">
+                <span>Liste des parametres</span>
+            </div>
+            <div class="widget-content">
+
+                <table class="datatable">
+                    <thead>
+                        <tr>
+                            <th>Nom du parametre</th>
+                            <th>Valeur</th>
+
+
+                        </tr>
+
+
+                    </thead>
+                    <tbody>
+                            {% for parametre in parametres %}
+                                <tr>
+                                    <td>
+                                        {{ parametre.labelName}}
+                                    </td>
+                                    <td>
+                                        {% if parametre.type == 'string' %}
+                                            <input type="text"
+                                                   id="{{ parametre.name }} "
+                                                   data-id="{{ parametre.id }}"
+                                                   data-type="{{ parametre.type }}"
+                                                   class="formParametre"
+                                                   value="{{ parametre.string}}">
+                                        {% elseif parametre.type == 'number'%}
+                                            <input type="number"
+                                                   id="{{ parametre.name }} "
+                                                   data-id="{{ parametre.id }}"
+                                                   data-type="{{ parametre.type }}"
+                                                   class="formParametre"
+                                                   value="{{ parametre.number}}">
+                                        {% elseif parametre.type == 'text'%}
+                                            {%  spaceless %}
+                                            <textarea
+                                                   id="{{ parametre.name }} "
+                                                   data-id="{{ parametre.id }}"
+                                                   data-type="{{ parametre.type }}"
+                                                   class="formParametre">{{ parametre.text}}</textarea>
+                                            {% endspaceless %}
+                                        {% elseif parametre.type == 'choice'%}
+                                            <select
+                                                   id="{{ parametre.name }} "
+                                                   data-id="{{ parametre.id }}"
+                                                   data-type="{{ parametre.type }}"
+                                                   class="formParametre"
+                                                   value="{{ parametre.choice}}">
+                                                    <option></option>
+                                                    {% for choice in parametre.choices %}
+                                                        <option
+                                                            {% if choice == parametre.choice %}
+                                                                selected="selected"
+                                                            {% endif %}
+                                                            >{{ choice }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                        {% endif%}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript">
+    $('.formParametre').change(function() {
+
+        var value = $(this).val();
+        var id = $(this).data('id');
+        var type = $(this).data('type');
+        var data = { id: id, value: value, type:type};
+        $.ajax({
+            type: "POST",
+            url: "{{ path('interne_facture_parametre_update_ajax') }}",
+            data: data,
+            error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+            success: function(htmlResponse) {}
+        });
+    });
+</script>
+
+
+{% endblock %}
+
+
