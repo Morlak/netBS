@@ -1,13 +1,21 @@
 <?php
 
-namespace Interne\FactureBundle\Entity;
+namespace Interne\GlobalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+/*
+ * La classe "parametre" permet d'avoir des parametre modulable pour le site
+ * en de multiple endroit grace au systeme de groupe.
+ * Afin de crée des parametres, aller dans la liste de parametre du
+ * ParametreController.php
+ *
+ */
 
 /**
  * Parametre
  *
- * @ORM\Table(name="facture_parametres")
+ * @ORM\Table(name="global_parametres")
  * @ORM\Entity
  */
 class Parametre
@@ -24,9 +32,16 @@ class Parametre
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="groupe", type="string", length=255)
      */
     private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255)
+     */
+    private $groupe;
 
     /**
      * @var string
@@ -81,6 +96,7 @@ class Parametre
     public function __construct(Array $parametre)
     {
         $this->name = $parametre['name'];
+        $this->groupe = $parametre['groupe'];
         $this->labelName = $parametre['labelName'];
         $this->type = $parametre['type'];
         if($parametre['value'] != null)
@@ -138,6 +154,29 @@ class Parametre
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set groupe
+     *
+     * @param string $groupe
+     * @return Parametre
+     */
+    public function setGroupe($groupe)
+    {
+        $this->groupe = $groupe;
+
+        return $this;
+    }
+
+    /**
+     * Get groupe
+     *
+     * @return string
+     */
+    public function getGroupe()
+    {
+        return $this->groupe;
     }
 
     /**

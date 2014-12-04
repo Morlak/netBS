@@ -1,17 +1,26 @@
 <?php
 
-namespace Interne\FactureBundle\Controller;
+namespace Interne\GlobalBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use Interne\FactureBundle\Entity\Parametre;
+use Interne\GlobalBundle\Entity\Parametre;
 
 class ParametreController extends Controller
 {
-    public function indexAction()
+    /*
+     * Cette méthode permet l'affichage d'un groupe de parametre.
+     * Le groupe est un argument de la methode a passer en url.
+     *
+     * A noter que l'ajout de parametre se fait automatiquement du
+     * moment que le parametre est présant dans la méthode
+     * "function listeParametre()".
+     *
+     */
+    public function indexAction($groupe)
     {
         $em = $this->getDoctrine()->getManager();
-        $parametres = $em->getRepository('InterneFactureBundle:Parametre')->findAll();
+        $parametres = $em->getRepository('InterneGlobalBundle:Parametre')->findByGroupe($groupe);
 
 
         $listeParametres = $this->listeParametre();
@@ -38,9 +47,12 @@ class ParametreController extends Controller
         }
         $em->flush();
 
-        return $this->render('InterneFactureBundle:Parametre:index.html.twig', array('parametres'=>$parametres));
+        return $this->render('InterneGlobalBundle:Parametre:index.html.twig', array('parametres'=>$parametres));
     }
 
+    /*
+     * Edition en ajax des parametres depuis la page d'affichage
+     */
     public function updateAjaxAction()
     {
         $request = $this->getRequest();
@@ -52,7 +64,7 @@ class ParametreController extends Controller
             $type = $request->request->get('type');
 
             $em = $this->getDoctrine()->getManager();
-            $parametre = $em->getRepository('InterneFactureBundle:Parametre')->find($id);
+            $parametre = $em->getRepository('InterneGlobalBundle:Parametre')->find($id);
 
             switch($type)
             {
@@ -76,6 +88,10 @@ class ParametreController extends Controller
 
     }
 
+    /*
+     * La liste de parametre permet l'ajout de nouveaux parametre (trié par groupe)
+     *
+     */
     private function listeParametre()
     {
         /*
@@ -91,11 +107,35 @@ class ParametreController extends Controller
         $listeParametres[] = array('name'=>'Exemple_choice','type'=>'choice','labelName'=>'choice','value'=>array('choice1','choice2'));
         */
 
-        $listeParametres[] = array('name'=>'impression_ccp_bvr','type'=>'string','labelName'=>'Numéro de compte CCP (BVR)','value'=>'01-66840-7');
-        $listeParametres[] = array('name'=>'impression_ccp_bv','type'=>'string','labelName'=>'Numéro de compte CCP (BV)','value'=>'10-1915-8');
-        $listeParametres[] = array('name'=>'impression_adresse','type'=>'text','labelName'=>'Adresse du groupe scout','value'=>null);
-        $listeParametres[] = array('name'=>'impression_mode_payement','type'=>'choice','labelName'=>'Choix du mode de payement','value'=>array('BV','BVR'));
-        $listeParametres[] = array('name'=>'impression_texte_facture','type'=>'text','labelName'=>'Texte sur les factures','value'=>null);
+        /*
+         * GROUPE => Facture Bundle
+         */
+
+        $listeParametres[] = array( 'name'=>'impression_ccp_bvr',
+                                    'groupe' => 'facture',
+                                    'type'=>'string',
+                                    'labelName'=>'Numéro de compte CCP (BVR)',
+                                    'value'=>'01-66840-7');
+        $listeParametres[] = array( 'name'=>'impression_ccp_bv',
+                                    'groupe' => 'facture',
+                                    'type'=>'string',
+                                    'labelName'=>'Numéro de compte CCP (BV)',
+                                    'value'=>'10-1915-8');
+        $listeParametres[] = array( 'name'=>'impression_adresse',
+                                    'groupe' => 'facture',
+                                    'type'=>'text',
+                                    'labelName'=>'Adresse du groupe scout',
+                                    'value'=>null);
+        $listeParametres[] = array( 'name'=>'impression_mode_payement',
+                                    'groupe' => 'facture',
+                                    'type'=>'choice',
+                                    'labelName'=>'Choix du mode de payement',
+                                    'value'=>array('BV','BVR'));
+        $listeParametres[] = array( 'name'=>'impression_texte_facture',
+                                    'groupe' => 'facture',
+                                    'type'=>'text',
+                                    'labelName'=>'Texte sur les factures',
+                                    'value'=>null);
 
 
         return $listeParametres;

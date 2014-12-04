@@ -99,7 +99,7 @@
         var data = { id: id, value: value, type:type};
         $.ajax({
             type: "POST",
-            url: "{{ path('interne_facture_parametre_update_ajax') }}",
+            url: "{{ path('InterneGlobal_parametre_update_ajax') }}",
             data: data,
             error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
             success: function(htmlResponse) {}

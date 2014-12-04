@@ -54,13 +54,7 @@ interne_facture_print:
 
 
 
-interne_facture_parametre:
-    path:     /parametre
-    defaults: { _controller: InterneFactureBundle:Parametre:index }
 
-interne_facture_parametre_update_ajax:
-    path:     /parametre/update_ajax
-    defaults: { _controller: InterneFactureBundle:Parametre:updateAjax }
 
 
 

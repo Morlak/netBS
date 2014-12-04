@@ -74,3 +74,16 @@ InterneGlobal_adder_test:
 InterneGlobal_debbug:
     pattern: /test
     defaults: { _controller: InterneGlobalBundle:Validator:test}
+
+
+
+
+
+#parametre
+InterneGlobal_parametre:
+    path:     /parametre/{groupe}
+    defaults: { _controller: InterneGlobalBundle:Parametre:index }
+
+InterneGlobal_parametre_update_ajax:
+    path:     /parametre/update_ajax
+    defaults: { _controller: InterneGlobalBundle:Parametre:updateAjax }
