@@ -60,7 +60,7 @@ class PrintController extends Controller
          * a la création de la facture en PDF
          */
         $em = $this->getDoctrine()->getManager();
-        $paramRepo = $em->getRepository('InterneFactureBundle:Parametre');
+        $paramRepo = $em->getRepository('InterneGlobalBundle:Parametre');
 
         $ccpBvr = $paramRepo->findOneBy(array('name'=>'impression_ccp_bvr'))->getValue();
         $adresse = $paramRepo->findOneBy(array('name'=>'impression_adresse'))->getValue();

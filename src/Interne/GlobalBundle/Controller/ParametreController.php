@@ -20,8 +20,9 @@ class ParametreController extends Controller
     public function indexAction($groupe)
     {
         $em = $this->getDoctrine()->getManager();
-        $parametres = $em->getRepository('InterneGlobalBundle:Parametre')->findByGroupe($groupe);
+        $parametresRepo = $em->getRepository('InterneGlobalBundle:Parametre');
 
+        $parametres = $parametresRepo->findAll();
 
         $listeParametres = $this->listeParametre();
 
@@ -47,6 +48,9 @@ class ParametreController extends Controller
         }
         $em->flush();
 
+        //on renvoie que les parametre du groupe en questions.
+        $parametres = $parametresRepo->findByGroupe($groupe);
+
         return $this->render('InterneGlobalBundle:Parametre:index.html.twig', array('parametres'=>$parametres));
     }
 
@@ -66,23 +70,26 @@ class ParametreController extends Controller
             $em = $this->getDoctrine()->getManager();
             $parametre = $em->getRepository('InterneGlobalBundle:Parametre')->find($id);
 
-            switch($type)
+            if($parametre != null)
             {
-                case 'string':
-                    $parametre->setString($value);
-                    break;
-                case 'number':
-                    $parametre->setNumber($value);
-                    break;
-                case 'text':
-                    $parametre->setText($value);
-                    break;
-                case 'choice':
-                    $parametre->setChoice($value);
-                    break;
+                switch($type)
+                {
+                    case 'string':
+                        $parametre->setString($value);
+                        break;
+                    case 'number':
+                        $parametre->setNumber($value);
+                        break;
+                    case 'text':
+                        $parametre->setText($value);
+                        break;
+                    case 'choice':
+                        $parametre->setChoice($value);
+                        break;
+                }
+                $em->flush();
+                return new Response();
             }
-            $em->flush();
-            return new Response();
         }
         return new Response();
 
@@ -98,17 +105,10 @@ class ParametreController extends Controller
          * ICI est crée la liste des parametres
          */
         $listeParametres = array();
-        /*
-         *  QUELQUES EXEMPLES
-         *
-        $listeParametres[] = array('name'=>'Exemple_text','type'=>'text','labelName'=>'Text','value'=>'text');
-        $listeParametres[] = array('name'=>'Exemple_string','type'=>'string','labelName'=>'String','value'=>'string');
-        $listeParametres[] = array('name'=>'Exemple_number','type'=>'number','labelName'=>'Nombre','value'=>77);
-        $listeParametres[] = array('name'=>'Exemple_choice','type'=>'choice','labelName'=>'choice','value'=>array('choice1','choice2'));
-        */
+
 
         /*
-         * GROUPE => Facture Bundle
+         * GROUPE => facture
          */
 
         $listeParametres[] = array( 'name'=>'impression_ccp_bvr',
@@ -136,6 +136,18 @@ class ParametreController extends Controller
                                     'type'=>'text',
                                     'labelName'=>'Texte sur les factures',
                                     'value'=>null);
+
+
+        /*
+         * GROUPE => autre
+         */
+
+        $listeParametres[] = array(
+            'name'=>'texte bidon',
+            'groupe' => 'autre',
+            'type'=>'text',
+            'labelName'=>'Un texte',
+            'value'=>null);
 
 
         return $listeParametres;

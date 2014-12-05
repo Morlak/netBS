@@ -4,14 +4,6 @@ namespace Interne\GlobalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/*
- * La classe "parametre" permet d'avoir des parametre modulable pour le site
- * en de multiple endroit grace au systeme de groupe.
- * Afin de crée des parametres, aller dans la liste de parametre du
- * ParametreController.php
- *
- */
-
 /**
  * Parametre
  *
@@ -20,6 +12,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Parametre
 {
+    /*
+     * La classe "parametre" permet d'avoir des parametre modulable pour le site
+     * en de multiple endroit grace au systeme de groupe.
+     * Afin de crée des parametres, aller dans la liste de parametre du
+     * ParametreController.php
+     *
+     */
+
     /**
      * @var integer
      *
@@ -34,14 +34,14 @@ class Parametre
      *
      * @ORM\Column(name="groupe", type="string", length=255)
      */
-    private $name;
+    private $groupe;
 
     /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
      */
-    private $groupe;
+    private $name;
 
     /**
      * @var string

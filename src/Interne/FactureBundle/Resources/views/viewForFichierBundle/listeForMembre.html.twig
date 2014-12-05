@@ -49,7 +49,15 @@
                                 <td>{{ facture.fraisRappel }}</td>
                                 <td>{{ facture.montantTotal }}</td>
                                 <td>{{ facture.montantRecu }}</td>
-                                <td></td>
+                                <td>
+                                    <a href="{{path('interne_facture_delete', {'id' : facture.id} ) }}">
+                                        <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
+                                    </a>
+
+                                    <a href="{{ path('interne_facture_print', {'id' : facture.id} ) }}" target="_blank">
+                                        <span class="glyphicon glyphicon-print" infobulle="Imprimer"></span>
+                                    </a>
+                                </td>
 
                             </tr>
                         {% endfor %}

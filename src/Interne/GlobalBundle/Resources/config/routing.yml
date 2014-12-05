@@ -81,7 +81,7 @@ InterneGlobal_debbug:
 
 #parametre
 InterneGlobal_parametre:
-    path:     /parametre/{groupe}
+    path:     /parametre/groupe/{groupe}
     defaults: { _controller: InterneGlobalBundle:Parametre:index }
 
 InterneGlobal_parametre_update_ajax:
