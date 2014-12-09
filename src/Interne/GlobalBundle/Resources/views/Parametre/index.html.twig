@@ -15,6 +15,7 @@
             </div>
             <div class="widget-content">
 
+
                 <table class="datatable">
                     <thead>
                         <tr>
@@ -102,7 +103,17 @@
             url: "{{ path('InterneGlobal_parametre_update_ajax') }}",
             data: data,
             error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
-            success: function(htmlResponse) {}
+            success: function(htmlResponse) {
+                $('#flash-container').html(
+                                '<div class="row">' +
+                                '<div class="alert alert-success alert-dismissible col-lg-6 col-lg-offset-3" role="alert">' +
+                                '<button type="button" class="close" data-dismiss="alert">' +
+                                '<span aria-hidden="true">&times;</span>' +
+                                '<span class="sr-only">Close</span>' +
+                                '</button><strong>Modification effectuée</strong>' +
+                                '</div>' +
+                                '</div>');
+            }
         });
     });
 </script>

@@ -14,15 +14,9 @@ class FactureSearchType extends AbstractType
     {
         $builder
             ->add('id','number',array('label' => 'Num. de référance','required' => false))
-            ->add('titre','text',array('label' => 'Titre','required' => false))
-            ->add('remarque','textarea',array('label' => 'Remarques','required' => false))
 
-            ->add(
-                'montantEmis',
-                'number',
-                array('label' => 'Montant émis',
-                    'required' => false)
-            )
+
+
 
             ->add(
                 'montantRecu',

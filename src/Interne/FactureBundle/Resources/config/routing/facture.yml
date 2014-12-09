@@ -18,10 +18,12 @@ interne_facture_delete:
     path:     /delete/{id}
     defaults: { _controller: InterneFactureBundle:Facture:delete }
 
-interne_facture_search:
-    path:     /search
-    defaults: { _controller: InterneFactureBundle:Facture:search }
-
 interne_facture_test:
     path:     /test
     defaults: { _controller: InterneFactureBundle:Facture:test }
+
+interne_facture_delete_ajax:
+    path:     /delete_ajax
+    defaults: { _controller: InterneFactureBundle:Facture:deleteAjax }
+    options:
+            expose: true

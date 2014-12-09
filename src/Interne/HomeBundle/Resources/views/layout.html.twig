@@ -437,9 +437,7 @@
 
 
 {# Insertion du fromulaire modal de créance #}
-{% include "InterneFactureBundle:creance:modalForm.html.twig" with {'parametre':'forListing'}%}
-
-
+{{ render(controller('InterneFactureBundle:Creance:creanceModalForm', { 'ownerEntity': null })) }}
 
 <!-- javascript n' shit -->
 

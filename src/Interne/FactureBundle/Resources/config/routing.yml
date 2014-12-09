@@ -26,6 +26,10 @@ interne_facture_creance:
     prefix:   /creance
 
 
+interne_facture_search:
+    resource: "routing/search.yml"
+    prefix:   /search
+
 
 
 interne_facture_liste_add_rappels:
@@ -44,7 +48,7 @@ interne_facture_liste_payed:
 
 
 interne_facture_print_ajax:
-    path:     /print
+    path:     /print/liste_facture
     defaults: { _controller: InterneFactureBundle:Print:printAjax }
 
 interne_facture_print:

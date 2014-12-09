@@ -2,6 +2,7 @@
 
 namespace Interne\FactureBundle\Controller;
 
+use Interne\FactureBundle\Form\CreanceAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Interne\FactureBundle\Entity\Creance;
@@ -9,10 +10,31 @@ use Interne\FichierBundle\Entity\Membre;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Interne\FactureBundle\Entity\Facture;
 
+
+
+
 class CreanceController extends Controller
 {
+    public function deleteAjaxAction()
+    {
+        $request = $this->getRequest();
 
-    public function waitingListeAction(){
+        if ($request->isXmlHttpRequest()) {
+
+            $id = $request->request->get('idCreance');
+            $em = $this->getDoctrine()->getManager();
+            $creance = $em->getRepository('InterneFactureBundle:Creance')->find($id);
+            $em->remove($creance);
+            $em->flush();
+
+
+            return $this->render('InterneFactureBundle:viewForFichierBundle:interfaceForFamilleOrMembre.html.twig',
+                array('ownerEntity' => $creance->getOwner()));
+        }
+    }
+
+    public function waitingListeAction()
+    {
 
         $em = $this->getDoctrine()->getManager();
         //cherche toute les créance sans factures.
@@ -23,19 +45,34 @@ class CreanceController extends Controller
 
     }
 
-    public function addToListeAjaxAction()
+    public function addCreanceToListingAjaxAction()
     {
         $request = $this->getRequest();
 
-        if($request->isXmlHttpRequest()) {
+        if ($request->isXmlHttpRequest()) {
 
-            $listeIds = $request->request->get('listeIds');
-            $titre = $request->request->get('titre');
-            $remarque = $request->request->get('remarque');
-            $montant = $request->request->get('montant');
+            $creance = new Creance();
+            $creanceAddForm  = $this->createForm(new CreanceAddType,$creance);
+            $creanceAddForm->submit($request);
+            $creance = $creanceAddForm->getData();
 
-            foreach($listeIds as $idMembre)
-            {
+            /*
+             * On récupère les proporiété de la créance du formulaire
+             */
+            $titre = $creance->getTitre();
+            $remarque = $creance->getRemarque();
+            $montant = $creance->getMontantEmis();
+
+            /*
+             * On récupère la liste des ids de membre à qui ajouter une créance
+             */
+            $listeIds = $creanceAddForm->get('idsMembre');
+
+
+            /*
+             * On ajoute une cérance à chaque membre de la liste
+             */
+            foreach ($listeIds as $idMembre) {
                 $creance = new Creance();
                 $creance->setDateCreation(new \DateTime());
                 $creance->setMontantEmis($montant);
@@ -61,29 +98,39 @@ class CreanceController extends Controller
     {
         $request = $this->getRequest();
 
-        if($request->isXmlHttpRequest()) {
-
-            $idMembre = $request->request->get('idMembre');
-            $titre = $request->request->get('titre');
-            $remarque = $request->request->get('remarque');
-            $montant = $request->request->get('montant');
+        if ($request->isXmlHttpRequest()) {
 
             $creance = new Creance();
             $creance->setDateCreation(new \DateTime());
-            $creance->setMontantEmis($montant);
-            $creance->setRemarque($remarque);
-            $creance->setTitre($titre);
+
+            $creanceAddForm  = $this->createForm(new CreanceAddType,$creance);
+
+            $creanceAddForm->submit($request);
+
+            $creance = $creanceAddForm->getData();
+
+            $classOwner = $creanceAddForm->get('classOwner')->getData();
+            $idOwner = $creanceAddForm->get('idOwner')->getData();
+
 
             $em = $this->getDoctrine()->getManager();
-            $membre = $em->getRepository('InterneFichierBundle:Membre')->find($idMembre);
+            if ($classOwner == 'Membre') {
+                $membre = $em->getRepository('InterneFichierBundle:Membre')->find($idOwner);
 
-            $membre->addCreance($creance);
+                $membre->addCreance($creance);
+
+            }
+            elseif ($classOwner == 'Famille') {
+                $famille = $em->getRepository('InterneFichierBundle:Famille')->find($idOwner);
+
+                $famille->addCreance($creance);
+            }
 
             $em->persist($creance);
             $em->flush();
 
-            return $this->render('InterneFactureBundle:viewForFichierBundle:listeForMembre.html.twig',
-                array('membre' => $membre));
+            return $this->render('InterneFactureBundle:viewForFichierBundle:interfaceForFamilleOrMembre.html.twig',
+                array('ownerEntity' => $creance->getOwner()));
 
         }
         return new Response();
@@ -107,8 +154,7 @@ class CreanceController extends Controller
          * On va mettre les créance de la liste dans des facture
          */
 
-        foreach($listeIdCreance as $creanceId)
-        {
+        foreach ($listeIdCreance as $creanceId) {
             $creance = $creanceRepo->find($creanceId);
             /*
              * La fonction va parcourire la liste des creances mais il se peut que
@@ -116,8 +162,7 @@ class CreanceController extends Controller
              * On va donc s'assurer que la créance n'est pas encore liée à une
              * facture.
              */
-            if($creance->getFacture() == null)
-            {
+            if ($creance->getFacture() == null) {
                 /*
                  * On commence par regarder si la créance
                  * appartien à un membre ou une famille.
@@ -128,21 +173,17 @@ class CreanceController extends Controller
 
                 $cibleFacturation = '';
 
-                if($famille != null)
-                {
+                if ($famille != null) {
                     /*
                      * la créance appartien à une famille
                      */
                     $cibleFacturation = 'Famille';
-                }
-                elseif($membre!= null)
-                {
+                } elseif ($membre != null) {
                     /*
                      * la cérance appartient à un membre
                      */
                     $cibleFacturation = $membre->getEnvoiFacture(); //retourne soit 'Famille' soit 'Membre'
-                    if($cibleFacturation == 'Famille')
-                    {
+                    if ($cibleFacturation == 'Famille') {
                         //on récupère la famille du membre
                         $famille = $membre->getFamille();
                     }
@@ -162,19 +203,17 @@ class CreanceController extends Controller
                  *  la cible de facturation.
                  */
 
-                switch($cibleFacturation){
+                switch ($cibleFacturation) {
 
                     case 'Membre':
 
-                        foreach($membre->getCreances() as $linkedCreance)
-                        {
+                        foreach ($membre->getCreances() as $linkedCreance) {
                             /*
                              * On récupère toute les créances du membre
                              * qui ne sont pas encore facturée
                              * !!! Et qui apparitennent à la liste !!!
                              */
-                            if((!$linkedCreance->isFactured()) && in_array($linkedCreance->getId(),$listeIdCreance))
-                            {
+                            if ((!$linkedCreance->isFactured()) && in_array($linkedCreance->getId(), $listeIdCreance)) {
                                 $facture->addCreance($linkedCreance);
                             }
                         }
@@ -184,37 +223,31 @@ class CreanceController extends Controller
 
                     case 'Famille':
 
-                        foreach($famille->getCreances() as $linkedCreance)
-                        {
+                        foreach ($famille->getCreances() as $linkedCreance) {
                             /*
                              * On récupère toute les créances de la famille
                              * qui ne sont pas encore facturée
                              * !!! Et qui apparitennent à la liste !!!
                              */
-                            if((!$linkedCreance->isFactured()) && in_array($linkedCreance->getId(),$listeIdCreance))
-                            {
+                            if ((!$linkedCreance->isFactured()) && in_array($linkedCreance->getId(), $listeIdCreance)) {
                                 $facture->addCreance($linkedCreance);
                             }
                         }
 
-                        foreach($famille->getMembres() as $membreOfFamille)
-                        {
+                        foreach ($famille->getMembres() as $membreOfFamille) {
                             /*
                              * On recherche des créances chez les
                              * membre de la famille qui envoie
                              * leurs facture à la famille
                              */
-                            if($membreOfFamille->getEnvoiFacture() == 'Famille')
-                            {
-                                foreach($membreOfFamille->getCreances() as $linkedCreance)
-                                {
+                            if ($membreOfFamille->getEnvoiFacture() == 'Famille') {
+                                foreach ($membreOfFamille->getCreances() as $linkedCreance) {
                                     /*
                                      * On récupère toute les créances du membre
                                      * qui ne sont pas encore facturée
                                      * !!! Et qui apparitennent à la liste !!!
                                      */
-                                    if((!$linkedCreance->isFactured())&& in_array($linkedCreance->getId(),$listeIdCreance))
-                                    {
+                                    if ((!$linkedCreance->isFactured()) && in_array($linkedCreance->getId(), $listeIdCreance)) {
                                         $facture->addCreance($linkedCreance);
                                     }
                                 }
@@ -236,7 +269,7 @@ class CreanceController extends Controller
     {
         $request = $this->getRequest();
 
-        if($request->isXmlHttpRequest()) {
+        if ($request->isXmlHttpRequest()) {
 
             /*
              * On récupère les données
@@ -267,11 +300,14 @@ class CreanceController extends Controller
                 return new Response();
             } elseif ($fromPage == 'Membre') {
 
-                return $this->render('InterneFactureBundle:viewForFichierBundle:listeForMembre.html.twig',
-                    array('membre' => $creance->getMembre()));
+                return $this->render('InterneFactureBundle:viewForFichierBundle:interfaceForFamilleOrMembre.html.twig',
+                    array('ownerEntity' => $creance->getOwner()));
 
 
             } elseif ($fromPage == 'Famille') {
+
+                return $this->render('InterneFactureBundle:viewForFichierBundle:interfaceForFamilleOrMembre.html.twig',
+                    array('ownerEntity' => $creance->getOwner()));
 
             }
 
@@ -279,6 +315,31 @@ class CreanceController extends Controller
         return new Response();
     }
 
+    public function creanceModalFormAction($ownerEntity)
+    {
+        $creance = new Creance();
+
+        $creanceAddForm  = $this->createForm(new CreanceAddType,$creance);
+
+        if($ownerEntity == null)
+        {
+            //si l'entité est null c'est que c'est pour le formulaire de listing
+        }
+        else if($ownerEntity->isClass('Membre'))
+        {
+            $creanceAddForm->get('idOwner')->setData($ownerEntity->getId());
+            $creanceAddForm->get('classOwner')->setData('Membre');
+        }
+        else if($ownerEntity->isClass('Famille'))
+        {
+            $creanceAddForm->get('idOwner')->setData($ownerEntity->getId());
+            $creanceAddForm->get('classOwner')->setData('Famille');
+        }
 
 
+
+        return $this->render('InterneFactureBundle:viewForFichierBundle:modalForm.html.twig',
+            array('ownerEntity' => $ownerEntity, 'creanceForm' => $creanceAddForm->createView() ));
+
+    }
 }

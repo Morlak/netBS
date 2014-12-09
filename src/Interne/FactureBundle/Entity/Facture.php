@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Interne\FichierBundle\Entity\Membre;
 use Interne\FichierBundle\Entity\Famille;
+use Interne\FichierBundle\Entity\Adresse;
 
 /**
  * Facture
@@ -336,154 +337,6 @@ class Facture
         return $this->rappels->count();
     }
 
-/*
-
-    **
-     * Get factureChilds
-     *
-     * @return ArrayCollection
-     *
-    public function getFactureChilds()
-    {
-        return $this->factureChilds;
-    }
-
-    **
-     * Add factureChild
-     *
-     * @param Facture factureChild
-     * @return Facture
-     *
-    public function addFactureChild($factureChild)
-    {
-        $this->factureChilds[] = $factureChild;
-        $factureChild->addFactureParent($this);
-
-        return $this;
-    }
-
-    **
-     * Get factureParents
-     *
-     * @return ArrayCollection
-     *
-    public function getFactureParents()
-    {
-        return $this->factureParents;
-    }
-
-    **
-     * Add factureParent
-     *
-     * @param Facture factureParent
-     * @return Facture
-     *
-    public function addFactureParent($factureParent)
-    {
-        $this->factureParents[] = $factureParent;
-
-        return $this;
-    }
-
-    **
-     *
-     * Get isParent
-     *
-     * @return Boolean
-     *
-    public function isParent()
-    {
-        if($this->factureChilds->count()>0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    }
-
-    **
-     * Get isChild
-     *
-     *
-     * @return Boolean
-     *
-    public function isChild()
-    {
-        if($this->factureParents->count()>0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-
-    }
-
-    **
-     * Set asPayed
-     *
-     *
-     *
-    public function setAsPayed(float $montantRecu,\DateTime $datePayement = null)
-    {
-
-        if($datePayement == null)
-        {
-            $datePayement = new \DateTime();
-            $date = new \DateTime();
-        }
-        $date->createFromFormat('d/m/Y',$datePayement);
-        $this->setDatePayement($date);
-
-        $this->setMontantRecu($montantRecu);
-        $this->setStatut('payee');
-
-        if($this->isParent())
-        {
-            *
-             * On réparti la somme payée dans tout les factures
-             * du groupe en répartisant aussi la diffreance
-             * si il y en a une.
-             *
-
-        }
-
-        *
-        finir ici!!!!
-        *
-
-
-    }
-*/
-
-    /*
-     * Set membre
-     *
-     * @param Membre $membre
-     * @return Rappel
-     *
-    public function setMembre($membre)
-    {
-        $this->membre = $membre;
-
-        return $this;
-    }
-
-    /*
-     * Get membre
-     *
-     * @return Membre
-     *
-    public function getMembre()
-    {
-        return $this->membre;
-    }
-    */
-
     /**
      * Add creance
      *
@@ -586,6 +439,39 @@ class Facture
         return $this->famille;
     }
 
+
+    /**
+     * Get ownerAdresse
+     *
+     * @return Adresse
+     */
+    public function getOwnerAdresse()
+    {
+
+        if($this->membre != null)
+        {
+            return $this->membre->getAdressePrincipale();
+        }
+        elseif($this->famille != null)
+        {
+            return $this->famille->getAdresse();
+        }
+        else
+            return null;
+    }
+
+    /**
+     * Get owner
+     */
+    public function getOwner()
+    {
+        if($this->membre != null)
+            return $this->membre;
+        elseif($this->famille != null)
+            return $this->famille;
+        else
+            return null;
+    }
 
 
 

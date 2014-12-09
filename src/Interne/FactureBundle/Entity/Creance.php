@@ -99,6 +99,7 @@ class Creance
         $this->setDateCreation(new \DateTime());
         $this->setMontantEmis(0);
         $this->setMontantRecu(0);
+        $this->setRemarque('');
     }
 
     /**
@@ -302,8 +303,15 @@ class Creance
      */
     public function isPayed()
     {
-        if($this->montantRecu >= $this->montantEmis)
-            return true;
+        if($this->facture != null)
+        {
+            if($this->facture->getStatut() == 'payee')
+            {
+                return true;
+            }
+            else
+                return false;
+        }
         else
             return false;
     }
@@ -321,6 +329,18 @@ class Creance
             return false;
     }
 
+    /**
+     * Get owner
+     */
+    public function getOwner()
+    {
+        if($this->membre != null)
+            return $this->membre;
+        elseif($this->famille != null)
+            return $this->famille;
+        else
+            return null;
+    }
 
 
 }

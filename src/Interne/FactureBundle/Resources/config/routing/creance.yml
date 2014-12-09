@@ -14,8 +14,14 @@ interne_facture_creance_waiting_liste:
     path:     /waiting_liste
     defaults: { _controller: InterneFactureBundle:Creance:waitingListe }
 
-interne_facture_creance_add_to_liste_ajax:
-    path:     /add_to_liste_ajax
-    defaults: { _controller: InterneFactureBundle:Creance:addToListeAjax }
+interne_facture_creance_add_creance_to_listing_ajax:
+    path:     /add_creance_to_listing_ajax
+    defaults: { _controller: InterneFactureBundle:Creance:addCreanceToListingAjax }
+    options:
+            expose: true
+
+interne_facture_creance_delete_ajax:
+    path:     /delete_ajax
+    defaults: { _controller: InterneFactureBundle:Creance:deleteAjax }
     options:
             expose: true

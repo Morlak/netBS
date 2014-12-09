@@ -344,4 +344,18 @@ class Famille
         return $this->creances;
     }
 
+    /**
+     * Is classe
+     *
+     * @param string $className
+     * @return boolean
+     */
+    public function isClass($className)
+    {
+        if($className == 'Famille')
+            return true;
+        else
+            return false;
+    }
+
 }

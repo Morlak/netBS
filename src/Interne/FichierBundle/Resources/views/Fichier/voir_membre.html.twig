@@ -483,10 +483,8 @@
 
 
 
-        {#
-            Insertion de la partie facture et créance pour le membre
-        #}
-        {% include "InterneFactureBundle:viewForFichierBundle:listeForMembre.html.twig" with {'membre': membre } %}
+    {# Insertion de la partie facture et créance pour le membre #}
+    {% include "InterneFactureBundle:viewForFichierBundle:interfaceForFamilleOrMembre.html.twig" with {'ownerEntity': membre } %}
 
 
 

@@ -187,4 +187,9 @@ class Adresse
     {
         return $this->remarques;
     }
+
+    public function __toString() {
+        return $this->rue.'\n'.$this->npa.' '.$this->localite;
+    }
+
 }

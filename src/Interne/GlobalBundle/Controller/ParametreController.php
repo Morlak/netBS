@@ -136,6 +136,11 @@ class ParametreController extends Controller
                                     'type'=>'text',
                                     'labelName'=>'Texte sur les factures',
                                     'value'=>null);
+        $listeParametres[] = array( 'name'=>'impression_affichage_montant',
+                                    'groupe' => 'facture',
+                                    'type'=>'choice',
+                                    'labelName'=>'Affichage du montant sur les factures',
+                                    'value'=>array('Oui','Non'));
 
 
         /*

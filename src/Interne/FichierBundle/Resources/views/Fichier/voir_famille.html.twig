@@ -18,8 +18,8 @@
 					
 					<ul class="data-liste">
 						<li><strong>Nom</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.nom">{{ famille.nom|capitalize }}</span></li>
-						<li><strong>E-mail familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.contact.email">{{ famille.contact.email }}</span></li>
-						<li><strong>Téléphone familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.contact.telephone">{{ famille.contact.telephone }}</span></li>
+						<li><strong>E-mail familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.contact.email"></span></li>
+						<li><strong>Téléphone familial</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.contact.telephone"></span></li>
 						<li class="separator"></li>
 						<li><strong>Adresse familiale</strong></li>
 						<li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.adresse.rue">{{ famille.adresse.rue }}</span></li>
@@ -50,8 +50,8 @@
 								<li><strong>Père</strong></li>
 								<li><strong>Prénom</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.pere.prenom">{{ famille.pere.prenom|capitalize }}</span></li>
 								<li><strong>Profession</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.pere.profession">{{ famille.pere.profession }}</span></li>
-								<li><strong>Téléphone</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.pere.contact.telephone">{{ famille.pere.contact.telephone }}</span></li>
-								<li><strong>E-mail</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.pere.contact.email">{{ famille.pere.contact.email }}</span></li>
+								<li><strong>Téléphone</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.pere.contact.telephone"></span></li>
+								<li><strong>E-mail</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.pere.contact.email"></span></li>
 								<li class="separator"></li>
 								<li><strong>Adresse du père</strong></li>
 								<li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.pere.adresse.rue">{{ famille.pere.adresse.rue }}</span></li>
@@ -68,8 +68,8 @@
 								<li><strong>Mère</strong></li>
 								<li><strong>Prénom</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.mere.prenom">{{ famille.mere.prenom|capitalize }}</span></li>
 								<li><strong>Profession</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.mere.profession">{{ famille.mere.profession }}</span></li>
-								<li><strong>Téléphone</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.mere.contact.telephone">{{ famille.mere.contact.telephone }}</span></li>
-								<li><strong>E-mail</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.mere.contact.email">{{ famille.mere.contact.email }}</span></li>
+								<li><strong>Téléphone</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.mere.contact.telephone"></span></li>
+								<li><strong>E-mail</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.mere.contact.email"></span></li>
 								<li class="separator"></li>
 								<li><strong>Adresse de la mère</strong></li>
 								<li><strong>Rue</strong><span class="editable" name="InterneFichierBundle.famille.{{ famille.id }}.mere.adresse.rue">{{ famille.mere.adresse.rue }}</span></li>
@@ -141,7 +141,10 @@
 	</div>
 
 
-			
+    {# Insertion de la partie facture et créance pour le membre #}
+    {% include "InterneFactureBundle:viewForFichierBundle:interfaceForFamilleOrMembre.html.twig" with {'ownerEntity': famille } %}
+
+
 
 {% endblock %}
 

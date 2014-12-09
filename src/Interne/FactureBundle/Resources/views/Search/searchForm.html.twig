@@ -1,18 +1,18 @@
 {% form_theme form 'InterneFichierBundle:Form:form_template.html.twig' %}
 
-{{ form_start(form) }}
+{{ form_start(form, {'attr': {'id': 'searchFactureForm'}}) }}
 
     {{ form_row(form.id) }}
     {{ form_row(form.statut) }}
     {{ form_row(form.nombreRappel) }}
-    {{ form_row(form.titre) }}
+
 
 
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Montants:</th>
-                <th>Emis</th>
+                <th>Créances</th>
                 <th>Frais</th>
                 <th>Total</th>
                 <th>Reçu</th>
@@ -21,7 +21,7 @@
         <tbody>
             <tr>
                 <th>Fixé</th>
-                <td>{{ form_widget(form.montantEmis) }}</td>
+                <td></td>
                 <td>{{ form_widget(form.montantFrais) }}</td>
                 <td>{{ form_widget(form.montantTotal) }}</td>
                 <td>{{ form_widget(form.montantRecu) }}</td>
@@ -50,5 +50,5 @@
 {{ form_row(form.datePayement) }}
 
     {{ form_rest(form) }}
-    <input type="submit" value="Chercher"/>
+
 {{ form_end(form) }}

@@ -3,6 +3,7 @@
 namespace Interne\FichierBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JsonSchema\Constraints\String;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -638,6 +639,21 @@ class Membre extends Personne
     {
         return $this->envoiFacture;
     }
+
+    /**
+     * Is classe
+     *
+     * @param string $className
+     * @return boolean
+     */
+    public function isClass($className)
+    {
+        if($className == 'Membre')
+            return true;
+        else
+            return false;
+    }
+
 
 
 

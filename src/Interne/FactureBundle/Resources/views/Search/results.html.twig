@@ -1,0 +1,30 @@
+{% if factures is not empty %}
+    {% for facture in factures %}
+        <tr>
+            <td>{{ facture.id }}</td>
+            {% if facture.statut == 'ouverte' %}
+                <td><span class="label label-info">Ouverte</span></td>
+            {% elseif facture.statut == 'payee' %}
+                <td><span class="label label-success">Payée</span></td>
+            {% else %}
+                <td></td>
+            {% endif %}
+            <td>{{ facture.montantCreances }}</td>
+            <td>{{ facture.fraisRappel }}</td>
+            <td>{{ facture.montantTotal }}</td>
+            <td>{{ facture.montantRecu }}</td>
+            <td>
+                <a class="btn btn-xs btn-danger" onclick="deleteFacture(this);" data-id="{{ facture.id }}">
+                    <span class="glyphicon glyphicon-trash" infobulle="Supprimer"></span>
+                </a>
+
+                <a class="btn btn-xs btn-info" href="{{ path('interne_facture_print', {'id' : facture.id} ) }}" target="_blank">
+                    <span class="glyphicon glyphicon-print" infobulle="Imprimer"></span>
+                </a>
+            </td>
+
+        </tr>
+    {% endfor %}
+{% else %}
+
+{% endif %}

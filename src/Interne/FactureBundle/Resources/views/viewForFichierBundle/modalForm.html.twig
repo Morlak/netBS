@@ -9,13 +9,13 @@
                     <span class="sr-only">Close</span>
                 </button>
 
-                {% if parametre == 'forListing' %}
+                {% if ownerEntity == null %}
                     <h4 class="modal-title" >Ajouter une créance en masse</h4>
 
-                {% elseif parametre == 'forMembre' %}
+                {% elseif ownerEntity.isClass('Membre') %}
                     <h4 class="modal-title" >Ajouter une créance au membre</h4>
 
-                {% elseif parametre == 'forFamille' %}
+                {% elseif ownerEntity.isClass('Famille') %}
                     <h4 class="modal-title" >Ajouter une créance à la famille</h4>
 
                 {% endif %}
@@ -23,35 +23,38 @@
 
             </div>
             <div class="modal-body">
-                <form role="form">
-                    <div class="form-group">
-                        Titre: <input type="text" id="modal_form_creance_titre">
-                        Remarque: <input type="text" id="modal_form_creance_remarque">
-                        Montant: <input type="number" id="modal_form_creance_montant">
-                    </div>
-                </form>
+
+                {% form_theme creanceForm 'InterneFichierBundle:Form:form_template.html.twig' %}
+
+                {{ form_start(creanceForm, {'attr': {'id': 'addCreanceForm'}}) }}
+                {{ form_row(creanceForm.titre) }}
+                {{ form_row(creanceForm.remarque) }}
+                {{ form_row(creanceForm.montantEmis) }}
 
 
 
+                {{ form_rest(creanceForm) }}
+                {{ form_end(creanceForm) }}
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
 
-                {% if parametre == 'forListing' %}
+                {% if ownerEntity == null %}
+
+                    <input type="hidden" id="adder-membres-ids">
 
                     <button type="button" onclick="adderAddCreances();" class="btn btn-primary">Valider</button>
 
-                    <!-- Liste des membres à qui on va ajouter une créance-->
-                    <input type="hidden" id="adder-membres-ids"/>
 
 
-                {% elseif parametre == 'forMembre' %}
+
+                {% elseif ownerEntity.isClass('Membre') %}
 
                     <button type="button" onclick="addCreance();" class="btn btn-primary">Valider</button>
 
 
-                {% elseif parametre == 'forFamille' %}
+                {% elseif ownerEntity.isClass('Famille') %}
 
                     <button type="button" onclick="" class="btn btn-primary">Valider</button>
 

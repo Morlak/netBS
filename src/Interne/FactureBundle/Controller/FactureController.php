@@ -6,6 +6,7 @@ use Interne\FactureBundle\Entity\Creance;
 use Interne\FactureBundle\Entity\Facture;
 use Interne\FactureBundle\Entity\Rappel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Interne\FactureBundle\Form\FactureType;
 use Symfony\Component\Validator\Constraints\Null;
@@ -205,52 +206,28 @@ class FactureController extends Controller
         return $this->render('InterneFactureBundle:Default:index.html.twig');
     }
 
-    public function searchAction(Request $request)
+    public function deleteAjaxAction()
     {
-        $facture = new Facture();
-        $factureSearchForm  = $this->createForm(new FactureSearchType, $facture);
+        $request = $this->getRequest();
 
-        if ($request->isMethod('POST'))
-        {
-            $factureSearchForm->submit($request);
+        if($request->isXmlHttpRequest()) {
 
-            $facture = $factureSearchForm->getData();
-            /*
-             * On récupère les éléments de recherche non compris dans la facture
-             */
-            $nombreRappel = $factureSearchForm->get('nombreRappel')->getData();
-            $montantEmisMinimum = $factureSearchForm->get('montantEmisMinimum')->getData();
-            $montantEmisMaximum = $factureSearchForm->get('montantEmisMaximum')->getData();
-            $montantRecuMinimum = $factureSearchForm->get('montantRecuMinimum')->getData();
-            $montantRecuMaximum = $factureSearchForm->get('montantRecuMaximum')->getData();
-            /*
-             * Tableau contenant les paramètres de recherche suplémentaire
-             */
-            $searchParameters = array(
-                    'nombreRappel' => $nombreRappel,
-                    'montantEmisMaximum' => $montantEmisMaximum,
-                    'montantEmisMinimum' => $montantEmisMinimum,
-                    'montantRecuMaximum' => $montantRecuMaximum,
-                    'montantRecuMinimum' => $montantRecuMinimum,
-
-            );
-
-            /*
-             * pour la recherche on utilise la fonction personalisée de
-             * recheche de facture qui se trouve dans factureRepository.php
-             */
+            $id = $request->request->get('idFacture');
             $em = $this->getDoctrine()->getManager();
-            $factures = $em->getRepository('InterneFactureBundle:Facture')->findBySearch($facture,$searchParameters);
+            $facture = $em->getRepository('InterneFactureBundle:Facture')->find($id);
 
-            return $this->render('InterneFactureBundle:Liste:liste.html.twig', array('factures' => $factures));
-
-
+            //on verifie que la facture existe bien, si c'est pas le cas, on affiche l'index
+            if ($facture != Null) {
+                $em->remove($facture);
+                $em->flush();
+            }
+            return $this->render('InterneFactureBundle:viewForFichierBundle:interfaceForFamilleOrMembre.html.twig',
+                array('ownerEntity' => $facture->getOwner()));
         }
-
-        return $this->render('InterneFactureBundle:Facture:search.html.twig', array(
-            'factureForm' => $factureSearchForm->createView()
-        ));
+        return new Response();
     }
+
+
 
 
 }

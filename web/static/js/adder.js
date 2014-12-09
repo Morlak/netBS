@@ -427,7 +427,10 @@ function adderAddDistinctions() {
  */
 function adderCreances(ids) {
 
-    $('#adder-membres-ids').val(ids)
+    /*
+     * On stock la liste de membre dans le formulaire d'ajout de créances
+     */
+    $('#InterneFactureBundle_creanceAddType_idsMembre').val(ids);
 
     //On affiche la modal
     $('#modal-add-creance').modal('show');
@@ -438,20 +441,12 @@ function adderCreances(ids) {
  */
 function adderAddCreances() {
 
-    //on récupère la liste
-    var listeIds = $('#adder-membres-ids').val(ids);
-
-    //on récupère les valeur du formulaire
-    var titre = $('#modal_form_creance_titre').val();
-    var remarque = $('#modal_form_creance_remarque').val();
-    var montant = $('#modal_form_creance_montant').val();
-
-    var data = { listeIds: listeIds, titre: titre, remarque: remarque, montant: montant};
+    var form = $('#addCreanceForm').serialize();
 
     $.ajax({
         type: "POST",
-        url: Routing.generate('interne_facture_creance_add_to_liste_ajax'),
-        data: data,
+        url: Routing.generate('interne_facture_creance_add_creance_to_listing_ajax'),
+        data: form,
         error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
         success: function(htmlResponse) {
 

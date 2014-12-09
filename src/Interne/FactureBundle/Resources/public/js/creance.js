@@ -1,3 +1,58 @@
+function deleteCreance(element){
+    var id = $(element).data("id");
+    var data = { idCreance: id};
+    $.ajax({
+        type: "POST",
+        url: Routing.generate('interne_facture_creance_delete_ajax'),
+        data: data,
+        error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+        success: function(htmlResponse) {
+            //cherche le nouveau contenu
+            $listeCreanceContent = $(htmlResponse).filter('#listeCreanceContent');
+
+            //rempalce le nouveau contenu
+            $('#listeCreanceContent').replaceWith($listeCreanceContent);
+
+            //Redessine la table
+            $('#listeCreanceTable').dataTable();
+        }
+    });
+}
+
+/*
+ * Ajoute une créance à un membre
+ *
+ * (l'ajout de créance à une liste de membre ne se fait pas ici mais dans adder.js)
+ */
+
+function addCreance(){
+
+    //on récupère les valeur du formulaire
+    var form = $('#addCreanceForm').serialize();
+
+    $.ajax({
+        type: "POST",
+        url: Routing.generate('interne_facture_creance_add_ajax'),
+        data: form,
+        error: function(jqXHR, textStatus, errorThrown) { alert('erreur'); },
+        success: function(htmlResponse) {
+
+            //cherche le nouveau contenu
+            $listeCreanceContent = $(htmlResponse).filter('#listeCreanceContent');
+
+            //rempalce le nouveau contenu
+            $('#listeCreanceContent').replaceWith($listeCreanceContent);
+
+            //Redessine la table
+            $('#listeCreanceTable').dataTable();
+
+        }
+    });
+}
+
+
+
+
 /*
  * Selection/deséléction de toutes les créances
  */

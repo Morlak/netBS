@@ -66,11 +66,12 @@ class PrintController extends Controller
         $adresse = $paramRepo->findOneBy(array('name'=>'impression_adresse'))->getValue();
         $modePayement = $paramRepo->findOneBy(array('name'=>'impression_mode_payement'))->getValue();
         $texteFacture = $paramRepo->findOneBy(array('name'=>'impression_texte_facture'))->getValue();
+        $affichageMontant = $paramRepo->findOneBy(array('name'=>'impression_affichage_montant'))->getValue();
 
 
 
-        $ccp = $ccpBvr;
         $numeroReference = (string)$facture->getId();
+        $montant = (string)$facture->getMontantTotal();
 
 
         /*
@@ -109,13 +110,10 @@ class PrintController extends Controller
          */
         $x =  110;
         $y =  50;
-        $adresseMembre =
-        'Nom Prénom
-        chemin
-        Ville';
+        $adresseFacturation = $facture->getOwnerAdresse();
 
         $pdf->SetXY($x,$y);
-        $pdf->MultiCell($cellWidth,$cellHigh,$adresseMembre);
+        $pdf->MultiCell($cellWidth,$cellHigh,$adresseFacturation);
 
 
         /*
@@ -194,7 +192,7 @@ class PrintController extends Controller
 
         if($modePayement == 'BVR')
         {
-            $pdf = $this->insertBvr($pdf,$adresse,$ccp,$numeroReference);
+            $pdf = $this->insertBvr($pdf,$adresse,$ccpBvr,$numeroReference,$affichageMontant,$montant);
         }
         elseif($modePayement == 'BV')
         {
@@ -260,7 +258,7 @@ class PrintController extends Controller
     /*
      * Ajouter un BVR
      */
-    private function insertBvr($pdf,$adresse,$ccp,$numeroReference)
+    private function insertBvr($pdf,$adresse,$ccp,$numeroReference,$affichageMontant,$montant)
     {
 
         /*
@@ -285,14 +283,12 @@ class PrintController extends Controller
         $pdf->Line($xStart+118,$yStart+80,$xStart+124,$yStart+80);
         $pdf->Line($xStart+121,$yStart+75,$xStart+121,$yStart+80);
 
-        $fontFamiliy = 'Arial';
-        $fontStyle  = '';
-        $fontSize = 9;
+
 
         $cellWidth = 50;//ne sert pas vraiment
         $cellHigh = 4;
 
-        $pdf->SetFont($fontFamiliy,$fontStyle,$fontSize);
+        $pdf->SetFont('Arial', '', 9);
 
 
         /*
@@ -355,6 +351,24 @@ class PrintController extends Controller
         $y = $yStart+85;
         $pdf->SetXY($x,$y);
         $pdf->Cell($cellWidth,$cellHigh,$codeLine);
+
+        if($affichageMontant == 'Oui')
+        {
+            /*
+             * Montant sur le BVR
+             */
+            $pdf->SetFont('Arial', '', 9);
+
+            $x = $xStart+50;
+            $y = $yStart+50;
+            $pdf->SetXY($x,$y);
+            $pdf->Cell($cellWidth,$cellHigh,number_format($montant,2));
+
+            $x = $xStart+90;
+            $y = $yStart+50;
+            $pdf->SetXY($x,$y);
+            $pdf->Cell($cellWidth,$cellHigh,number_format($montant,2));
+        }
 
         return $pdf;
 

@@ -60,20 +60,6 @@ class FactureRepository extends EntityRepository
         }
 
 
-
-        /*
-         * Activer la jointure uniquement si un des parametres de recherche
-         * concerne les rappels. Sinon il y a exculusion direct des factures
-         * sans rappel.
-         */
-        if(
-            ($searchParameters['nombreRappel'] != null)
-        )
-        {
-            $queryBuilder->innerJoin('Interne\FactureBundle\Entity\Rappel', 'rappel', 'WITH', 'facture.id = rappel.facture');
-        }
-
-
         /*
          *
          * Elements de recherche spécifique qui permet d'affiner la recherche.
@@ -106,9 +92,38 @@ class FactureRepository extends EntityRepository
                     ->setParameter('montantRecuMaximum', $parameter);
             }
 
+        /*
+         * Activer la jointure uniquement si un des parametres de recherche
+         * concerne les rappels. Sinon il y a exculusion direct des factures
+         * sans rappel.
+         */
+        if(
+            ($searchParameters['nombreRappel'] != null)
+        )
+        {
+            //cette ligne fonctionne
+            $queryBuilder->innerJoin('Interne\FactureBundle\Entity\Rappel', 'rappel', 'WITH', 'facture.id = rappel.facture');
+        }
+
+
+
+
 
             $parameter = $searchParameters['nombreRappel'];
             if ($parameter == null) {
+
+
+                //$queryBuilder->innerJoin('facture.rappels', 'rappel');
+
+
+                //$queryBuilder->andHaving('COUNT(facture.rappels) >= 2');
+
+                //$queryBuilder->addSelect('facture, count(')
+                //->andWhere('rappel.frais = :frais')
+                //->setParameter('x',6)
+                //->andHaving('COUNT(facture.rappels) = x')
+                //'SELECT u, count(g.id) FROM Entities\User u JOIN u.groups g GROUP BY u.id');
+
                 //$queryBuilder
                 //->andWhere('rappel.frais = :frais')
                 //->setParameter('x',6)
