@@ -10,10 +10,6 @@ interne_facture_creance_facturation_ajax:
     options:
             expose: true
 
-interne_facture_creance_waiting_liste:
-    path:     /waiting_liste
-    defaults: { _controller: InterneFactureBundle:Creance:waitingListe }
-
 interne_facture_creance_add_creance_to_listing_ajax:
     path:     /add_creance_to_listing_ajax
     defaults: { _controller: InterneFactureBundle:Creance:addCreanceToListingAjax }

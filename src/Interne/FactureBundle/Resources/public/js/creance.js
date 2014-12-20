@@ -53,29 +53,7 @@ function addCreance(){
 
 
 
-/*
- * Selection/deséléction de toutes les créances
- */
 
-function selectAllCreances(box)
-{
-    var table = $('#listeCreanceTable').dataTable();
-
-    if(box.checked)
-    {
-        $('input.selectCreance', table.fnGetNodes()).each(function() {
-            this.checked = true;
-
-        });
-    }
-    else
-    {
-        $('input.selectCreance', table.fnGetNodes()).each(function() {
-            this.checked = false;
-
-        });
-    }
-}
 
 /*
  * envoie en Ajax de la liste des créances à facturer
@@ -120,7 +98,7 @@ function createFactureWithSelectedCreances(fromPage){
                 //Redessine la table
                 $('#listeFacturesTable').dataTable();
             }
-            else if(fromPage == 'WaitingListe')
+            else if(fromPage == 'Search')
             {
                 //nothing to do
             }

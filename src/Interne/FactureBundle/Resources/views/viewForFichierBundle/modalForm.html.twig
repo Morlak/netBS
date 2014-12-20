@@ -22,7 +22,7 @@
 
 
             </div>
-            <div class="modal-body">
+            <div class="modal-body" style="overflow-y:auto">
 
                 {% form_theme creanceForm 'InterneFichierBundle:Form:form_template.html.twig' %}
 
@@ -30,6 +30,8 @@
                 {{ form_row(creanceForm.titre) }}
                 {{ form_row(creanceForm.remarque) }}
                 {{ form_row(creanceForm.montantEmis) }}
+
+
 
 
 

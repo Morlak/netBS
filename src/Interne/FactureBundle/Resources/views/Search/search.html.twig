@@ -7,87 +7,9 @@
 
 
 
-    <div class="row" id="searchContent">
-        <div class="col-lg-8">
-            <div class="widget">
-                <div class="widget-title">
-                    <span>Factures</span>
+    {% include "InterneFactureBundle:Search:results.html.twig" with {'factures': factures, 'creances':creances} %}
 
-                    <div class="widget-toolbar">
-                        <button data-toggle="modal" data-target="#modal-facture-searchForm">form
-                        </button>
-                    </div>
-                </div>
-                <div class="widget-content">
-
-
-                    <table class="datatable" id="searchTable">
-                        <thead>
-                        <tr>
-                            <th rowspan="2">Num. Réf.</th>
-                            <th rowspan="2">Statut</th>
-
-                            <th colspan="4">Montants</th>
-                            <th>Actions</th>
-
-                        </tr>
-                        <tr>
-                            <th>Créances</th>
-                            <th>Frais rappels</th>
-                            <th>Total</th>
-                            <th>Reçu</th>
-                            <th></th>
-
-                        </tr>
-                        </thead>
-
-                        <tbody>
-
-                        </tbody>
-                    </table>
-
-
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-    <div class="modal fade" id="modal-facture-searchForm" aria-hidden="false">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-
-
-                        <h4 class="modal-title" >Effectuer une recherche</h4>
-
-                </div>
-                <div class="modal-body">
-
-
-                    {% include "InterneFactureBundle:Search:searchForm.html.twig" with {'form': form} %}
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-                    <button type="button" onclick="sendSearch();" class="btn btn-primary">Valider</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-
+    {% include "InterneFactureBundle:Search:searchForm.html.twig" with {'formFacture': formFacture, 'formCreance':formCreance} %}
 
 
 
@@ -95,10 +17,8 @@
 
 {% block javascript %}
 
-    {% javascripts
-    '@InterneFactureBundle/Resources/public/js/search.js'
-
-    %}
+    {% javascripts '@InterneFactureBundle/Resources/public/js/search.js'
+                    '@InterneFactureBundle/Resources/public/js/creance.js'%}
         <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 

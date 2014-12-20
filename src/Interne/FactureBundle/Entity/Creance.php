@@ -10,7 +10,7 @@ use Interne\FichierBundle\Entity\Famille;
  * Creance
  *
  * @ORM\Table(name="facture_creances")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Interne\FactureBundle\Entity\CreanceRepository")
  */
 class Creance
 {
@@ -25,6 +25,10 @@ class Creance
 
     /*
      * =========== RELATIONS ===============
+     *
+     * Une créance peut avoir un seul propriétaire...soit un membre...soit une famille.
+     *
+     * Les créances peut également appartenir à une facture une fois qu'elle sont "facturée"
      */
 
     /**
@@ -93,6 +97,7 @@ class Creance
     /*
      * ========== Fonctions =================
      */
+
 
     public function __construct()
     {
@@ -296,6 +301,10 @@ class Creance
         return $this->famille;
     }
 
+    /*
+     * Cette méthode regarde si la créance à une facture et si
+     * cette facture est payée.
+     */
     /**
      * Is payed
      *
@@ -303,7 +312,7 @@ class Creance
      */
     public function isPayed()
     {
-        if($this->facture != null)
+        if($this->isFactured())
         {
             if($this->facture->getStatut() == 'payee')
             {
@@ -329,6 +338,10 @@ class Creance
             return false;
     }
 
+    /*
+     * Cette fonction retourne le propriétaire de la créance.
+     * Ce ne peut être que un membre ou une famille.
+     */
     /**
      * Get owner
      */

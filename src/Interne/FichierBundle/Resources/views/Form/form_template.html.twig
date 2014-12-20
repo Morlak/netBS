@@ -129,5 +129,22 @@
 
 {# DATEPICKER #}
 {#{% block date_widget -%}#}
+{% block date_widget %}
+{% spaceless %}
+    {% if widget == 'single_text' %}
+        {{ block('field_widget') }}
+    {% else %}
+        <table>
+            <tr>
+                <td>{{ form_widget(form.year) }}</td>
+                <td>{{ form_widget(form.month) }}</td>
+                <td>{{ form_widget(form.day) }}</td>
+            </tr>
+        </table>
+
+
+    {% endif %}
+{% endspaceless %}
+{% endblock date_widget %}
 
 {#{%- endblock date_widget %}#}

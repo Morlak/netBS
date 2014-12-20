@@ -2,10 +2,11 @@
 
 namespace Interne\FactureBundle\Form;
 
-use Interne\FichierBundle\Entity\Membre;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 
 class CreanceAddType extends AbstractType
@@ -23,7 +24,7 @@ class CreanceAddType extends AbstractType
             ->add(
                 'remarque',
                 'textarea',
-                array('label' => 'Remarque', 'required' => false)
+                array('label' => 'Remarque', 'required' => false, 'data' => '')
             )
             ->add(
                 'montantEmis',
@@ -47,7 +48,21 @@ class CreanceAddType extends AbstractType
                 'hidden',
                 array(  'required' => false,
                         'mapped' => false)
-            );
+            )
+            /*
+            ->add(
+                'model',
+                'entity',
+                array(
+                    'mapped' => false,
+                    'required' => false,
+                    'class' => 'InterneFactureBundle:Model',
+                    'query_builder' => function(EntityRepository $er) {
+                        return $er->createQueryBuilder('model');
+                    },
+        ))
+            */
+            ;//fin de fonction
 
 
     }

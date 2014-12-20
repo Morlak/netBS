@@ -2,6 +2,7 @@
 
 namespace Interne\FactureBundle\Form;
 
+use Interne\FactureBundle\Controller\CreanceController;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -13,32 +14,12 @@ class FactureSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            /*
+             * Elements appartenant aux factures
+             */
             ->add('id','number',array('label' => 'Num. de référance','required' => false))
-
-
-
-
-            ->add(
-                'montantRecu',
-                'number',
-                array(
-                    'label' => 'Montant reçu',
-                    'required' => false,
-                    'data'=> null
-                )
-            )
-
-            ->add(
-                'statut',
-                'choice',
-                array(
-                    'label' => 'Statut',
-                    'required' => false,
-                    'choices' => array('ouverte'=>'Ouverte', 'payee'=>'Payée'),
-                    'data' => null
-
-                )
-            )
+            ->add('montantRecu','number',array('label' => 'Montant reçu','required' => false,'data'=> null))
+            ->add('statut','choice',array('label' => 'Statut','required' => false,'choices' => array('ouverte'=>'Ouverte', 'payee'=>'Payée'),'data' => null))
             ->add('dateCreation','date',array('label' => 'Date de création','data'=> null,'required' => false))
             ->add('datePayement','date',array('label' => 'Date de Payement','data'=> null,'required' => false))
             /*
@@ -46,8 +27,7 @@ class FactureSearchType extends AbstractType
              * pas à l'entité.
              */
             ->add('nombreRappel','number',array('label' => 'Nombre de Rappel','required' => false,'mapped' => false))
-            ->add('montantEmisMinimum','number',array('required' => false,'mapped' => false))
-            ->add('montantEmisMaximum','number', array('required' => false,'mapped' => false))
+
             ->add('montantRecuMinimum','number',array('required' => false,'mapped' => false))
             ->add('montantRecuMaximum','number',array('required' => false,'mapped' => false))
             ->add('montantFrais','number',array('required' => false,'mapped' => false))
@@ -57,6 +37,8 @@ class FactureSearchType extends AbstractType
             ->add('montantTotalMinimum','number',array('required' => false,'mapped' => false))
             ->add('montantTotalMaximum','number',array('required' => false,'mapped' => false))
 
+            ->add('datePayementMaximum','date',array('data'=> null,'required' => false,'mapped' => false))
+            ->add('datePayementMinimum','date',array('data'=> null,'required' => false,'mapped' => false))
 
 
         ;//fin de la fonction builder
@@ -75,7 +57,7 @@ class FactureSearchType extends AbstractType
 
     public function getName()
     {
-        return 'InterneFactureBundle_facture_search';
+        return 'InterneFactureBundleFactureSearchType';
     }
 
 }

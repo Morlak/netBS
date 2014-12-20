@@ -15,6 +15,14 @@ use Interne\FactureBundle\Entity\Facture;
 
 class CreanceController extends Controller
 {
+    /*
+     * Supprime une cérance en ajax.
+     * Ne supprime que les cérances qui sont pas encore
+     * liée a une facture.
+     */
+    /**
+     * @return Response
+     */
     public function deleteAjaxAction()
     {
         $request = $this->getRequest();
@@ -24,27 +32,29 @@ class CreanceController extends Controller
             $id = $request->request->get('idCreance');
             $em = $this->getDoctrine()->getManager();
             $creance = $em->getRepository('InterneFactureBundle:Creance')->find($id);
-            $em->remove($creance);
-            $em->flush();
 
+            /*
+             * On vérifie que la cérance n'est pas liée à une facture avant de la supprimer
+             */
+            if(!$creance->isFactured())
+            {
+                $em->remove($creance);
+                $em->flush();
+            }
 
             return $this->render('InterneFactureBundle:viewForFichierBundle:interfaceForFamilleOrMembre.html.twig',
                 array('ownerEntity' => $creance->getOwner()));
         }
     }
 
-    public function waitingListeAction()
-    {
 
-        $em = $this->getDoctrine()->getManager();
-        //cherche toute les créance sans factures.
-        $creances = $em->getRepository('InterneFactureBundle:Creance')->findByFacture(null);
-
-        return $this->render('InterneFactureBundle:Creance:waitingListe.html.twig',
-            array('creances' => $creances));
-
-    }
-
+    /*
+     * Ajoute des cérances en masse à la liste de membre (listing)
+     *
+     */
+    /**
+     * @return Response
+     */
     public function addCreanceToListingAjaxAction()
     {
         $request = $this->getRequest();
@@ -94,6 +104,12 @@ class CreanceController extends Controller
         return new Response();
     }
 
+    /*
+     * Ajoute une cérance à un membre ou une famille
+     */
+    /**
+     * @return Response
+     */
     public function addAjaxAction()
     {
         $request = $this->getRequest();
@@ -136,13 +152,19 @@ class CreanceController extends Controller
         return new Response();
     }
 
+    /*
+     * Creation de factures avec une liste de créances (Id).
+     *
+     * Remarque: cette fonction va grouper les factures par unité de
+     * facturation. Cela marche uniquement pour les factures
+     * présente dans la liste d'IDs
+     */
+    /**
+     * @param Array $listeIdCreance
+     */
     private function createFacture($listeIdCreance)
     {
-        /*
-         * Remarque: cette fonction va grouper les factures par unité de
-         * facturation. Cela marche uniquement pour les factures
-         * présente dans la liste d'IDs
-         */
+
 
         /*
          * On load la base de donnée
@@ -265,6 +287,13 @@ class CreanceController extends Controller
         }
     }
 
+    /*
+     * Cette methode permet de facturer une liste de cérance
+     * depuis plusieur page différente.
+     */
+    /**
+     * @return Response
+     */
     public function facturationAjaxAction()
     {
         $request = $this->getRequest();
@@ -296,7 +325,7 @@ class CreanceController extends Controller
 
 
             //adaptation du rendu selon la provenance
-            if ($fromPage == 'WaitingList') {
+            if ($fromPage == 'Search') {
                 return new Response();
             } elseif ($fromPage == 'Membre') {
 
@@ -315,12 +344,26 @@ class CreanceController extends Controller
         return new Response();
     }
 
+
+    /*
+     * Crée un rendu twig custum en fonction de la page qui
+     * demande de formulaire (modal) pour l'ajout de créance.
+     *
+     */
+    /**
+     * @param $ownerEntity
+     * @return Response
+     */
     public function creanceModalFormAction($ownerEntity)
     {
         $creance = new Creance();
 
         $creanceAddForm  = $this->createForm(new CreanceAddType,$creance);
 
+        /*
+         * On récupère les infos du membre ou famille pour construire
+         * le formulaire custum de la page qui le demande..
+         */
         if($ownerEntity == null)
         {
             //si l'entité est null c'est que c'est pour le formulaire de listing
@@ -335,8 +378,6 @@ class CreanceController extends Controller
             $creanceAddForm->get('idOwner')->setData($ownerEntity->getId());
             $creanceAddForm->get('classOwner')->setData('Famille');
         }
-
-
 
         return $this->render('InterneFactureBundle:viewForFichierBundle:modalForm.html.twig',
             array('ownerEntity' => $ownerEntity, 'creanceForm' => $creanceAddForm->createView() ));

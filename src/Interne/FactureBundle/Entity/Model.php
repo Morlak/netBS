@@ -121,4 +121,8 @@ class Model
     {
         return $this->montantEmis;
     }
+
+    public function __toString() {
+        return $this->titre;
+    }
 }

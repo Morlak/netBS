@@ -22,8 +22,12 @@ class PrintController extends Controller
             $em = $this->getDoctrine()->getManager();
             $facture = $em->getRepository('InterneFactureBundle:Facture')->find($id);
 
+            /*
+             * Creation du PDF
+             */
+            $pdf = new Pdf();
 
-            $pdf = $this->factureToPdf($facture);
+            $pdf = $this->factureToPdf($facture,$pdf);
 
 
             $fileName = 'Facture_' . $facture->getId() . '.pdf';
@@ -42,7 +46,11 @@ class PrintController extends Controller
             $facture = $em->getRepository('InterneFactureBundle:Facture')->find($id);
 
 
-            $pdf = $this->factureToPdf($facture);
+            /*
+             * Creation du PDF
+             */
+            $pdf = new Pdf();
+            $pdf = $this->factureToPdf($facture,$pdf);
 
 
             $fileName = 'Facture_' . $facture->getId() . '.pdf';
@@ -53,7 +61,15 @@ class PrintController extends Controller
     }
 
 
-    private function factureToPdf(Facture $facture)
+    /*
+     * Création du PDF associé à une facture.
+     */
+    /**
+     * @param Facture $facture
+     * @param Pdf $pdf
+     * @return Pdf
+     */
+    private function factureToPdf(Facture $facture, Pdf $pdf)
     {
         /*
          * On récupère les parametres nécaissaires
@@ -68,16 +84,16 @@ class PrintController extends Controller
         $texteFacture = $paramRepo->findOneBy(array('name'=>'impression_texte_facture'))->getValue();
         $affichageMontant = $paramRepo->findOneBy(array('name'=>'impression_affichage_montant'))->getValue();
 
-
-
+        /*
+         * Infos utile de la facture
+         */
         $numeroReference = (string)$facture->getId();
         $montant = (string)$facture->getMontantTotal();
+        $adresseFacturation = $facture->getOwnerAdresse();
+        $title = 'Facture N°'.$facture->getId();
 
 
-        /*
-         * Creation du PDF
-         */
-        $pdf = new Pdf();
+
 
         $pdf->AddPage();
         $pdf->SetAutoPageBreak(false);
@@ -110,11 +126,8 @@ class PrintController extends Controller
          */
         $x =  110;
         $y =  50;
-        $adresseFacturation = $facture->getOwnerAdresse();
-
         $pdf->SetXY($x,$y);
         $pdf->MultiCell($cellWidth,$cellHigh,$adresseFacturation);
-
 
         /*
          * Titre de la facture
@@ -124,7 +137,6 @@ class PrintController extends Controller
         $x = 20;
         $y =  70;
         $pdf->SetXY($x,$y);
-        $title = 'Facture N°'.$facture->getId();
         $pdf->Cell(140,$cellHigh,$title);
 
         //retour à la ligne
@@ -146,7 +158,6 @@ class PrintController extends Controller
         /*
          * Tableau facture
          */
-
         $pdf->SetFont('Arial','B',9);
         $pdf->Cell(110,$cellHigh,'');
         $pdf->Cell(30,$cellHigh,'Date');
@@ -203,9 +214,7 @@ class PrintController extends Controller
 
         }
 
-
-
-        $pdf->Output();
+        //$pdf->Output();
         //$pdf->getPdf()->Output('test.pdf','D');
 
         return $pdf;
@@ -216,6 +225,12 @@ class PrintController extends Controller
 
     /*
      * Crée les ligne de Codage BVR
+     */
+    /**
+     * @param $numeroReference
+     * @param string $type
+     * @param string $ccp
+     * @return mixed|string
      */
     private  function creatLineCode($numeroReference,$type = 'numRef',$ccp = '')
     {
@@ -257,6 +272,15 @@ class PrintController extends Controller
 
     /*
      * Ajouter un BVR
+     */
+    /**
+     * @param $pdf
+     * @param $adresse
+     * @param $ccp
+     * @param $numeroReference
+     * @param $affichageMontant
+     * @param $montant
+     * @return mixed
      */
     private function insertBvr($pdf,$adresse,$ccp,$numeroReference,$affichageMontant,$montant)
     {

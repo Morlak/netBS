@@ -28,6 +28,10 @@ class Facture
 
     /*
      * =========== RELATIONS ===============
+     *
+     * Une facture contient une liste de cérances et une liste de rappels.
+     *
+     * Une facture à un propriétaire, soit un membre, soit une famille.
      */
 
 
@@ -460,6 +464,9 @@ class Facture
             return null;
     }
 
+    /*
+     * La facture peut avoir soit un membre, soit une famille comme prorpiétaire.
+     */
     /**
      * Get owner
      */

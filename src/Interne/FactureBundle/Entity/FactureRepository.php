@@ -31,8 +31,6 @@ class FactureRepository extends EntityRepository
             $queryBuilder->andWhere('facture.id = :id')->setParameter('id', $parameter);
         }
 
-
-
         $parameter = $facture->getMontantRecu();
         if($parameter != null)
         {
@@ -68,113 +66,235 @@ class FactureRepository extends EntityRepository
 
         if($searchParameters != null) {
 
-            $parameter = $searchParameters['montantEmisMinimum'];
-            if ($parameter != null) {
-                $queryBuilder->andWhere('facture.montantEmis >= :montantEmisMinimum')
-                    ->setParameter('montantEmisMinimum', $parameter);
-            }
 
-            $parameter = $searchParameters['montantEmisMaximum'];
-            if ($parameter != null) {
-                $queryBuilder->andWhere('facture.montantEmis <= :montantEmisMaximum')
-                    ->setParameter('montantEmisMaximum', $parameter);
-            }
 
-            $parameter = $searchParameters['montantRecuMinimum'];
+            $parameter = $searchParameters['facture']['montantRecuMinimum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('facture.montantRecu >= :montantRecuMinimum')
                     ->setParameter('montantRecuMinimum', $parameter);
             }
 
-            $parameter = $searchParameters['montantRecuMaximum'];
+            $parameter = $searchParameters['facture']['montantRecuMaximum'];
             if ($parameter != null) {
                 $queryBuilder->andWhere('facture.montantRecu <= :montantRecuMaximum')
                     ->setParameter('montantRecuMaximum', $parameter);
             }
 
-        /*
-         * Activer la jointure uniquement si un des parametres de recherche
-         * concerne les rappels. Sinon il y a exculusion direct des factures
-         * sans rappel.
-         */
-        if(
-            ($searchParameters['nombreRappel'] != null)
-        )
-        {
-            //cette ligne fonctionne
-            $queryBuilder->innerJoin('Interne\FactureBundle\Entity\Rappel', 'rappel', 'WITH', 'facture.id = rappel.facture');
-        }
+            $parameter = $searchParameters['facture']['datePayementMaximum'];
+            if($parameter != null)
+            {
+                $queryBuilder->andWhere('facture.datePayement <= :datePayement')
+                    ->setParameter('datePayement', $parameter);
+            }
+
+            $parameter = $searchParameters['facture']['datePayementMinimum'];
+            if($parameter != null)
+            {
+                $queryBuilder->andWhere('facture.datePayement >= :datePayement')
+                    ->setParameter('datePayement', $parameter);
+            }
 
 
 
 
+            /*
+             * Jointure avec les éléments de recherche contenu dans la partie cérance
+             */
+            $queryBuilder->innerJoin('Interne\FactureBundle\Entity\Creance', 'creance', 'WITH', 'facture.id = creance.facture');
 
-            $parameter = $searchParameters['nombreRappel'];
-            if ($parameter == null) {
+            $creances = $facture->getCreances();
+            $creance = $creances[0];
 
-
-                //$queryBuilder->innerJoin('facture.rappels', 'rappel');
-
-
-                //$queryBuilder->andHaving('COUNT(facture.rappels) >= 2');
-
-                //$queryBuilder->addSelect('facture, count(')
-                //->andWhere('rappel.frais = :frais')
-                //->setParameter('x',6)
-                //->andHaving('COUNT(facture.rappels) = x')
-                //'SELECT u, count(g.id) FROM Entities\User u JOIN u.groups g GROUP BY u.id');
-
-                //$queryBuilder
-                //->andWhere('rappel.frais = :frais')
-                //->setParameter('x',6)
-                //->andHaving('COUNT(facture.rappels) = x')
-
-
+            /*
+             * Elements de recherche contenu dans le formulaire de creance standard
+             */
+            $parameter = $creance->getTitre();
+            if($parameter != null)
+            {
                 /*
-                 * fonctionelle
+                 * Recherche tout les titre où le bout de texte $parametre est présent
                  */
-                //->innerJoin('Interne\FactureBundle\Entity\Rappel', 'rappel', 'WITH', 'facture.id = rappel.facture')
-                //->andWhere('rappel.frais = :frais')
-                //->setParameter('frais',7)
-                /*
-                 *
-                 */
+                $queryBuilder->andWhere($queryBuilder->expr()->like('creance.titre',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
+            }
 
-                //->where('g.name = :goalName')->andWhere('s.gsiteId = :gsiteId')
-                //->setParameter('goalName', 'Background Dx')->setParameter('gsiteId', '66361836');
-                //->innerJoin('facture.rappels', 'bidon')
-                //->andhaving('COUNT(facture.rappels) = 6');
-                //->addSelect('COUNT(rappel) as nProducts')
-                //->addGroupBy('facture.id')
-                //->having('nProducts = 6')
-                //;
-
-                //->setParameter('nbRappel',3)->andWhere('COUNT(facture.rappels) = nbRappel');
-
-                /*
-                 * A FAIRE
-                 */
-                /*$queryBuilder
-                    ->addSelect("COUNT(rappel) number_rappels")
-
-                    ->leftJoin('facture.rappels', 'rappel')
-
-                    ->groupBy('facture.id');
-
-
-
-                    //->innerJoin('facture.rappels','rappel')
-                    //->andhaving('COUNT(rappel) = 3');
-
-                    //
-
-                    //->andHaving('COUNT(facture.rappels) = 1');
-
-                */
-
+            $parameter = $creance->getRemarque();
+            if($parameter != null)
+            {
+                $queryBuilder->andWhere($queryBuilder->expr()->like('creance.remarque',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
 
             }
+
+            $parameter = $creance->getMontantEmis();
+            if($parameter != null)
+            {
+                $queryBuilder->andWhere('creance.montantEmis = :montantEmis')->setParameter('montantEmis', $parameter);
+            }
+
+            $parameter = $creance->getMontantRecu();
+            if($parameter != null)
+            {
+                $queryBuilder->andWhere('creance.montantRecu = :montantRecu')->setParameter('montantRecu', $parameter);
+            }
+
+            $parameter = $creance->getDateCreation();
+            if($parameter != null)
+            {
+                $queryBuilder->andWhere('creance.dateCreation = :dateCreation')
+                    ->setParameter('dateCreation', $parameter);
+            }
+
+            /*
+             *
+             * Elements de recherche spécifique qui permet d'affiner la recherche.
+             *
+             */
+
+            if($searchParameters != null)
+            {
+
+                $parameter = $searchParameters['creance']['isLinkedToFacture'];
+                if ($parameter != null) {
+                    if($parameter == 'yes') //donc la créance est liée
+                    {
+                        $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('creance.facture'));
+
+                    }
+                    else //donc la cérance n'a pas encore de facture
+                    {
+                        $queryBuilder->andWhere($queryBuilder->expr()->isNull('creance.facture'));
+
+                    }
+                }
+
+                /*
+                 * Intervale pour les montants
+                 */
+
+                $parameter = $searchParameters['creance']['montantEmisMinimum'];
+                if ($parameter != null) {
+                    $queryBuilder->andWhere('creance.montantEmis >= :montantEmisMinimum')
+                        ->setParameter('montantEmisMinimum', $parameter);
+                }
+
+                $parameter = $searchParameters['creance']['montantEmisMaximum'];
+                if ($parameter != null) {
+                    $queryBuilder->andWhere('creance.montantEmis <= :montantEmisMaximum')
+                        ->setParameter('montantEmisMaximum', $parameter);
+                }
+
+                $parameter = $searchParameters['creance']['montantRecuMinimum'];
+                if ($parameter != null) {
+                    $queryBuilder->andWhere('creance.montantRecu >= :montantRecuMinimum')
+                        ->setParameter('montantRecuMinimum', $parameter);
+                }
+
+                $parameter = $searchParameters['creance']['montantRecuMaximum'];
+                if ($parameter != null) {
+                    $queryBuilder->andWhere('creance.montantRecu <= :montantRecuMaximum')
+                        ->setParameter('montantRecuMaximum', $parameter);
+                }
+
+                /*
+                 * Intervale date de création
+                 */
+
+                $parameter = $searchParameters['creance']['dateCreationMaximum'];
+                if ($parameter != null) {
+                    $queryBuilder->andWhere('creance.dateCreation <= :dateCreationMaximum')
+                        ->setParameter('dateCreationMaximum', $parameter);
+                }
+                $parameter = $searchParameters['creance']['dateCreationMinimum'];
+                if ($parameter != null) {
+                    $queryBuilder->andWhere('creance.dateCreation >= :dateCreationMinimum')
+                        ->setParameter('dateCreationMinimum', $parameter);
+                }
+
+
+                /*
+                 * relation avec les membres et famille
+                 */
+                if(($searchParameters['creance']['membreNom'] != null) || ($searchParameters['creance']['membrePrenom'] != null) || ($searchParameters['creance']['familleNom'] != null))
+                {
+
+                    if(($searchParameters['creance']['membreNom'] != null) || ($searchParameters['creance']['membrePrenom'] != null))
+                    {
+                        //On lie avec le membre
+                        $queryBuilder->innerJoin('Interne\FichierBundle\Entity\Membre', 'membre', 'WITH', 'membre.id = creance.membre');
+
+                        $parameter = $searchParameters['creance']['membrePrenom'];
+                        if ($parameter != null) {
+                            $queryBuilder->andWhere($queryBuilder->expr()->like('membre.prenom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
+                        }
+
+                        $parameter = $searchParameters['creance']['membreNom'];
+                        if ($parameter != null) {
+
+                            //On lie avec la famille
+                            $queryBuilder->innerJoin('Interne\FichierBundle\Entity\Famille', 'famille', 'WITH', 'membre.id = membre.famille');
+
+                            $queryBuilder->andWhere($queryBuilder->expr()->like('famille.nom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
+                        }
+
+
+                    }
+
+
+                    /*
+                     * lien avec la famille
+                     */
+
+                    if($searchParameters['creance']['familleNom'] != null)
+                    {
+                        //On lie avec la famille
+                        $queryBuilder->innerJoin('Interne\FichierBundle\Entity\Famille', 'famille', 'WITH', 'famille.id = creance.famille');
+
+                        $parameter = $searchParameters['creance']['familleNom'];
+                        if ($parameter != null) {
+                            $queryBuilder->andWhere($queryBuilder->expr()->like('famille.nom',$queryBuilder->expr()->literal('%'.$parameter.'%')) );
+                        }
+                    }
+                }
+            }
+
+
+
+
+            /*
+             * Activer la jointure uniquement si un des parametres de recherche
+             * concerne les rappels. Sinon il y a exculusion direct des factures
+             * sans rappel.
+             */
+            if($searchParameters['facture']['nombreRappel'] != null)
+            {
+                //cette ligne fonctionne
+                $queryBuilder->innerJoin('Interne\FactureBundle\Entity\Rappel', 'rappel', 'WITH', 'facture.id = rappel.facture');
+
+                $parameter = $searchParameters['facture']['nombreRappel'];
+                if ($parameter == null) {
+
+                    /*
+                    $queryBuilder->andWhere($queryBuilder->addSelect('COUNT(rappel) AS nbRappel')
+                        ->addGroupBy('rappel.facture')
+                        ->having('nbRappel > 1'));
+                    */
+
+
+                    $queryBuilder->andHaving($queryBuilder->expr()->eq($queryBuilder->expr()->count('rappel'),3));
+                }
+
+            }
+
+
+
+
+
+
         }
+
+
+
+
+
 
 
         return $queryBuilder->getQuery()->getResult();

@@ -222,19 +222,19 @@
 
 
 
-    {% block javascript %}
+{% block javascript %}
 
-        {% javascripts  '@InterneFactureBundle/Resources/public/js/creance.js'
-        '@InterneFactureBundle/Resources/public/js/facture.js'%}
-        <script src="{{ asset_url }}"></script>
-        {% endjavascripts %}
-
-
+    {% javascripts  '@InterneFactureBundle/Resources/public/js/creance.js'
+    '@InterneFactureBundle/Resources/public/js/facture.js'%}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 
 
 
 
-    {% endblock %}
+
+
+{% endblock %}
 
 
 

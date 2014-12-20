@@ -5,14 +5,14 @@
 
 {% block body %}
 
-<a href="{{path('interne_facture_show_all')}}">Show All facture</a><br>
-<a href="{{path('interne_facture_create')}}">create facture </a><br>
+
+
 <a href="{{path('interne_facture_search_form')}}">search facture </a><br>
 <a href="{{path('interne_facture_model')}}">model facture </a><br>
 <a href="{{path('interne_facture_validation')}}"> Validation </a><br>
 <a href="{{path('interne_facture_statistics')}}">Stat </a><br>
-    <a href="{{path('InterneGlobal_parametre', {'groupe' : 'facture'} )}}">Parametres </a><br>
-    <a href="{{path('interne_facture_creance_waiting_liste')}}">Waiting Liste </a><br>
+<a href="{{path('InterneGlobal_parametre', {'groupe' : 'facture'} )}}">Parametres </a><br>
+
 
 
 TO DO LIST
@@ -25,32 +25,12 @@ TO DO LIST
     <li>télécharger la librairie pour les graphiques de stat</li>
     <li></li>
     <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
+
+
 </ul>
 
+
+    {% include "InterneFactureBundle:Default:modeEmploi.html.twig" %}
 
 
 {% endblock %}
